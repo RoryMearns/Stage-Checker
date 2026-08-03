@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetchStageData();
 
-        const rows = response.Data ?? [];
+        const rows = (response.Data ?? []).sort((a, b) =>
+            a.Location.localeCompare(b.Location)
+        );
 
         populateTable(rows, tableBody);
 
@@ -31,7 +33,7 @@ function populateTable(rows, tableBody) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${item.Location}</td>
-            <td>${item.LocationIdentifier}</td>
+            <td class="has-text-right">${item.LocationIdentifier}</td>
             <td class="has-text-right">${item.ValueNumber.toFixed(3)}</td>
         `;
         tableBody.appendChild(row);
