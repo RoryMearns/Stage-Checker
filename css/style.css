@@ -1,0 +1,83 @@
+:root {
+    --river-deep: #1F3B3C;
+    --river-mid: #3C8C7C;
+    --river-pale: #EDF3F1;
+    --river-bg: #F5F8F7;
+    --river-muted: #8A9A96;
+    --river-line: #DCE7E4;
+}
+
+html, body {
+    background-color: var(--river-bg);
+}
+
+.section > .container > .title {
+    color: var(--river-deep);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.section > .container > .subtitle {
+    color: var(--river-muted);
+}
+
+.title {
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.title::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: var(--river-mid);
+    margin-top: 0.75rem;
+    border-radius: 2px;
+}
+
+.notification.is-info {
+    background-color: var(--river-pale);
+    color: var(--river-deep);
+}
+
+.notification.is-danger {
+    background-color: #FBEEEC;
+    color: #8C3B2E;
+}
+
+.table {
+    background-color: transparent;
+}
+
+.table thead th {
+    background-color: var(--river-deep);
+    color: #ffffff;
+    border-color: var(--river-deep);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+    background-color: var(--river-pale);
+}
+
+.table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.table.is-hoverable tbody tr:hover {
+    background-color: rgba(60, 140, 124, 0.12);
+}
+
+.table td, .table th {
+    border-color: var(--river-line);
+}
+
+.table td:last-child {
+    font-variant-numeric: tabular-nums;
+    color: var(--river-deep);
+    font-weight: 600;
+}
