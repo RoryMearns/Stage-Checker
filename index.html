@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage Checker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Stage Checker</h1>
+
+        <div id="loading" class="notification is-info">
+            <p>Loading data...</p>
+        </div>
+
+        <div id="error" class="notification is-danger" style="display: none;">
+            <button class="delete"></button>
+            <p id="error-message"></p>
+        </div>
+
+        <div id="table-container" style="display: none;">
+            <table class="table is-striped is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>ID</th>
+                    <th class="has-text-right">Stage (m)</th>
+                </tr>
+                </thead>
+                <tbody id="data-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
