@@ -33,7 +33,7 @@ function populateTable(rows, tableBody) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${item.Location}</td>
-            <td class="has-text-right">${item.LocationIdentifier}</td>
+            <td class="has-text-right is-hidden-mobile">${item.LocationIdentifier}</td>
             <td class="has-text-right">${item.ValueNumber.toFixed(3)}</td>
         `;
         tableBody.appendChild(row);
