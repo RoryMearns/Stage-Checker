@@ -1,7 +1,9 @@
 import {fetchStageData, fetchFlowData} from "./api.js";
 
+const RUN_INFO_URL = new URL('../data/run-info.json', import.meta.url);
+
 async function loadRunInfo() {
-    const res = await fetch('../data/run-info.json');
+    const res = await fetch(RUN_INFO_URL);
     if (!res.ok) {
         throw new Error(`Failed to load run-info.json (${res.status})`);
     }
