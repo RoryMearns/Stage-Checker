@@ -11,7 +11,6 @@ html, body {
     background-color: var(--river-bg);
 }
 
-/* Header */
 .section > .container > .title {
     color: var(--river-deep);
     font-weight: 700;
@@ -22,8 +21,6 @@ html, body {
     color: var(--river-muted);
 }
 
-/* Small accent rule under the header, ties the page together */
-/* Scoped to the page title only — not run headings, which reuse .title elsewhere */
 .section > .container > .title {
     position: relative;
     padding-bottom: 0.5rem;
@@ -39,7 +36,6 @@ html, body {
     border-radius: 2px;
 }
 
-/* Run section headings — smaller, no underline, just a quiet label above each table */
 .run-heading {
     font-size: 1.1rem;
     font-weight: 600;
@@ -52,7 +48,6 @@ html, body {
     margin-top: 0;
 }
 
-/* Notifications: recolor to fit the palette instead of Bulma defaults */
 .notification.is-info {
     background-color: var(--river-pale);
     color: var(--river-deep);
@@ -63,7 +58,6 @@ html, body {
     color: #8C3B2E;
 }
 
-/* Table */
 .table {
     background-color: transparent;
     table-layout: fixed;
@@ -107,4 +101,27 @@ html, body {
     justify-content: flex-end;
     gap: 0.4rem;
     white-space: nowrap;
+}
+
+.col-stage {
+    width: 160px;
+}
+
+.col-flow {
+    width: 130px;
+}
+
+@media screen and (max-width: 768px) {
+    .col-stage {
+        width: 90px;
+    }
+
+    .col-flow {
+        width: 80px;
+    }
+
+    .table td, .table th {
+        padding: 0.4em 0.5em;
+        font-size: 0.9rem;
+    }
 }

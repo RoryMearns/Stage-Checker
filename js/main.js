@@ -61,8 +61,8 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
         table.innerHTML = `
             <colgroup>
                 <col>
-                <col style="width: 160px">
-                <col style="width: 130px">
+                <col class="col-stage">
+                <col class="col-flow">
             </colgroup>
             <thead>
                 <tr>
@@ -89,7 +89,7 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
 
             const meta = siteMeta[siteId];
             const wadeLimitTag = meta?.wadeLimitFlow !== undefined
-                ? ` <span class="tag is-warning is-light">limit ${meta.wadeLimitFlow}</span>`
+                ? ` <span class="tag is-warning is-light is-hidden-mobile">limit ${meta.wadeLimitFlow}</span>`
                 : '';
 
             const flowItem = flowBySite.get(siteId);
