@@ -66,6 +66,7 @@ html, body {
 /* Table */
 .table {
     background-color: transparent;
+    table-layout: fixed;
 }
 
 .table thead th {
@@ -98,4 +99,12 @@ html, body {
     font-variant-numeric: tabular-nums;
     color: var(--river-deep);
     font-weight: 600;
+}
+
+.value-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    white-space: nowrap;
 }

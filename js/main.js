@@ -1,4 +1,4 @@
-import {fetchStageData} from "./api.js";
+import {fetchStageData, fetchFlowData} from "./api.js";
 
 async function loadRunInfo() {
     const res = await fetch('../data/run-info.json');
@@ -15,18 +15,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const errorMessage = document.getElementById('error-message');
 
     try {
-        const [runInfo, response] = await Promise.all([
+        const [runInfo, stageResponse, flowResponse] = await Promise.all([
             loadRunInfo(),
-            fetchStageData()
+            fetchStageData(),
+            fetchFlowData()
         ]);
 
         const siteMeta = runInfo.siteMeta ?? {};
 
-        const dataBySite = new Map(
-            (response.Data ?? []).map(item => [item.LocationIdentifier, item])
+        const stageBySite = new Map(
+            (stageResponse.Data ?? []).map(item => [item.LocationIdentifier, item])
+        );
+        const flowBySite = new Map(
+            (flowResponse.Data ?? []).map(item => [item.LocationIdentifier, item])
         );
 
-        renderRuns(runInfo.runs, dataBySite, siteMeta, runsContainer);
+        renderRuns(runInfo.runs, stageBySite, flowBySite, siteMeta, runsContainer);
 
         loadingDiv.style.display = 'none';
         runsContainer.style.display = 'block';
@@ -38,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function renderRuns(runs, dataBySite, siteMeta, container) {
+function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
     container.innerHTML = '';
 
     runs.forEach(run => {
@@ -53,10 +57,16 @@ function renderRuns(runs, dataBySite, siteMeta, container) {
         const table = document.createElement('table');
         table.className = 'table is-striped is-hoverable is-fullwidth';
         table.innerHTML = `
+            <colgroup>
+                <col>
+                <col style="width: 160px">
+                <col style="width: 130px">
+            </colgroup>
             <thead>
                 <tr>
                     <th>Location</th>
                     <th class="has-text-right">Stage (m)</th>
+                    <th class="has-text-right">Flow (m³/s)</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -64,7 +74,7 @@ function renderRuns(runs, dataBySite, siteMeta, container) {
         const tbody = table.querySelector('tbody');
 
         run.sites.filter(Boolean).forEach(siteId => {
-            const item = dataBySite.get(siteId);
+            const item = stageBySite.get(siteId);
             const row = document.createElement('tr');
 
             if (!item) {
@@ -80,9 +90,15 @@ function renderRuns(runs, dataBySite, siteMeta, container) {
                 ? ` <span class="tag is-warning is-light">limit ${meta.wadeLimitFlow}</span>`
                 : '';
 
+            const flowItem = flowBySite.get(siteId);
+            const flowValue = flowItem ? flowItem.ValueNumber.toFixed(3) : '—';
+
             row.innerHTML = `
                 <td>${item.Location}</td>
-                <td class="has-text-right">${wadeLimitTag}${item.ValueNumber.toFixed(3)}</td>
+                <td class="has-text-right">
+                    <span class="value-cell">${wadeLimitTag}<span>${item.ValueNumber.toFixed(3)}</span></span>
+                </td>
+                <td class="has-text-right">${flowValue}</td>
             `;
             tbody.appendChild(row);
         });
