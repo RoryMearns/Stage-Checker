@@ -89,12 +89,6 @@ html, body {
     border-color: var(--river-line);
 }
 
-.table td:last-child {
-    font-variant-numeric: tabular-nums;
-    color: var(--river-deep);
-    font-weight: 600;
-}
-
 .value-cell {
     display: inline-flex;
     align-items: center;
