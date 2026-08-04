@@ -11,6 +11,7 @@ html, body {
     background-color: var(--river-bg);
 }
 
+/* Header */
 .section > .container > .title {
     color: var(--river-deep);
     font-weight: 700;
@@ -21,12 +22,14 @@ html, body {
     color: var(--river-muted);
 }
 
-.title {
+/* Small accent rule under the header, ties the page together */
+/* Scoped to the page title only — not run headings, which reuse .title elsewhere */
+.section > .container > .title {
     position: relative;
     padding-bottom: 0.5rem;
 }
 
-.title::after {
+.section > .container > .title::after {
     content: "";
     display: block;
     width: 48px;
@@ -36,6 +39,20 @@ html, body {
     border-radius: 2px;
 }
 
+/* Run section headings — smaller, no underline, just a quiet label above each table */
+.run-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--river-deep);
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.run-section:first-of-type .run-heading {
+    margin-top: 0;
+}
+
+/* Notifications: recolor to fit the palette instead of Bulma defaults */
 .notification.is-info {
     background-color: var(--river-pale);
     color: var(--river-deep);
@@ -46,6 +63,7 @@ html, body {
     color: #8C3B2E;
 }
 
+/* Table */
 .table {
     background-color: transparent;
 }

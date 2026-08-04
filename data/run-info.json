@@ -1,0 +1,47 @@
+{
+	"runs": [
+		{
+			"name": "Toko",
+			"sites": ["EM182", "EM294"]
+		},
+		{
+			"name": "Lower Taieri",
+			"sites": ["EM140", "EM156"]
+		},
+		{
+			"name": "City",
+			"sites": ["EY199", "EM136", "GT263", "EM135", "GT533"]
+		},
+		{
+			"name": "3 O'Clock",
+			"sites": ["EW387", "EM141", "FF416"]
+		},
+		{
+			"name": "Maws",
+			"sites": ["EN422", "EM196"]
+		},
+		{
+			"name": "Southwest",
+			"sites": ["EM893", "EM295", "EM448", "EM289", "EN063", "EM525", "GT145"]
+		},
+		{
+			"name": "Catlins",
+			"sites": ["EM481", "EN348"]
+		},
+		{
+			"name": "Maniototo",
+			"sites": ["EM145", "EX666", "FA784", "EM144", "EM142", "EM161", "EM469", "EM293"]
+		},
+		{
+			"name": "North Otago",
+			"sites": ["EM131", "EM462", "EY959", "EM376", "EM617", "EY899", "EM764", "EM618", "EM375", "EM495", "GT597", "GT396", "FH844", "EY527", "FK293"]
+		}
+	],
+	"siteMeta": {
+		"EM141": { "wadeLimitFlow": 8 },
+		"EN422": { "wadeLimitFlow": 2.5 },
+		"EM481": { "wadeLimitFlow": 7 },
+		"EN348": { "wadeLimitFlow": 3.5 },
+		"EM295": { "wadeLimitStage": 1 }
+	}
+}
