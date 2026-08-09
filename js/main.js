@@ -92,13 +92,19 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
                 ? ` <span class="tag is-warning is-light is-hidden-mobile">limit ${meta.wadeLimitFlow}</span>`
                 : '';
 
+            const stageValue = typeof item.ValueNumber === 'number'
+                ? item.ValueNumber.toFixed(3)
+                : '—';
+
             const flowItem = flowBySite.get(siteId);
-            const flowValue = flowItem ? flowItem.ValueNumber.toFixed(3) : '—';
+            const flowValue = (flowItem && typeof flowItem.ValueNumber === 'number')
+                ? flowItem.ValueNumber.toFixed(3)
+                : '—';
 
             row.innerHTML = `
                 <td>${item.Location}</td>
                 <td class="has-text-right">
-                    <span class="value-cell">${wadeLimitTag}<span>${item.ValueNumber.toFixed(3)}</span></span>
+                    <span class="value-cell">${wadeLimitTag}<span>${stageValue}</span></span>
                 </td>
                 <td class="has-text-right">${flowValue}</td>
             `;
