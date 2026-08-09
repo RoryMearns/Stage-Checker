@@ -5,7 +5,8 @@ async function postJson(url) {
     try {
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store'
         });
         return await response.json();
     } catch (error) {
