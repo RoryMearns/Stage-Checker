@@ -44,6 +44,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+function formatValueCell(dataItem, extraTag = '') {
+    const isOverdue = dataItem?.State === 'OVERDUE';
+    const hasValue = dataItem && typeof dataItem.ValueNumber === 'number';
+
+    const overdueTag = isOverdue
+        ? '<span class="overdue-tag" title="Equipment overdue — this site has stopped reporting, value may be stale">Overdue</span>'
+        : '';
+
+    let valueMarkup = '<span>—</span>';
+    if (hasValue) {
+        valueMarkup = `<span>${dataItem.ValueNumber.toFixed(3)}</span>`;
+    } else if (isOverdue) {
+        valueMarkup = '';
+    }
+
+    return `<span class="value-cell">${extraTag}${overdueTag}${valueMarkup}</span>`;
+}
+
 function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
     container.innerHTML = '';
 
@@ -92,21 +110,12 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
                 ? ` <span class="tag is-warning is-light is-hidden-mobile">limit ${meta.wadeLimitFlow}</span>`
                 : '';
 
-            const stageValue = typeof item.ValueNumber === 'number'
-                ? item.ValueNumber.toFixed(3)
-                : '—';
-
             const flowItem = flowBySite.get(siteId);
-            const flowValue = (flowItem && typeof flowItem.ValueNumber === 'number')
-                ? flowItem.ValueNumber.toFixed(3)
-                : '—';
 
             row.innerHTML = `
                 <td>${item.Location}</td>
-                <td class="has-text-right">
-                    <span class="value-cell">${wadeLimitTag}<span>${stageValue}</span></span>
-                </td>
-                <td class="has-text-right">${flowValue}</td>
+                <td class="has-text-right">${formatValueCell(item, wadeLimitTag)}</td>
+                <td class="has-text-right">${formatValueCell(flowItem)}</td>
             `;
             tbody.appendChild(row);
         });

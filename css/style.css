@@ -89,11 +89,29 @@ html, body {
     border-color: var(--river-line);
 }
 
+.table td:last-child {
+    font-variant-numeric: tabular-nums;
+    color: var(--river-deep);
+    font-weight: 600;
+}
+
 .value-cell {
     display: inline-flex;
     align-items: center;
     justify-content: flex-end;
     gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.overdue-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #8C3B2E;
+    background-color: #FBEEEC;
+    border-radius: 4px;
+    padding: 0.15rem 0.45rem;
     white-space: nowrap;
 }
 
