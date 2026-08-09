@@ -6,6 +6,11 @@ const CORS_HEADERS = {
     'Access-Control-Allow-Headers': 'Content-Type'
 };
 
+const NO_CACHE_HEADERS = {
+    'Cache-Control': 'no-store, no-cache, must-revalidate',
+    'Pragma': 'no-cache'
+};
+
 export const handler = async (event) => {
     if (event.requestContext?.http?.method === 'OPTIONS' || event.httpMethod === 'OPTIONS') {
         return {
@@ -42,7 +47,8 @@ export const handler = async (event) => {
                         statusCode: 200,
                         headers: {
                             'Content-Type': 'application/json',
-                            ...CORS_HEADERS
+                            ...CORS_HEADERS,
+                            ...NO_CACHE_HEADERS
                         },
                         body: JSON.stringify(jsonData)
                     });
@@ -51,7 +57,8 @@ export const handler = async (event) => {
                         statusCode: 200,
                         headers: {
                             'Content-Type': 'application/json',
-                            ...CORS_HEADERS
+                            ...CORS_HEADERS,
+                            ...NO_CACHE_HEADERS
                         },
                         body: data
                     });
@@ -64,7 +71,8 @@ export const handler = async (event) => {
                 statusCode: 500,
                 headers: {
                     'Content-Type': 'application/json',
-                    ...CORS_HEADERS
+                    ...CORS_HEADERS,
+                    ...NO_CACHE_HEADERS
                 },
                 body: JSON.stringify({ error: error.message })
             });
