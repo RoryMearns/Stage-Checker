@@ -41,16 +41,20 @@ html, body {
     white-space: nowrap;
 }
 
-.run-heading {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--river-deep);
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
+.run-section {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1.25rem 1.25rem 0.75rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(31, 59, 60, 0.06);
 }
 
-.run-section:first-of-type .run-heading {
+.run-heading {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--river-deep);
     margin-top: 0;
+    margin-bottom: 0.75rem;
 }
 
 .notification.is-info {
@@ -69,9 +73,9 @@ html, body {
 }
 
 .table thead th {
-    background-color: var(--river-deep);
-    color: #ffffff;
-    border-color: var(--river-deep);
+    background-color: transparent;
+    color: var(--river-deep);
+    border-bottom: 2px solid var(--river-mid);
     font-weight: 600;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -101,7 +105,7 @@ html, body {
 .table td:last-child {
     font-variant-numeric: tabular-nums;
     color: var(--river-deep);
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .value-cell {
@@ -149,6 +153,17 @@ html, body {
 }
 
 @media screen and (max-width: 768px) {
+    .section {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .run-section {
+        padding: 0.75rem 0.6rem 0.5rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+    }
+
     .banner-inner {
         justify-content: center;
     }
