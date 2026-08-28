@@ -116,6 +116,16 @@ html, body {
     width: 130px;
 }
 
+.col-icon {
+    width: 48px;
+}
+
+.row-icon {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+}
+
 @media screen and (max-width: 768px) {
     .col-stage {
         width: 90px;
@@ -123,6 +133,15 @@ html, body {
 
     .col-flow {
         width: 80px;
+    }
+
+    .col-icon {
+        width: 36px;
+    }
+
+    .row-icon {
+        width: 22px;
+        height: 22px;
     }
 
     .table td, .table th {
