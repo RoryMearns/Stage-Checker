@@ -123,9 +123,6 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
             }
 
             const meta = siteMeta[siteId];
-            const wadeLimitTag = meta?.wadeLimitFlow !== undefined
-                ? ` <span class="tag is-warning is-light is-hidden-mobile">limit ${meta.wadeLimitFlow}</span>`
-                : '';
 
             const flowItem = flowBySite.get(siteId);
             const iconName = flowIconName(flowItem, meta);
@@ -134,7 +131,7 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
 
             row.innerHTML = `
                 <td>${item.Location}</td>
-                <td class="has-text-right">${formatValueCell(item, wadeLimitTag)}</td>
+                <td class="has-text-right stage-cell">${formatValueCell(item)}</td>
                 <td class="has-text-right flow-cell">${formatValueCell(flowItem)}</td>
                 <td class="has-text-centered icon-cell"><img src="${iconUrl}" alt="${iconLabel}" title="${iconLabel}" class="row-icon"></td>
             `;
