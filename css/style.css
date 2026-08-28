@@ -73,6 +73,10 @@ html, body {
     font-size: 0.75rem;
 }
 
+.unit-label {
+    white-space: nowrap;
+}
+
 .table.is-striped tbody tr:not(.is-selected):nth-child(even) {
     background-color: var(--river-pale);
 }
@@ -124,6 +128,19 @@ html, body {
     width: 28px;
     height: 28px;
     vertical-align: middle;
+}
+
+.table td.flow-cell {
+    padding-left: 0.35em;
+    padding-right: 0.35em;
+}
+
+.table td.stage-cell {
+    padding-right: 0.35em;
+}
+
+.table td.icon-cell {
+    padding-left: 0.35em;
 }
 
 @media screen and (max-width: 768px) {

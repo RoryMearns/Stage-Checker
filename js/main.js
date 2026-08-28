@@ -101,8 +101,8 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
             <thead>
                 <tr>
                     <th>Location</th>
-                    <th class="has-text-right">Stage (m)</th>
-                    <th class="has-text-right">Flow (m³/s)</th>
+                    <th class="has-text-right">Stage<span class="unit-label is-hidden-mobile"> (m)</span></th>
+                    <th class="has-text-right">Flow<span class="unit-label is-hidden-mobile"> (m³/s)</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -135,8 +135,8 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
             row.innerHTML = `
                 <td>${item.Location}</td>
                 <td class="has-text-right">${formatValueCell(item, wadeLimitTag)}</td>
-                <td class="has-text-right">${formatValueCell(flowItem)}</td>
-                <td class="has-text-centered"><img src="${iconUrl}" alt="${iconLabel}" title="${iconLabel}" class="row-icon"></td>
+                <td class="has-text-right flow-cell">${formatValueCell(flowItem)}</td>
+                <td class="has-text-centered icon-cell"><img src="${iconUrl}" alt="${iconLabel}" title="${iconLabel}" class="row-icon"></td>
             `;
             tbody.appendChild(row);
         });
