@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loadingDiv = document.getElementById('loading');
     const errorDiv = document.getElementById('error');
     const runsContainer = document.getElementById('runs-container');
+    const legendDiv = document.getElementById('legend');
     const errorMessage = document.getElementById('error-message');
 
     try {
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         loadingDiv.style.display = 'none';
         runsContainer.style.display = 'block';
+        legendDiv.style.display = 'block';
 
     } catch (error) {
         errorMessage.textContent = `Failed to load data: ${error.message}`;
