@@ -1,6 +1,27 @@
 import {fetchStageData, fetchFlowData} from "./api.js";
 
 const RUN_INFO_URL = new URL('../data/run-info.json', import.meta.url);
+const IMAGES_BASE_URL = new URL('../images/', import.meta.url);
+
+const FLOW_ICON_LABELS = {
+    flowtracker: 'Flow below FT limit',
+    microboard: 'Flow at or above FT limit, below SXS limit',
+    'moving-boat': 'Flow at or above SXS limit',
+    'no-data': 'No flow limit data available'
+};
+
+function flowIconName(flowItem, meta) {
+    const ft = meta?.ftUpperLimit;
+    const sxs = meta?.sxsUpperLimit;
+    const value = (flowItem && typeof flowItem.ValueNumber === 'number') ? flowItem.ValueNumber : null;
+
+    if (value === null || typeof ft !== 'number' || typeof sxs !== 'number') {
+        return 'no-data';
+    }
+    if (value < ft) return 'flowtracker';
+    if (value < sxs) return 'microboard';
+    return 'moving-boat';
+}
 
 async function loadRunInfo() {
     const res = await fetch(RUN_INFO_URL, { cache: 'no-store' });
@@ -48,18 +69,12 @@ function formatValueCell(dataItem, extraTag = '') {
     const isOverdue = dataItem?.State === 'OVERDUE';
     const hasValue = dataItem && typeof dataItem.ValueNumber === 'number';
 
-    const overdueTag = isOverdue
-        ? '<span class="overdue-tag" title="Equipment overdue — this site has stopped reporting, value may be stale">Overdue</span>'
+    const text = hasValue ? dataItem.ValueNumber.toFixed(3) : '—';
+    const overdueAttrs = isOverdue
+        ? ' class="is-overdue" title="Equipment overdue — this site has stopped reporting, value may be stale"'
         : '';
 
-    let valueMarkup = '<span>—</span>';
-    if (hasValue) {
-        valueMarkup = `<span>${dataItem.ValueNumber.toFixed(3)}</span>`;
-    } else if (isOverdue) {
-        valueMarkup = '';
-    }
-
-    return `<span class="value-cell">${extraTag}${overdueTag}${valueMarkup}</span>`;
+    return `<span class="value-cell">${extraTag}<span${overdueAttrs}>${text}</span></span>`;
 }
 
 function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
@@ -81,12 +96,14 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
                 <col>
                 <col class="col-stage">
                 <col class="col-flow">
+                <col class="col-icon">
             </colgroup>
             <thead>
                 <tr>
                     <th>Location</th>
-                    <th class="has-text-right">Stage (m)</th>
-                    <th class="has-text-right">Flow (m³/s)</th>
+                    <th class="has-text-right">Stage<span class="unit-label is-hidden-mobile"> (m)</span></th>
+                    <th class="has-text-right">Flow<span class="unit-label is-hidden-mobile"> (m³/s)</span></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -99,23 +116,28 @@ function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
 
             if (!item) {
                 row.innerHTML = `
-                    <td colspan="3" class="has-text-grey-light">${siteId} — no data returned</td>
+                    <td colspan="4" class="has-text-grey-light">${siteId} — no data returned</td>
                 `;
                 tbody.appendChild(row);
                 return;
             }
 
             const meta = siteMeta[siteId];
-            const wadeLimitTag = meta?.wadeLimitFlow !== undefined
-                ? ` <span class="tag is-warning is-light is-hidden-mobile">limit ${meta.wadeLimitFlow}</span>`
-                : '';
+            const shortName = meta?.shortName?.trim();
+            const locationCell = shortName
+                ? `<span class="full-name">${item.Location}</span><span class="short-name">${shortName}</span>`
+                : item.Location;
 
             const flowItem = flowBySite.get(siteId);
+            const iconName = flowIconName(flowItem, meta);
+            const iconUrl = new URL(`${iconName}.svg`, IMAGES_BASE_URL).href;
+            const iconLabel = FLOW_ICON_LABELS[iconName];
 
             row.innerHTML = `
-                <td>${item.Location}</td>
-                <td class="has-text-right">${formatValueCell(item, wadeLimitTag)}</td>
-                <td class="has-text-right">${formatValueCell(flowItem)}</td>
+                <td>${locationCell}</td>
+                <td class="has-text-right stage-cell">${formatValueCell(item)}</td>
+                <td class="has-text-right flow-cell">${formatValueCell(flowItem)}</td>
+                <td class="has-text-centered icon-cell"><img src="${iconUrl}" alt="${iconLabel}" title="${iconLabel}" class="row-icon"></td>
             `;
             tbody.appendChild(row);
         });
