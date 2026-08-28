@@ -48,18 +48,12 @@ function formatValueCell(dataItem, extraTag = '') {
     const isOverdue = dataItem?.State === 'OVERDUE';
     const hasValue = dataItem && typeof dataItem.ValueNumber === 'number';
 
-    const overdueTag = isOverdue
-        ? '<span class="overdue-tag" title="Equipment overdue — this site has stopped reporting, value may be stale">Overdue</span>'
+    const text = hasValue ? dataItem.ValueNumber.toFixed(3) : '—';
+    const overdueAttrs = isOverdue
+        ? ' class="is-overdue" title="Equipment overdue — this site has stopped reporting, value may be stale"'
         : '';
 
-    let valueMarkup = '<span>—</span>';
-    if (hasValue) {
-        valueMarkup = `<span>${dataItem.ValueNumber.toFixed(3)}</span>`;
-    } else if (isOverdue) {
-        valueMarkup = '';
-    }
-
-    return `<span class="value-cell">${extraTag}${overdueTag}${valueMarkup}</span>`;
+    return `<span class="value-cell">${extraTag}<span${overdueAttrs}>${text}</span></span>`;
 }
 
 function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {

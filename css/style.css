@@ -103,16 +103,9 @@ html, body {
     white-space: nowrap;
 }
 
-.overdue-tag {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: #8C3B2E;
-    background-color: #FBEEEC;
-    border-radius: 4px;
-    padding: 0.15rem 0.45rem;
-    white-space: nowrap;
+.is-overdue {
+    color: var(--river-muted);
+    font-weight: 400;
 }
 
 .col-stage {
