@@ -1,42 +1,4 @@
 {
-	"runs": [
-		{
-			"name": "Toko",
-			"sites": ["EM182", "EM294"]
-		},
-		{
-			"name": "Lower Taieri",
-			"sites": ["EM140", "EM156"]
-		},
-		{
-			"name": "City",
-			"sites": ["EY199", "EM136", "GT263", "EM135", "GT533"]
-		},
-		{
-			"name": "3 O'Clock",
-			"sites": ["EW387", "EM141", "FF416"]
-		},
-		{
-			"name": "Maws",
-			"sites": ["EN422", "EM196"]
-		},
-		{
-			"name": "Southwest",
-			"sites": ["EM893", "EM295", "EM448", "EM289", "EN063", "EM525", "GT145"]
-		},
-		{
-			"name": "Catlins",
-			"sites": ["EM481", "EN348"]
-		},
-		{
-			"name": "Maniototo",
-			"sites": ["EM145", "EX666", "FA784", "EM144", "EM142", "EM161", "EM469", "EM293"]
-		},
-		{
-			"name": "North Otago",
-			"sites": ["EM131", "EM462", "EY959", "EM376", "EM617", "EY899", "EM764", "EM618", "EM375", "EM495", "FH844", "EY527", "FK293"]
-		}
-	],
 	"siteMeta": {
 		"EM182": { "shortName": "Toko at West", "ftUpperLimit": 0.8, "sxsUpperLimit": 3 },
 		"EM294": { "shortName": "Tweeds", "ftUpperLimit": 1, "sxsUpperLimit": 5 },
@@ -80,5 +42,47 @@
 		"FH844": { "ftUpperLimit": 0.8, "sxsUpperLimit": 4 },
 		"EY527": { "ftUpperLimit": 0.3, "sxsUpperLimit": 11 },
 		"FK293": { "ftUpperLimit": 0.3, "sxsUpperLimit": 8 }
-	}
+	},
+	"runs": [
+		{
+			"name": "Waitahuna",
+			"sites": ["EM294", "EM135"]
+		},
+		{
+			"name": "Toko Silverstream",
+			"sites": ["EM182"]
+		},
+		{
+			"name": "Lee Stream",
+			"sites": ["GT533", "EM156", "FF416"]
+		},
+		{
+			"name": "City",
+			"sites": ["EY199", "EM136", "GT263"]
+		},
+		{
+			"name": "3 O'Clock",
+			"sites": ["EW387", "EM141", "EM140"]
+		},
+		{
+			"name": "Waiwera",
+			"sites": ["EN422", "EM196"]
+		},
+		{
+			"name": "Catlins",
+			"sites": ["EM481", "EN348"]
+		},
+		{
+			"name": "Southwest Otago",
+			"sites": ["EM893", "EM295", "EM448", "EM289", "EM525", "EN063" ]
+		},
+		{
+			"name": "Clutha",
+			"sites": ["GT145"]
+		},
+		{
+			"name": "Maniototo",
+			"sites": ["FA784", "EX666", "EM145", "EM144", "EM142", "EM293", "EM161", "EM469"]
+		}
+	]
 }
