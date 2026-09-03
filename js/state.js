@@ -1,10 +1,31 @@
+const STORAGE_KEY = 'stagechecker:collapsed-sections';
+
+function loadPersisted() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const ids = raw ? JSON.parse(raw) : [];
+        return new Set(Array.isArray(ids) ? ids : []);
+    } catch {
+        return new Set();
+    }
+}
+
+function persist() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.collapsed]));
+    } catch {
+        // Storage unavailable, fail silently
+    }
+}
+
 const state = {
-    collapsed: new Set()
+    collapsed: loadPersisted()
 };
 
 const listeners = new Set();
 
 function notify() {
+    persist();
     listeners.forEach(listener => listener(state));
 }
 
