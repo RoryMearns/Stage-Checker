@@ -150,6 +150,61 @@ html, body {
     height: 24px;
 }
 
+.calc-card {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.calc-title {
+    margin-bottom: 0.75rem;
+}
+
+.calc-help {
+    color: var(--river-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.calc-help strong {
+    color: inherit;
+}
+
+.calc-steps {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+}
+
+.calc-help.calc-direction {
+    margin-top: 1.25rem;
+    margin-bottom: 0.35rem;
+}
+
+.calc-button {
+    background-color: var(--river-mid);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+}
+
+.calc-button:hover {
+    background-color: var(--river-deep);
+    color: #ffffff;
+}
+
+.calc-result {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--river-deep);
+}
+
+.calc-result.is-error {
+    color: #8C3B2E;
+    font-weight: 500;
+}
+
 .notification.is-info {
     background-color: var(--river-pale);
     color: var(--river-deep);
