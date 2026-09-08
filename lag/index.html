@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lag Time Calculator - The Friendly Shag</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-banner">
+    <div class="container banner-inner">
+        <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+        <span class="banner-title">The Friendly Shag</span>
+    </div>
+</header>
+
+<section class="section">
+    <div class="container">
+        <div class="run-section calc-card">
+            <h2 class="run-heading calc-title">Lag Time Calculator</h2>
+            <p class="calc-help">
+                Calculate lag time to be subtracted from the gauging time based on the distance from the gauging
+                site to the recorder station.
+            </p>
+
+            <form id="lag-form">
+                <div class="field">
+                    <label class="label" for="velocity">Velocity (m/s)</label>
+                    <div class="control">
+                        <input class="input" type="number" id="velocity" name="velocity" step="any" min="0" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="distance">Distance (m)</label>
+                    <div class="control">
+                        <input class="input" type="number" id="distance" name="distance" step="any" min="0" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button calc-button">Calculate lag time</button>
+                    </div>
+                </div>
+            </form>
+
+            <p id="lag-result" class="calc-result" style="display: none;"></p>
+            <p id="lag-steps" class="calc-help calc-steps" style="display: none;"></p>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<script type="module" src="../js/lag.js"></script>
+</body>
+</html>
