@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stepsEl.style.display = '';
         stepsEl.innerHTML = `
             Lag time = distance ÷ velocity<br>
-            = ${distance}m ÷ ${velocity}m/s = ${seconds.toFixed(1)}s<br>
+            = ${distance}m ÷ ${velocity}m/s = ${seconds.toFixed(1)} seconds<br>
             = ${seconds.toFixed(1)}s ÷ 60 = ${exactMinutes.toFixed(2)} minutes
         `;
     });
