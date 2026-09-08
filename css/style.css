@@ -167,9 +167,18 @@ html, body {
     margin-bottom: 1.25rem;
 }
 
+.calc-help strong {
+    color: inherit;
+}
+
 .calc-steps {
     margin-top: 0.75rem;
     margin-bottom: 0;
+}
+
+.calc-help.calc-direction {
+    margin-top: 1.25rem;
+    margin-bottom: 0.35rem;
 }
 
 .calc-button {

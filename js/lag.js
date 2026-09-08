@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const velocityInput = document.getElementById('velocity');
     const distanceInput = document.getElementById('distance');
     const resultEl = document.getElementById('lag-result');
+    const directionEl = document.getElementById('lag-direction');
     const stepsEl = document.getElementById('lag-steps');
 
     form.addEventListener('submit', event => {
@@ -15,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
             resultEl.textContent = 'Enter a velocity greater than 0 and a distance of 0 or more.';
             resultEl.classList.add('is-error');
             resultEl.style.display = '';
+            directionEl.style.display = 'none';
+            directionEl.textContent = '';
             stepsEl.style.display = 'none';
             stepsEl.textContent = '';
             return;
@@ -27,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resultEl.classList.remove('is-error');
         resultEl.style.display = '';
         resultEl.textContent = `${roundedMinutes} minute lag time`;
+
+        directionEl.style.display = '';
+        directionEl.innerHTML = `
+            <strong>Gauging upstream:</strong> <em>add</em> <strong>${roundedMinutes} minutes</strong> to your gauging time.<br>
+            <strong>Gauging downstream:</strong> <em>subtract</em> <strong>${roundedMinutes} minutes</strong> from your gauging time.
+        `;
 
         stepsEl.style.display = '';
         stepsEl.innerHTML = `
