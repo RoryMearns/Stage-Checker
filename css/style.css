@@ -171,14 +171,13 @@ html, body {
     color: inherit;
 }
 
-.calc-steps {
-    margin-top: 0.75rem;
-    margin-bottom: 0;
+.calc-help a {
+    color: var(--river-mid);
+    font-weight: 600;
 }
 
-.calc-help.calc-direction {
-    margin-top: 1.25rem;
-    margin-bottom: 0.35rem;
+.calc-help a:hover {
+    color: var(--river-deep);
 }
 
 .calc-button {
@@ -203,6 +202,26 @@ html, body {
 .calc-result.is-error {
     color: #8C3B2E;
     font-weight: 500;
+}
+
+.calc-steps {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+}
+
+.calc-help.calc-direction {
+    margin-top: 1.25rem;
+    margin-bottom: 0.35rem;
+}
+
+.field-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.field-row .field {
+    flex: 1;
+    min-width: 0;
 }
 
 .notification.is-info {
@@ -376,5 +395,9 @@ html, body {
     .table td, .table th {
         padding: 0.3em 0.4em;
         font-size: 0.9rem;
+    }
+
+    .field-row {
+        gap: 0.5rem;
     }
 }

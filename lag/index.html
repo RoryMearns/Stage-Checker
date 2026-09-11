@@ -53,6 +53,41 @@
             <p id="lag-direction" class="calc-help calc-direction" style="display: none;"></p>
             <p id="lag-steps" class="calc-help calc-steps" style="display: none;"></p>
         </div>
+
+        <div class="run-section calc-card">
+            <h2 class="run-heading calc-title">Magnetic Declination</h2>
+            <p class="calc-help">
+                Convert magnetic declination degrees and minutes (e.g. 25&deg; 46') from
+                <a href="https://www.magnetic-declination.com/" target="_blank" rel="noopener">magnetic-declination.com</a> to decimal degrees.
+            </p>
+
+            <form id="declination-form">
+                <div class="field-row">
+                    <div class="field">
+                        <label class="label" for="declination-degrees">Degrees (&deg;)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="declination-degrees" name="degrees" step="1" min="0" max="360" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="declination-minutes">Minutes (')</label>
+                        <div class="control">
+                            <input class="input" type="number" id="declination-minutes" name="minutes" step="any" min="0" max="59.99" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button calc-button">Convert to decimal degrees</button>
+                    </div>
+                </div>
+            </form>
+
+            <p id="declination-result" class="calc-result" style="display: none;"></p>
+            <p id="declination-steps" class="calc-help calc-steps" style="display: none;"></p>
+        </div>
     </div>
 </section>
 
@@ -61,5 +96,6 @@
 </footer>
 
 <script type="module" src="../js/lag.js"></script>
+<script type="module" src="../js/declination.js"></script>
 </body>
 </html>
