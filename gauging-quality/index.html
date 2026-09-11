@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gauging Quality Card - The Friendly Shag</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-banner">
+    <div class="container banner-inner">
+        <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+        <span class="banner-title">The Friendly Shag</span>
+    </div>
+</header>
+
+<section class="section">
+    <div class="container">
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Gauging Quality Card</h2>
+            <p class="calc-help">
+                Select one option per criterion to estimate the ADCP gauging quality.
+            </p>
+
+            <div class="field-row gq-meta-row">
+                <div class="field">
+                    <label class="label" for="gq-site">Site</label>
+                    <div class="control">
+                        <input class="input" type="text" id="gq-site" name="site" placeholder="e.g. Taieri at Outram">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="gq-date">Date</label>
+                    <div class="control">
+                        <input class="input" type="date" id="gq-date" name="date">
+                    </div>
+                </div>
+            </div>
+
+            <div id="gq-criteria">
+
+                <div class="gq-criterion" data-name="1">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">1</span>
+                        <span class="gq-name">Channel Description <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-1" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Bed debris and vegetation disrupting flow and bed profile, a large amount of non-uniform and turbulent flow. Aeration of the water.</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-1" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Some non-uniform flow, asymmetrical channel shape, some bed debris/vegetation causing moderate flow and channel disturbance.</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-1" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> Uniform/laminar flow, smooth uniform X-section profile, no large bed debris or vegetation disruption of flow within the channel profile.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="2">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">2</span>
+                        <span class="gq-name">Total Exposure Time</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-2" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 0-8 min</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-2" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 8-12 min</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-2" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> &gt;12 min</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="3">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">3</span>
+                        <span class="gq-name">% of Q Measured</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-3" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> &le;40%</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-3" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> &gt;40% &amp; &lt;65%</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-3" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> &ge;65%</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="4">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">4</span>
+                        <span class="gq-name">Data loss, missing or lost ensembles <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-4" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Significant, large blocks located in main areas of channel flow.</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-4" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Some blocks randomly located across channel.</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-4" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> No or minor instances located randomly.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="6">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">6</span>
+                        <span class="gq-name">Compass Calibration</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-6" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Q1-4 or not completed</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-6" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Sontek Q5-7 Or RDI &gt;2&deg;</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-6" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> Sontek Q8-9 Or RDI &lt;2&deg;</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="7">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">7</span>
+                        <span class="gq-name">Moving Bed Test</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-7" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Not completed</span>
+                        </label>
+                        <div class="gq-option gq-option-empty" aria-hidden="true"></div>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-7" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> Completed</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="8">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">8</span>
+                        <span class="gq-name">Edge Data <em>All transects must have 2+ cells to be Good</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-8" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 0 cells</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-8" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 1 cell</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-8" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> 2+ cells</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="9">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">9</span>
+                        <span class="gq-name">Pitch <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-9" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 10&deg; +</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-9" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 6-9&deg;</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-9" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> 0-5&deg;</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="10">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">10</span>
+                        <span class="gq-name">Roll <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-10" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 10&deg; +</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-10" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 6-9&deg;</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-10" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> 0-5&deg;</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="11">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">11</span>
+                        <span class="gq-name">Moving Bed Track Reference</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-11" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Bottom Track - no loop correction.</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-11" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Bottom Track - loop correction.</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-11" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> GPS-RTK/GPS-VTG or N/A</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="12">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">12</span>
+                        <span class="gq-name">Max GPS HDOP's <em>Only if GPS used as a reference</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-12" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> &gt;6</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-12" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 3-5</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-12" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> &lt;2</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="field gq-notes-field">
+                <label class="label" for="gq-notes">Notes</label>
+                <div class="control">
+                    <textarea id="gq-notes" class="textarea" rows="4" placeholder="Add any additional notes about this gauging..."></textarea>
+                </div>
+            </div>
+
+            <p id="gq-progress" class="calc-help"></p>
+
+            <div class="gq-totals">
+                <div class="gq-total-item gq-total-poor">
+                    <span class="gq-total-label">Poor points</span>
+                    <span id="gq-total-poor" class="gq-total-value">0</span>
+                </div>
+                <div class="gq-total-item gq-total-fair">
+                    <span class="gq-total-label">Fair points</span>
+                    <span id="gq-total-fair" class="gq-total-value">0</span>
+                </div>
+                <div class="gq-total-item gq-total-good">
+                    <span class="gq-total-label">Good points</span>
+                    <span id="gq-total-good" class="gq-total-value">0</span>
+                </div>
+                <div class="gq-total-item gq-grand-total">
+                    <span class="gq-total-label">Grand total</span>
+                    <span id="gq-total-grand" class="gq-total-value">0</span>
+                </div>
+            </div>
+
+            <div id="gq-quality-code" class="gq-quality-code"></div>
+
+            <p class="calc-help gq-note">
+                <strong>Note:</strong> if 3 or more criteria are marked Poor, the gauging is automatically
+                classified as Poor, regardless of total score.
+            </p>
+
+            <div class="field gq-actions">
+                <button type="button" id="gq-reset" class="button gq-reset-button">Reset all</button>
+                <button type="button" id="gq-download" class="button calc-button">Download results</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module" src="../js/gauging-quality.js"></script>
+</body>
+</html>
