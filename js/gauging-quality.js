@@ -126,18 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const siteValue = siteInput.value.trim();
         const dateValue = formatDateForDisplay(dateInput.value);
-        if (siteValue || dateValue) {
-            const meta = document.createElement('div');
-            meta.className = 'gq-report-meta';
-            meta.innerHTML = `
-                ${siteValue ? `<span><strong>Site:</strong> ${siteValue}</span>` : ''}
-                ${dateValue ? `<span><strong>Date:</strong> ${dateValue}</span>` : ''}
-            `;
-            report.appendChild(meta);
-        }
 
         const list = document.createElement('ul');
         list.className = 'gq-report-list';
+
+        if (siteValue) {
+            list.innerHTML += `<li><span class="gq-report-name">Site:</span> <span class="gq-report-value">${siteValue}</span></li>`;
+        }
+        if (dateValue) {
+            list.innerHTML += `<li><span class="gq-report-name">Date:</span> <span class="gq-report-value">${dateValue}</span></li>`;
+        }
 
         criteria.forEach(criterion => {
             const number = criterion.dataset.name;
