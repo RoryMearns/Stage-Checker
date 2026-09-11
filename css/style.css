@@ -217,11 +217,19 @@ html, body {
 .field-row {
     display: flex;
     gap: 0.75rem;
+    margin-bottom: 0.85rem;
 }
 
 .field-row .field {
     flex: 1;
     min-width: 0;
+    margin-bottom: 0;
+}
+
+.field-row .fn-field {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
 }
 
 .gq-meta-row {
@@ -783,4 +791,90 @@ html, body {
 .gq-report-notes p {
     margin: 0.35rem 0 0;
     white-space: pre-wrap;
+}
+
+.fn-section {
+    margin-bottom: 1.5rem;
+}
+
+.fn-section:last-of-type {
+    margin-bottom: 1rem;
+}
+
+.fn-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--river-mid);
+    border-bottom: 1px solid var(--river-line);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.85rem;
+}
+
+.fn-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.25rem;
+}
+
+.fn-grid > .field,
+.fn-grid > .fn-field {
+    flex: 1 1 220px;
+    min-width: 200px;
+    margin-bottom: 0;
+}
+
+.fn-grid > .fn-field-wide {
+    flex-basis: 100%;
+}
+
+.fn-field-label {
+    font-weight: 600;
+    color: var(--river-deep);
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+.fn-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.fn-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--river-line);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--river-deep);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.fn-option input[type="radio"] {
+    width: 0.9rem;
+    height: 0.9rem;
+    margin: 0;
+    accent-color: var(--river-deep);
+}
+
+.fn-option.is-selected,
+.fn-option:has(input:checked) {
+    background-color: var(--river-pale);
+    border-color: var(--river-mid);
+}
+
+.fn-other-input {
+    margin-top: 0.5rem;
+    max-width: 260px;
+}
+
+.fn-help {
+    color: var(--river-muted);
+    font-size: 0.78rem;
+    margin-top: 0.35rem;
 }

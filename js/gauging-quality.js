@@ -1,3 +1,5 @@
+import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng } from './form-utils.js';
+
 const POINTS = { poor: 3, fair: 1, good: 0 };
 
 const QUALITY_CODES = [
@@ -20,26 +22,6 @@ function getSelectedDescription(checkedInput) {
     if (labelWord) labelWord.remove();
 
     return clone.textContent.trim();
-}
-
-function todayIsoDate() {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-}
-
-function formatDateForDisplay(isoDate) {
-    if (!isoDate) return '';
-    const [year, month, day] = isoDate.split('-');
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const monthIndex = parseInt(month, 10) - 1;
-    return `${parseInt(day, 10)} ${monthNames[monthIndex]} ${year}`;
-}
-
-function sanitizeForFilename(text) {
-    return text.trim().replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -219,36 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return report;
     }
 
-    downloadButton.addEventListener('click', async () => {
-        if (typeof html2canvas !== 'function') {
-            alert('Could not generate the image - please check your internet connection and try again.');
-            return;
-        }
-
+    downloadButton.addEventListener('click', () => {
         const report = buildReport();
-        report.style.position = 'absolute';
-        report.style.left = '-9999px';
-        report.style.top = '0';
-        report.style.width = '480px';
-        document.body.appendChild(report);
-
-        try {
-            const canvas = await html2canvas(report, { backgroundColor: '#F5F8F7', scale: 2 });
-            const link = document.createElement('a');
-
-            const siteValue = sanitizeForFilename(siteInput.value || '');
-            const dateValue = dateInput.value || '';
-            const nameParts = ['ADCP Gauging Quality Card', siteValue, dateValue].filter(Boolean);
-
-            link.download = `${nameParts.join(' - ')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        } catch (error) {
-            console.error('Failed to generate results image:', error);
-            alert('Something went wrong generating the image. Please try again.');
-        } finally {
-            report.remove();
-        }
+        const siteValue = sanitizeForFilename(siteInput.value || '');
+        const dateValue = dateInput.value || '';
+        const nameParts = ['ADCP Gauging Quality Card', siteValue, dateValue].filter(Boolean);
+        downloadElementAsPng(report, `${nameParts.join(' - ')}.png`);
     });
 
     recalculate();
