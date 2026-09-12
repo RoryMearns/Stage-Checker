@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="page-gauging">
 <header class="site-banner">
     <div class="container banner-inner">
         <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
@@ -151,12 +151,6 @@
                             <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Across"><span>Across</span></label>
                         </div>
                     </div>
-                    <div class="field">
-                        <label class="label" for="fn-water-temp">External water temp (&deg;C)</label>
-                        <div class="control">
-                            <input class="input" type="number" id="fn-water-temp" step="any">
-                        </div>
-                    </div>
                     <div class="fn-field">
                         <div class="fn-field-label">Water clarity</div>
                         <div class="fn-options">
@@ -225,6 +219,12 @@
                         </div>
                     </div>
                     <div class="field">
+                        <label class="label" for="fn-water-temp">External water temp (&deg;C)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-water-temp" step="any">
+                        </div>
+                    </div>
+                    <div class="field">
                         <label class="label" for="fn-xsection-pct">% of x-section measured</label>
                         <div class="control">
                             <input class="input" type="number" id="fn-xsection-pct" step="any" min="0" max="100">
@@ -278,8 +278,11 @@
 
             <div class="field gq-actions">
                 <button type="button" id="fn-reset" class="button gq-reset-button">Reset all</button>
+                <button type="button" id="fn-share" class="button calc-button">Copy share link</button>
                 <button type="button" id="fn-download" class="button calc-button">Download notes</button>
             </div>
+
+            <p id="fn-share-link" class="fn-share-link" style="display: none;"></p>
         </div>
 
         <div class="run-section">

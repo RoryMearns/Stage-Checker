@@ -1,4 +1,4 @@
-import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng } from './form-utils.js';
+import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, encodeStateToCode, decodeCodeToState, copyToClipboard } from './form-utils.js';
 
 function radioValue(name) {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
@@ -42,6 +42,17 @@ function setupOtherToggle(radioName, otherInputId) {
     return sync;
 }
 
+function setRadio(name, value) {
+    if (value === undefined || value === null) return;
+    const input = document.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (input) input.checked = true;
+}
+
+function setInputValue(id, value) {
+    if (value === undefined || value === null) return;
+    document.getElementById(id).value = value;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const siteNameInput = document.getElementById('fn-site-name');
     const dateInput = document.getElementById('fn-date');
@@ -50,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButton = document.getElementById('fn-reset');
     const downloadButton = document.getElementById('fn-download');
     const notesInput = document.getElementById('fn-notes');
+    const shareButton = document.getElementById('fn-share');
+    const shareLinkEl = document.getElementById('fn-share-link');
 
     dateInput.value = todayIsoDate();
 
@@ -70,12 +83,109 @@ document.addEventListener('DOMContentLoaded', () => {
         notesInput.value = '';
         dateInput.value = todayIsoDate();
         otherSyncs.forEach(sync => sync());
+        shareLinkEl.style.display = 'none';
+        delete shareLinkEl.dataset.url;
     });
 
     function textValue(id) {
         const value = document.getElementById(id).value.trim();
         return value || null;
     }
+
+    function collectState() {
+        const state = {};
+        const set = (key, value) => { if (value) state[key] = value; };
+
+        set('s', textValue('fn-site-name'));
+        set('d', dateInput.value);
+        set('p', textValue('fn-party'));
+        set('l', textValue('fn-location'));
+        set('lt', radioValue('fn-laptop'));
+        set('lto', textValue('fn-laptop-other'));
+        set('r5', radioValue('fn-rs5'));
+        set('r5o', textValue('fn-rs5-other'));
+        set('m9', radioValue('fn-m9'));
+        set('m9o', textValue('fn-m9-other'));
+        set('md', radioValue('fn-method'));
+        set('pf', radioValue('fn-platform'));
+        set('pfo', textValue('fn-platform-other'));
+        set('tr', radioValue('fn-traverse'));
+        set('ws', radioValue('fn-wind-speed'));
+        set('wd', radioValue('fn-wind-direction'));
+        set('wt', textValue('fn-water-temp'));
+        set('wc', radioValue('fn-clarity'));
+        set('st', radioValue('fn-system-test'));
+        set('cc', radioValue('fn-compass-cal'));
+        set('lp', radioValue('fn-loop-test'));
+        set('td', textValue('fn-transducer-depth'));
+        set('sd', textValue('fn-screening-distance'));
+        set('cw', textValue('fn-channel-width'));
+        set('xp', textValue('fn-xsection-pct'));
+        set('t1', radioValue('fn-time-12min'));
+        set('mv', textValue('fn-mean-velocity'));
+        set('dr', textValue('fn-distance-recorder'));
+        set('tx', textValue('fn-transects'));
+        set('mq', textValue('fn-mean-q'));
+        set('cv', textValue('fn-cov'));
+        set('n', notesInput.value.trim());
+
+        return state;
+    }
+
+    function applyState(state) {
+        setInputValue('fn-site-name', state.s);
+        if (state.d) dateInput.value = state.d;
+        setInputValue('fn-party', state.p);
+        setInputValue('fn-location', state.l);
+        setRadio('fn-laptop', state.lt);
+        setInputValue('fn-laptop-other', state.lto);
+        setRadio('fn-rs5', state.r5);
+        setInputValue('fn-rs5-other', state.r5o);
+        setRadio('fn-m9', state.m9);
+        setInputValue('fn-m9-other', state.m9o);
+        setRadio('fn-method', state.md);
+        setRadio('fn-platform', state.pf);
+        setInputValue('fn-platform-other', state.pfo);
+        setRadio('fn-traverse', state.tr);
+        setRadio('fn-wind-speed', state.ws);
+        setRadio('fn-wind-direction', state.wd);
+        setInputValue('fn-water-temp', state.wt);
+        setRadio('fn-clarity', state.wc);
+        setRadio('fn-system-test', state.st);
+        setRadio('fn-compass-cal', state.cc);
+        setRadio('fn-loop-test', state.lp);
+        setInputValue('fn-transducer-depth', state.td);
+        setInputValue('fn-screening-distance', state.sd);
+        setInputValue('fn-channel-width', state.cw);
+        setInputValue('fn-xsection-pct', state.xp);
+        setRadio('fn-time-12min', state.t1);
+        setInputValue('fn-mean-velocity', state.mv);
+        setInputValue('fn-distance-recorder', state.dr);
+        setInputValue('fn-transects', state.tx);
+        setInputValue('fn-mean-q', state.mq);
+        setInputValue('fn-cov', state.cv);
+        if (state.n) notesInput.value = state.n;
+
+        otherSyncs.forEach(sync => sync());
+    }
+
+    async function loadFromUrlIfPresent() {
+        const code = new URLSearchParams(window.location.search).get('d');
+        if (!code) return;
+
+        try {
+            const state = await decodeCodeToState(code);
+            applyState(state);
+        } catch (error) {
+            console.error('Failed to load shared link:', error);
+        } finally {
+            // Remove the code from the URL bar so refreshing the page doesn't re-apply it
+            const cleanUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+    }
+
+    loadFromUrlIfPresent();
 
     function buildReport() {
         const report = document.createElement('div');
@@ -109,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
             divider(),
             fieldRow('Wind speed', radioValue('fn-wind-speed')),
             fieldRow('Wind direction', radioValue('fn-wind-direction')),
-            fieldRow('External water temp', textValue('fn-water-temp') ? `${textValue('fn-water-temp')}&deg;C` : null),
             fieldRow('Water clarity', radioValue('fn-clarity')),
             divider(),
             fieldRow('System test completed', radioValue('fn-system-test')),
@@ -120,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fieldRow('Measured transducer depth', textValue('fn-transducer-depth') ? `${textValue('fn-transducer-depth')}m` : null),
             fieldRow('Screening distance used', textValue('fn-screening-distance') ? `${textValue('fn-screening-distance')}m` : null),
             fieldRow('Rangefinder channel width', textValue('fn-channel-width') ? `${textValue('fn-channel-width')}m` : null),
+            fieldRow('External water temp', textValue('fn-water-temp') ? `${textValue('fn-water-temp')}&deg;C` : null),
             fieldRow('% of x-section measured', textValue('fn-xsection-pct') ? `${textValue('fn-xsection-pct')}%` : null),
             fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null),
             fieldRow('Distance to recorder', textValue('fn-distance-recorder') ? `${textValue('fn-distance-recorder')} m` : null)
@@ -170,5 +280,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateValue = dateInput.value || '';
         const nameParts = ['ADCP Field Measurement Notes', siteValue, dateValue].filter(Boolean);
         downloadElementAsPng(report, `${nameParts.join(' - ')}.png`);
+    });
+
+    async function showCopyFeedback(copied) {
+        const original = shareLinkEl.textContent;
+        shareLinkEl.textContent = copied ? 'Copied to clipboard!' : 'Copy failed - select and copy manually';
+        setTimeout(() => {
+            shareLinkEl.textContent = original;
+        }, 1400);
+    }
+
+    shareButton.addEventListener('click', async () => {
+        const state = collectState();
+        const code = await encodeStateToCode(state);
+        const url = `${window.location.origin}${window.location.pathname}?d=${code}`;
+
+        shareLinkEl.dataset.url = url;
+        shareLinkEl.textContent = url;
+        shareLinkEl.style.display = '';
+
+        const copied = await copyToClipboard(url);
+        showCopyFeedback(copied);
+    });
+
+    shareLinkEl.addEventListener('click', async () => {
+        const url = shareLinkEl.dataset.url;
+        if (!url) return;
+        const copied = await copyToClipboard(url);
+        showCopyFeedback(copied);
     });
 });
