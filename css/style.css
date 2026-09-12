@@ -333,6 +333,7 @@ html, body {
     gap: 0.45rem;
     padding: 0.3rem 0.5rem;
     border-radius: 4px;
+    background-color: rgba(31, 59, 60, 0.02);
     border-left: 3px solid transparent;
     cursor: pointer;
     transition: background-color 0.15s ease, border-left-color 0.15s ease;
