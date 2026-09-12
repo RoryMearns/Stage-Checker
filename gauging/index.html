@@ -121,20 +121,20 @@
                     <div class="fn-field">
                         <div class="fn-field-label">RS5 ADCP serial No</div>
                         <div class="fn-options">
-                            <label class="fn-option"><input type="radio" name="fn-rs5" value="RS52126005"><span>RS52126005</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-rs5" value="RS52126006"><span>RS52126006</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-rs5" value="RS52537002"><span>RS52537002</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-rs5" value="Other"><span>Other</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52126005"><span>RS52126005</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52126006"><span>RS52126006</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52537002"><span>RS52537002</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="Other-RS5"><span>Other</span></label>
                         </div>
                         <input class="input fn-other-input is-hidden" type="text" id="fn-rs5-other" placeholder="If Other, specify">
                     </div>
                     <div class="fn-field">
                         <div class="fn-field-label">M9 ADCP serial No</div>
                         <div class="fn-options">
-                            <label class="fn-option"><input type="radio" name="fn-m9" value="401"><span>401</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-m9" value="5755"><span>5755</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-m9" value="2250"><span>2250</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-m9" value="Other"><span>Other</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="401"><span>401</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="5755"><span>5755</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="2250"><span>2250</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="Other-M9"><span>Other</span></label>
                         </div>
                         <input class="input fn-other-input is-hidden" type="text" id="fn-m9-other" placeholder="If Other, specify">
                     </div>
@@ -243,12 +243,6 @@
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="fn-xsection-pct">% of x-section measured</label>
-                        <div class="control">
-                            <input class="input" type="number" id="fn-xsection-pct" step="any" min="0" max="100">
-                        </div>
-                    </div>
-                    <div class="field">
                         <label class="label" for="fn-distance-recorder">Distance to recorder (m)</label>
                         <div class="control">
                             <input class="input" type="number" id="fn-distance-recorder" step="any" min="0">
@@ -260,6 +254,12 @@
                             <input class="input" type="number" id="fn-mean-velocity" step="any" min="0">
                         </div>
                         <p class="fn-help">Used to calculate lag time when distance to recorder is over 200m</p>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-xsection-pct">% of x-section measured</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-xsection-pct" step="any" min="0" max="100">
+                        </div>
                     </div>
                 </div>
             </div>

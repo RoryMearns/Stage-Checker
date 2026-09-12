@@ -23,18 +23,30 @@ function divider() {
 }
 
 function withOther(value, otherInputId) {
-    if (value !== 'Other') return value;
+    if (!value || !value.startsWith('Other')) return value;
     const otherValue = document.getElementById(otherInputId).value.trim();
     return otherValue ? `Other (${otherValue})` : 'Other';
 }
 
-function setupOtherToggle(radioName, otherInputId) {
+const M9_VALUES = ['401', '5755', '2250', 'Other-M9'];
+
+function adcpSerialRow() {
+    const value = radioValue('fn-adcp-serial');
+    if (!value) return fieldRow('ADCP Serial No', null);
+
+    const isM9 = M9_VALUES.includes(value);
+    const label = isM9 ? 'M9 ADCP Serial No' : 'RS5 ADCP Serial No';
+    const otherInputId = isM9 ? 'fn-m9-other' : 'fn-rs5-other';
+    return fieldRow(label, withOther(value, otherInputId));
+}
+
+function setupOtherToggle(radioName, otherInputId, otherValue = 'Other') {
     const otherInput = document.getElementById(otherInputId);
     const radios = document.querySelectorAll(`input[name="${radioName}"]`);
 
     function sync() {
         const checked = document.querySelector(`input[name="${radioName}"]:checked`);
-        const isOther = Boolean(checked && checked.value === 'Other');
+        const isOther = Boolean(checked && checked.value === otherValue);
         otherInput.classList.toggle('is-hidden', !isOther);
     }
 
@@ -70,8 +82,8 @@ dateInput.value = todayIsoDate();
 
 const otherSyncs = [
     setupOtherToggle('fn-laptop', 'fn-laptop-other'),
-    setupOtherToggle('fn-m9', 'fn-m9-other'),
-    setupOtherToggle('fn-rs5', 'fn-rs5-other'),
+    setupOtherToggle('fn-adcp-serial', 'fn-rs5-other', 'Other-RS5'),
+    setupOtherToggle('fn-adcp-serial', 'fn-m9-other', 'Other-M9'),
     setupOtherToggle('fn-platform', 'fn-platform-other')
 ];
 
@@ -97,9 +109,8 @@ export function collectNotesState() {
     set('l', textValue('fn-location'));
     set('lt', radioValue('fn-laptop'));
     set('lto', textValue('fn-laptop-other'));
-    set('r5', radioValue('fn-rs5'));
+    set('as', radioValue('fn-adcp-serial'));
     set('r5o', textValue('fn-rs5-other'));
-    set('m9', radioValue('fn-m9'));
     set('m9o', textValue('fn-m9-other'));
     set('md', radioValue('fn-method'));
     set('pf', radioValue('fn-platform'));
@@ -136,9 +147,8 @@ export function applyNotesState(state) {
     setInputValue('fn-location', state.l);
     setRadio('fn-laptop', state.lt);
     setInputValue('fn-laptop-other', state.lto);
-    setRadio('fn-rs5', state.r5);
+    setRadio('fn-adcp-serial', state.as);
     setInputValue('fn-rs5-other', state.r5o);
-    setRadio('fn-m9', state.m9);
     setInputValue('fn-m9-other', state.m9o);
     setRadio('fn-method', state.md);
     setRadio('fn-platform', state.pf);
@@ -193,8 +203,7 @@ export function buildNotesReport() {
         fieldRow('Water clarity', radioValue('fn-clarity')),
         divider(),
         fieldRow('Rugged laptop used', withOther(radioValue('fn-laptop'), 'fn-laptop-other')),
-        fieldRow('RS5 ADCP serial No', withOther(radioValue('fn-rs5'), 'fn-rs5-other')),
-        fieldRow('M9 ADCP serial No', withOther(radioValue('fn-m9'), 'fn-m9-other')),
+        adcpSerialRow(),
         divider(),
         fieldRow('Measurement Method', radioValue('fn-method')),
         fieldRow('Platform', withOther(radioValue('fn-platform'), 'fn-platform-other')),
@@ -209,9 +218,9 @@ export function buildNotesReport() {
         fieldRow('Screening distance used', textValue('fn-screening-distance') ? `${textValue('fn-screening-distance')}m` : null),
         fieldRow('Rangefinder channel width', textValue('fn-channel-width') ? `${textValue('fn-channel-width')}m` : null),
         fieldRow('External water temp', textValue('fn-water-temp') ? `${textValue('fn-water-temp')}&deg;C` : null),
-        fieldRow('% of x-section measured', textValue('fn-xsection-pct') ? `${textValue('fn-xsection-pct')}%` : null),
         fieldRow('Distance to recorder', textValue('fn-distance-recorder') ? `${textValue('fn-distance-recorder')} m` : null),
-        fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null)
+        fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null),
+        fieldRow('% of x-section measured', textValue('fn-xsection-pct') ? `${textValue('fn-xsection-pct')}%` : null)
     ];
 
     if (hasLag) {
