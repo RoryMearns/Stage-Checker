@@ -456,6 +456,30 @@ html, body {
     color: var(--river-deep);
 }
 
+.gq-total-poor {
+    background-color: #FBEEEC;
+}
+
+.gq-total-poor .gq-total-value {
+    color: #8C3B2E;
+}
+
+.gq-total-fair {
+    background-color: #E6F6FC;
+}
+
+.gq-total-fair .gq-total-value {
+    color: #146C94;
+}
+
+.gq-total-good {
+    background-color: var(--river-pale);
+}
+
+.gq-total-good .gq-total-value {
+    color: var(--river-mid);
+}
+
 .gq-grand-total {
     background-color: var(--river-deep);
 }
