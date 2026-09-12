@@ -9,6 +9,8 @@
 
 html, body {
     background-color: var(--river-bg);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .section {
@@ -872,6 +874,10 @@ html, body {
     line-height: 1.4;
 }
 
+.gq-report-row {
+    font-size: 0.85rem;
+}
+
 .gq-report-divider {
     height: 0;
     line-height: 0;
@@ -887,15 +893,15 @@ html, body {
 }
 
 .gq-report-poor {
-    color: #8C3B2E;
+    color: var(--river-deep);
 }
 
 .gq-report-fair {
-    color: #146C94;
+    color: var(--river-deep);
 }
 
 .gq-report-good {
-    color: var(--river-mid);
+    color: var(--river-deep);
 }
 
 .gq-report-none {
