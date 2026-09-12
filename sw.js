@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shag-shell-v2';
+const CACHE_NAME = 'shag-shell-v3';
 
 const NEVER_CACHE = [
     'yop7qymjl5.execute-api.ap-southeast-2.amazonaws.com',
@@ -37,6 +37,9 @@ const PRECACHE_URLS = [
     '/js/gauging-quality.js',
     '/js/gauging-share.js',
     '/js/form-utils.js',
+
+    '/nems/',
+    '/nems/index.html',
 
     'https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',

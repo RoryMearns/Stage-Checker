@@ -36,17 +36,36 @@ export async function renderElementToCanvas(reportElement) {
     }
 }
 
-function downloadCanvas(canvas, filename) {
+async function saveCanvasAsPng(canvas, filename) {
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+    if (navigator.canShare && navigator.share) {
+        const file = new File([blob], filename, { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({ files: [file] });
+                return;
+            } catch (error) {
+                if (error.name === 'AbortError') return;
+                console.error('Share failed, falling back to direct download:', error);
+            }
+        }
+    }
+
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.download = filename;
-    link.href = canvas.toDataURL('image/png');
+    link.href = url;
+    document.body.appendChild(link);
     link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export async function downloadElementAsPng(reportElement, filename) {
     try {
         const canvas = await renderElementToCanvas(reportElement);
-        downloadCanvas(canvas, filename);
+        await saveCanvasAsPng(canvas, filename);
     } catch (error) {
         console.error('Failed to generate image:', error);
         alert('Something went wrong generating the image. Please try again.');
@@ -76,7 +95,7 @@ export async function downloadElementsSideBySide(reportElements, filename, gap =
             x += canvas.width + gap;
         });
 
-        downloadCanvas(combined, filename);
+        await saveCanvasAsPng(combined, filename);
     } catch (error) {
         console.error('Failed to generate combined image:', error);
         alert('Something went wrong generating the image. Please try again.');
