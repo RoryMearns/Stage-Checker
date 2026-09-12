@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADCP Field Measurement Notes - The Friendly Shag</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-gauging">
+<header class="site-banner">
+    <div class="container banner-inner">
+        <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+        <span class="banner-title">The Friendly Shag</span>
+    </div>
+</header>
+
+<section class="section">
+    <div class="container">
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">ADCP Field Measurement Notes</h2>
+            <p class="calc-help">
+                Record field details for this gauging.
+            </p>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Identification</div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="fn-site-name">Site name</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-site-name" placeholder="e.g. Taieri at Outram">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-date">Date</label>
+                        <div class="control">
+                            <input class="input" type="date" id="fn-date">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-party">Party</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-party" placeholder="Names">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-location">Measurement location</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-location" placeholder="e.g. 50m upstream of bridge">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Equipment</div>
+                <div class="fn-grid">
+                    <div class="fn-field">
+                        <div class="fn-field-label">Rugged laptop used</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-laptop" value="1"><span>1</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-laptop" value="2"><span>2</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-laptop" value="3"><span>3</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-laptop" value="4"><span>4</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-laptop" value="Other"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-laptop-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">RS5 ADCP serial No</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-rs5" value="RS52126005"><span>RS52126005</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-rs5" value="RS52126006"><span>RS52126006</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-rs5" value="RS52537002"><span>RS52537002</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-rs5" value="Other"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-rs5-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">M9 ADCP serial No</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-m9" value="401"><span>401</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-m9" value="5755"><span>5755</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-m9" value="2250"><span>2250</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-m9" value="Other"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-m9-other" placeholder="If Other, specify">
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Method</div>
+                <div class="fn-grid">
+                    <div class="fn-field">
+                        <div class="fn-field-label">Measurement Method</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-method" value="Stationary"><span>Stationary</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-method" value="Continuous"><span>Continuous</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field fn-field-wide">
+                        <div class="fn-field-label">Platform</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-platform" value="Hydroboard"><span>Hydroboard</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-platform" value="Surfbee"><span>Surfbee</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-platform" value="Trimaran"><span>Trimaran</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-platform" value="Kayak"><span>Kayak</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-platform" value="Surfboard"><span>Surfboard</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-platform" value="Other"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-platform-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="fn-field fn-field-wide">
+                        <div class="fn-field-label">Traverse method</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Wading"><span>Wading</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="RC Boat"><span>RC Boat</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Bridge"><span>Bridge</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Loop"><span>Loop</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Cableway"><span>Cableway</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Flying Fox"><span>Flying Fox</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Jet Boat"><span>Jet Boat</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-traverse" value="Helicopter"><span>Helicopter</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Conditions</div>
+                <div class="fn-grid">
+                    <div class="fn-field">
+                        <div class="fn-field-label">Wind speed</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-wind-speed" value="Calm"><span>Calm</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-wind-speed" value="Moderate"><span>Moderate</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-wind-speed" value="Strong"><span>Strong</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">Wind direction</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Up"><span>Up</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Down"><span>Down</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Across"><span>Across</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">Water clarity</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-clarity" value="Turbid"><span>Turbid</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-clarity" value="Discoloured"><span>Discoloured</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-clarity" value="Clear"><span>Clear</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">System Setup</div>
+                <div class="fn-grid">
+                    <div class="fn-field">
+                        <div class="fn-field-label">System test completed?</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-system-test" value="Yes"><span>Yes</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-system-test" value="No"><span>No</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">Compass cal completed?</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-compass-cal" value="Yes"><span>Yes</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-compass-cal" value="No"><span>No</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">Loop test completed?</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-loop-test" value="Yes"><span>Yes</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-loop-test" value="No"><span>No</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field">
+                        <div class="fn-field-label">Measurement time &gt;12min?</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-time-12min" value="Yes"><span>Yes</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-time-12min" value="No"><span>No</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Measurements</div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="fn-transducer-depth">Transducer depth (m)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-transducer-depth" step="any" min="0">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-screening-distance">Screening distance (m)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-screening-distance" step="any" min="0">
+                        </div>
+                        <p class="fn-help">= transducer depth + 0.16m</p>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-channel-width">Rangefinder channel width (m)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-channel-width" step="any" min="0">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-water-temp">External water temp (&deg;C)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-water-temp" step="any">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-xsection-pct">% of x-section measured</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-xsection-pct" step="any" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-mean-velocity">Mean velocity (m/s)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-mean-velocity" step="any" min="0">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-distance-recorder">Distance to recorder (m)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-distance-recorder" step="any" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Results</div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="fn-transects">Number of usable transects</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-transects" step="1" min="0">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-mean-q">Mean Q (m&sup3;/s)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-mean-q" step="any">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-cov">CoV (%)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-cov" step="any">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field gq-notes-field">
+                <label class="label" for="fn-notes">Additional notes</label>
+                <div class="control">
+                    <textarea id="fn-notes" class="textarea" rows="4" placeholder="Add any additional notes about this gauging..."></textarea>
+                </div>
+            </div>
+
+            <div class="field gq-actions">
+                <button type="button" id="fn-reset" class="button gq-reset-button">Reset all</button>
+                <button type="button" id="fn-share" class="button calc-button">Copy share link</button>
+                <button type="button" id="fn-download" class="button calc-button">Download notes</button>
+            </div>
+
+            <p id="fn-share-link" class="fn-share-link" style="display: none;"></p>
+        </div>
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">ADCP Gauging Quality</h2>
+            <p class="calc-help">
+                Select one option per criterion to estimate the ADCP gauging quality.
+            </p>
+
+            <div class="field-row gq-meta-row">
+                <div class="field">
+                    <label class="label" for="gq-site">Site</label>
+                    <div class="control">
+                        <input class="input" type="text" id="gq-site" name="site" placeholder="e.g. Taieri at Outram">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="gq-date">Date</label>
+                    <div class="control">
+                        <input class="input" type="date" id="gq-date" name="date">
+                    </div>
+                </div>
+            </div>
+
+            <div id="gq-criteria">
+
+                <div class="gq-criterion" data-name="1">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">1</span>
+                        <span class="gq-name">Channel Description <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-1" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Bed debris and vegetation disrupting flow and bed profile, a large amount of non-uniform and turbulent flow. Aeration of the water.</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-1" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Some non-uniform flow, asymmetrical channel shape, some bed debris/vegetation causing moderate flow and channel disturbance.</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-1" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> Uniform/laminar flow, smooth uniform X-section profile, no large bed debris or vegetation disruption of flow within the channel profile.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="2">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">2</span>
+                        <span class="gq-name">Total Exposure Time</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-2" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 0-8 min</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-2" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 8-12 min</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-2" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> &gt;12 min</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="3">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">3</span>
+                        <span class="gq-name">% of Q Measured</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-3" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> &le;40%</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-3" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> &gt;40% &amp; &lt;65%</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-3" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> &ge;65%</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="4">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">4</span>
+                        <span class="gq-name">Data loss, missing or lost ensembles <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-4" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Significant, large blocks located in main areas of channel flow.</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-4" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Some blocks randomly located across channel.</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-4" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> No or minor instances located randomly.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="6">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">6</span>
+                        <span class="gq-name">Compass Calibration</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-6" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Q1-4 or not completed</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-6" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Sontek Q5-7 Or RDI &gt;2&deg;</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-6" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> Sontek Q8-9 Or RDI &lt;2&deg;</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="7">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">7</span>
+                        <span class="gq-name">Moving Bed Test</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-7" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Not completed</span>
+                        </label>
+                        <div class="gq-option gq-option-empty" aria-hidden="true"></div>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-7" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> Completed</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="8">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">8</span>
+                        <span class="gq-name">Edge Data <em>All transects must have 2+ cells to be Good</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-8" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 0 cells</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-8" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 1 cell</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-8" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> 2+ cells</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="9">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">9</span>
+                        <span class="gq-name">Pitch <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-9" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 10&deg; +</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-9" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 6-9&deg;</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-9" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> 0-5&deg;</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="10">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">10</span>
+                        <span class="gq-name">Roll <em>Visual</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-10" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> 10&deg; +</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-10" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 6-9&deg;</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-10" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> 0-5&deg;</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="11">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">11</span>
+                        <span class="gq-name">Moving Bed Track Reference</span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-11" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> Bottom Track - no loop correction.</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-11" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> Bottom Track - loop correction.</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-11" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> GPS-RTK/GPS-VTG or N/A</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="gq-criterion" data-name="12">
+                    <div class="gq-criterion-header">
+                        <span class="gq-number">12</span>
+                        <span class="gq-name">Max GPS HDOP's <em>Only if GPS used as a reference</em></span>
+                    </div>
+                    <div class="gq-options">
+                        <label class="gq-option gq-poor">
+                            <input type="radio" name="gq-12" value="poor">
+                            <span class="gq-option-text"><span class="gq-label-word">Poor:</span> &gt;6</span>
+                        </label>
+                        <label class="gq-option gq-fair">
+                            <input type="radio" name="gq-12" value="fair">
+                            <span class="gq-option-text"><span class="gq-label-word">Fair:</span> 3-5</span>
+                        </label>
+                        <label class="gq-option gq-good">
+                            <input type="radio" name="gq-12" value="good">
+                            <span class="gq-option-text"><span class="gq-label-word">Good:</span> &lt;2</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="field gq-notes-field">
+                <label class="label" for="gq-notes">Notes</label>
+                <div class="control">
+                    <textarea id="gq-notes" class="textarea" rows="4" placeholder="Add any additional notes about this gauging..."></textarea>
+                </div>
+            </div>
+
+            <p id="gq-progress" class="calc-help"></p>
+
+            <div class="gq-totals">
+                <div class="gq-total-item gq-total-poor">
+                    <span class="gq-total-label">Poor points</span>
+                    <span id="gq-total-poor" class="gq-total-value">0</span>
+                </div>
+                <div class="gq-total-item gq-total-fair">
+                    <span class="gq-total-label">Fair points</span>
+                    <span id="gq-total-fair" class="gq-total-value">0</span>
+                </div>
+                <div class="gq-total-item gq-total-good">
+                    <span class="gq-total-label">Good points</span>
+                    <span id="gq-total-good" class="gq-total-value">0</span>
+                </div>
+                <div class="gq-total-item gq-grand-total">
+                    <span class="gq-total-label">Grand total</span>
+                    <span id="gq-total-grand" class="gq-total-value">0</span>
+                </div>
+            </div>
+
+            <div id="gq-quality-code" class="gq-quality-code"></div>
+
+            <p class="calc-help gq-note">
+                <strong>Note:</strong> if 3 or more criteria are marked Poor, the gauging is automatically
+                classified as Poor, regardless of total score.
+            </p>
+
+            <div class="field gq-actions">
+                <button type="button" id="gq-reset" class="button gq-reset-button">Reset all</button>
+                <button type="button" id="gq-download" class="button calc-button">Download results</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module" src="../js/gauging-notes.js"></script>
+<script type="module" src="../js/gauging-quality.js"></script>
+</body>
+</html>
