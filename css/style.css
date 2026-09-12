@@ -160,8 +160,12 @@ html, body {
     margin-right: auto;
 }
 
-.calc-title {
-    margin-bottom: 0.75rem;
+.run-heading.calc-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding-bottom: 0.6rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--river-mid);
 }
 
 .calc-help {
@@ -478,6 +482,11 @@ html, body {
     color: #8C3B2E;
 }
 
+.error-reload-button {
+    margin-top: 0.75rem;
+    display: block;
+}
+
 .table {
     background-color: transparent;
     table-layout: fixed;
@@ -647,11 +656,6 @@ html, body {
 
     .gq-actions {
         flex-direction: column;
-    }
-
-    .fn-grid > .field {
-        flex-basis: 100%;
-        max-width: 100%;
     }
 }
 
@@ -868,8 +872,8 @@ html, body {
 }
 
 .fn-grid > .field {
-    flex: 1 1 calc(33.333% - 0.833rem);
-    max-width: calc(33.333% - 0.833rem);
+    flex: 1 1 calc(25% - 0.9375rem);
+    max-width: calc(25% - 0.9375rem);
 }
 
 .fn-grid > .fn-field-wide {
@@ -880,6 +884,13 @@ html, body {
     .fn-grid > .field {
         flex-basis: calc(50% - 0.625rem);
         max-width: calc(50% - 0.625rem);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .fn-grid > .field {
+        flex-basis: 100%;
+        max-width: 100%;
     }
 }
 
