@@ -674,6 +674,12 @@ html, body {
     line-height: 1.4;
 }
 
+.gq-report-divider {
+    height: 0;
+    line-height: 0;
+    border-top: 1px solid var(--river-line);
+}
+
 .gq-report-num {
     color: var(--river-muted);
 }
@@ -771,6 +777,21 @@ html, body {
     padding: 0.6rem 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
+}
+
+.gq-report-highlight {
+    text-align: center;
+    background-color: var(--river-pale);
+    color: var(--river-deep);
+    font-size: 1rem;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.gq-report-highlight strong {
+    font-size: 1.15rem;
 }
 
 .gq-report-notes {

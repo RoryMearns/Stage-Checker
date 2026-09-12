@@ -18,6 +18,10 @@ function fieldRowWithNote(label, value, note) {
     `;
 }
 
+function divider() {
+    return '<li class="gq-report-divider" aria-hidden="true"></li>';
+}
+
 function withOther(value, otherInputId) {
     if (value !== 'Other') return value;
     const otherValue = document.getElementById(otherInputId).value.trim();
@@ -94,20 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
             fieldRow('Date', dateValue),
             fieldRow('Party', party),
             fieldRow('Measurement location', textValue('fn-location')),
+            divider(),
             fieldRow('Rugged laptop used', withOther(radioValue('fn-laptop'), 'fn-laptop-other')),
             fieldRow('RS5 ADCP serial No', withOther(radioValue('fn-rs5'), 'fn-rs5-other')),
             fieldRow('M9 ADCP serial No', withOther(radioValue('fn-m9'), 'fn-m9-other')),
+            divider(),
             fieldRow('Measurement Method', radioValue('fn-method')),
             fieldRow('Platform', withOther(radioValue('fn-platform'), 'fn-platform-other')),
             fieldRow('Traverse method', radioValue('fn-traverse')),
+            divider(),
             fieldRow('Wind speed', radioValue('fn-wind-speed')),
             fieldRow('Wind direction', radioValue('fn-wind-direction')),
             fieldRow('External water temp', textValue('fn-water-temp') ? `${textValue('fn-water-temp')}&deg;C` : null),
             fieldRow('Water clarity', radioValue('fn-clarity')),
+            divider(),
             fieldRow('System test completed', radioValue('fn-system-test')),
             fieldRow('Compass cal completed', radioValue('fn-compass-cal')),
             fieldRow('Loop test completed', radioValue('fn-loop-test')),
             fieldRow('Measurement time &gt;12min', radioValue('fn-time-12min')),
+            divider(),
             fieldRow('Measured transducer depth', textValue('fn-transducer-depth') ? `${textValue('fn-transducer-depth')}m` : null),
             fieldRow('Screening distance used', textValue('fn-screening-distance') ? `${textValue('fn-screening-distance')}m` : null),
             fieldRow('Rangefinder channel width', textValue('fn-channel-width') ? `${textValue('fn-channel-width')}m` : null),
@@ -125,8 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         rows.push(
+            divider(),
             fieldRow('Number of usable transects', textValue('fn-transects')),
-            fieldRow('Mean Q', textValue('fn-mean-q') ? `${textValue('fn-mean-q')} m&sup3;/s` : null),
             fieldRow('CoV', textValue('fn-cov') ? `${textValue('fn-cov')}%` : null)
         );
 
@@ -141,6 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
             notes.className = 'gq-report-notes';
             notes.innerHTML = `<strong>Notes</strong><p>${notesValue.replace(/\n/g, '<br>')}</p>`;
             report.appendChild(notes);
+        }
+
+        const meanQValue = textValue('fn-mean-q');
+        if (meanQValue) {
+            const highlight = document.createElement('div');
+            highlight.className = 'gq-report-highlight';
+            highlight.innerHTML = `Mean Q: <strong>${meanQValue} m&sup3;/s</strong>`;
+            report.appendChild(highlight);
         }
 
         return report;
