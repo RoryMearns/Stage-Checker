@@ -18,19 +18,22 @@ html, body {
 .site-banner {
     background-color: var(--river-deep);
     height: 84px;
+    min-height: 84px;
     box-shadow: 0 2px 10px rgba(15, 30, 30, 0.18);
     border-bottom: 3px solid var(--river-mid);
 }
 
-.banner-inner {
+.site-banner .navbar-brand > .banner-brand {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    align-self: flex-end;
     gap: 1rem;
-    height: 100%;
+    padding: 0 0.75rem;
 }
 
-.banner-logo {
-    height: 54px;
+.site-banner .banner-logo {
+    max-height: none;
+    height: 80px;
     width: auto;
 }
 
@@ -41,6 +44,42 @@ html, body {
     font-weight: 700;
     letter-spacing: -0.01em;
     white-space: nowrap;
+    margin-bottom: 23px;
+}
+
+.site-banner .navbar-menu,
+.site-banner .navbar-item,
+.site-banner .navbar-link {
+    background-color: var(--river-deep);
+    color: var(--river-bg);
+}
+
+.site-banner .navbar-item:hover,
+.site-banner .navbar-item:focus {
+    background-color: rgba(245, 248, 247, 0.1);
+    color: var(--river-bg);
+}
+
+.site-banner .navbar-item.is-current-page {
+    color: var(--river-bg);
+    font-weight: 700;
+    box-shadow: inset 0 -3px 0 var(--river-mid);
+}
+
+.site-banner .navbar-burger {
+    height: 3.25rem;
+    width: 3.25rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: var(--river-bg);
+}
+
+.site-banner .navbar-burger span {
+    background-color: var(--river-bg);
+}
+
+.site-banner .navbar-burger:hover {
+    background-color: rgba(245, 248, 247, 0.1);
 }
 
 .site-footer {
@@ -160,8 +199,12 @@ html, body {
     margin-right: auto;
 }
 
-.calc-title {
-    margin-bottom: 0.75rem;
+.run-heading.calc-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding-bottom: 0.6rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--river-mid);
 }
 
 .calc-help {
@@ -478,6 +521,11 @@ html, body {
     color: #8C3B2E;
 }
 
+.error-reload-button {
+    margin-top: 0.75rem;
+    display: block;
+}
+
 .table {
     background-color: transparent;
     table-layout: fixed;
@@ -573,6 +621,20 @@ html, body {
         padding-bottom: 0.75rem;
     }
 
+    .site-banner {
+        height: 56px;
+        min-height: 56px;
+    }
+
+    .site-banner .navbar-brand > .banner-brand {
+        align-self: center;
+        align-items: center;
+    }
+
+    .banner-title {
+        margin-bottom: 0;
+    }
+
     .site-footer {
         display: flex;
         justify-content: center;
@@ -615,8 +677,13 @@ html, body {
         padding: 0.5rem 0.5rem;
     }
 
-    .banner-inner {
-        justify-content: center;
+    .site-banner .navbar-menu {
+        background-color: var(--river-deep);
+        box-shadow: 0 2px 10px rgba(15, 30, 30, 0.18);
+    }
+
+    .site-banner .navbar-item.is-current-page {
+        box-shadow: inset 3px 0 0 var(--river-mid);
     }
 
     .col-stage {
@@ -647,11 +714,6 @@ html, body {
 
     .gq-actions {
         flex-direction: column;
-    }
-
-    .fn-grid > .field {
-        flex-basis: 100%;
-        max-width: 100%;
     }
 }
 
@@ -868,8 +930,8 @@ html, body {
 }
 
 .fn-grid > .field {
-    flex: 1 1 calc(33.333% - 0.833rem);
-    max-width: calc(33.333% - 0.833rem);
+    flex: 1 1 calc(25% - 0.9375rem);
+    max-width: calc(25% - 0.9375rem);
 }
 
 .fn-grid > .fn-field-wide {
@@ -880,6 +942,13 @@ html, body {
     .fn-grid > .field {
         flex-basis: calc(50% - 0.625rem);
         max-width: calc(50% - 0.625rem);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .fn-grid > .field {
+        flex-basis: 100%;
+        max-width: 100%;
     }
 }
 

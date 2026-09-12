@@ -1,0 +1,7 @@
+{
+  "name": "stage-checker",
+  "private": true,
+  "scripts": {
+    "serve": "npx serve ."
+  }
+}

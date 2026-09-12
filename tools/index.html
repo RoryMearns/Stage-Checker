@@ -11,12 +11,28 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-<header class="site-banner">
-    <div class="container banner-inner">
-        <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
-        <span class="banner-title">The Friendly Shag</span>
+<nav class="navbar site-banner" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item banner-brand">
+                <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+                <span class="banner-title">The Friendly Shag</span>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="site-nav-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="site-nav-menu" class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Stage Checker</a>
+                <a href="/tools/" class="navbar-item is-current-page">Tools</a>
+                <a href="/gauging/" class="navbar-item">Gauging</a>
+            </div>
+        </div>
     </div>
-</header>
+</nav>
 
 <section class="section">
     <div class="container">
@@ -97,5 +113,7 @@
 
 <script type="module" src="../js/lag.js"></script>
 <script type="module" src="../js/declination.js"></script>
+<script src="../js/navbar.js"></script>
+<script type="module" src="../js/register-sw.js"></script>
 </body>
 </html>

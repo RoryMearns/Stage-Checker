@@ -18,10 +18,9 @@ export function sanitizeForFilename(text) {
     return text.trim().replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ');
 }
 
-export async function downloadElementAsPng(reportElement, filename) {
+export async function renderElementToCanvas(reportElement) {
     if (typeof html2canvas !== 'function') {
-        alert('Could not generate the image - please check your internet connection and try again.');
-        return;
+        throw new Error('html2canvas is not available - check your internet connection.');
     }
 
     reportElement.style.position = 'absolute';
@@ -31,16 +30,56 @@ export async function downloadElementAsPng(reportElement, filename) {
     document.body.appendChild(reportElement);
 
     try {
-        const canvas = await html2canvas(reportElement, { backgroundColor: '#F5F8F7', scale: 2 });
-        const link = document.createElement('a');
-        link.download = filename;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        return await html2canvas(reportElement, { backgroundColor: '#F5F8F7', scale: 2 });
+    } finally {
+        reportElement.remove();
+    }
+}
+
+function downloadCanvas(canvas, filename) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+}
+
+export async function downloadElementAsPng(reportElement, filename) {
+    try {
+        const canvas = await renderElementToCanvas(reportElement);
+        downloadCanvas(canvas, filename);
     } catch (error) {
         console.error('Failed to generate image:', error);
         alert('Something went wrong generating the image. Please try again.');
-    } finally {
-        reportElement.remove();
+    }
+}
+
+export async function downloadElementsSideBySide(reportElements, filename, gap = 32) {
+    try {
+        const canvases = [];
+        for (const element of reportElements) {
+            canvases.push(await renderElementToCanvas(element));
+        }
+
+        const totalWidth = canvases.reduce((sum, c) => sum + c.width, 0) + gap * (canvases.length - 1);
+        const maxHeight = Math.max(...canvases.map(c => c.height));
+
+        const combined = document.createElement('canvas');
+        combined.width = totalWidth;
+        combined.height = maxHeight;
+        const ctx = combined.getContext('2d');
+        ctx.fillStyle = '#F5F8F7';
+        ctx.fillRect(0, 0, totalWidth, maxHeight);
+
+        let x = 0;
+        canvases.forEach(canvas => {
+            ctx.drawImage(canvas, x, 0);
+            x += canvas.width + gap;
+        });
+
+        downloadCanvas(combined, filename);
+    } catch (error) {
+        console.error('Failed to generate combined image:', error);
+        alert('Something went wrong generating the image. Please try again.');
     }
 }
 

@@ -4,7 +4,7 @@ import {renderRuns} from "./render.js";
 import {setupCollapseControls} from "./collapse.js";
 import {runSectionId} from "./utils.js";
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     const loadingDiv = document.getElementById('loading');
     const errorDiv = document.getElementById('error');
     const runsContainer = document.getElementById('runs-container');
@@ -12,36 +12,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     const collapseAllHeader = document.getElementById('collapse-all-header');
     const legendDiv = document.getElementById('legend');
     const errorMessage = document.getElementById('error-message');
+    const reloadButton = document.getElementById('reload-data');
 
-    try {
-        const [runInfo, stageResponse, flowResponse] = await Promise.all([
-            loadRunInfo(),
-            fetchStageData(),
-            fetchFlowData()
-        ]);
+    async function loadData() {
+        loadingDiv.style.display = 'block';
+        errorDiv.style.display = 'none';
 
-        const siteMeta = runInfo.siteMeta ?? {};
+        try {
+            const [runInfo, stageResponse, flowResponse] = await Promise.all([
+                loadRunInfo(),
+                fetchStageData(),
+                fetchFlowData()
+            ]);
 
-        const stageBySite = new Map(
-            (stageResponse.Data ?? []).map(item => [item.LocationIdentifier, item])
-        );
-        const flowBySite = new Map(
-            (flowResponse.Data ?? []).map(item => [item.LocationIdentifier, item])
-        );
+            const siteMeta = runInfo.siteMeta ?? {};
 
-        renderRuns(runInfo.runs, stageBySite, flowBySite, siteMeta, runsContainer);
+            const stageBySite = new Map(
+                (stageResponse.Data ?? []).map(item => [item.LocationIdentifier, item])
+            );
+            const flowBySite = new Map(
+                (flowResponse.Data ?? []).map(item => [item.LocationIdentifier, item])
+            );
 
-        const sectionIds = ['legend', ...runInfo.runs.map(run => runSectionId(run.name))];
-        setupCollapseControls(sectionIds, runsControls, collapseAllHeader);
+            renderRuns(runInfo.runs, stageBySite, flowBySite, siteMeta, runsContainer);
 
-        loadingDiv.style.display = 'none';
-        runsControls.style.display = 'block';
-        runsContainer.style.display = 'block';
-        legendDiv.style.display = 'block';
+            const sectionIds = ['legend', ...runInfo.runs.map(run => runSectionId(run.name))];
+            setupCollapseControls(sectionIds, runsControls, collapseAllHeader);
 
-    } catch (error) {
-        errorMessage.textContent = `Failed to load data: ${error.message}`;
-        loadingDiv.style.display = 'none';
-        errorDiv.style.display = 'block';
+            loadingDiv.style.display = 'none';
+            runsControls.style.display = 'block';
+            runsContainer.style.display = 'block';
+            legendDiv.style.display = 'block';
+
+        } catch (error) {
+            console.error('Failed to load data:', error);
+            errorMessage.textContent = "Couldn't load data. Reload when you get internet.";
+            loadingDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
+        }
     }
+
+    reloadButton.addEventListener('click', loadData);
+
+    loadData();
 });
