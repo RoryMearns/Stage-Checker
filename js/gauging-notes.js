@@ -219,8 +219,7 @@ export function buildNotesReport() {
         fieldRow('Rangefinder channel width', textValue('fn-channel-width') ? `${textValue('fn-channel-width')}m` : null),
         fieldRow('External water temp', textValue('fn-water-temp') ? `${textValue('fn-water-temp')}&deg;C` : null),
         fieldRow('Distance to recorder', textValue('fn-distance-recorder') ? `${textValue('fn-distance-recorder')} m` : null),
-        fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null),
-        fieldRow('% of x-section measured', textValue('fn-xsection-pct') ? `${textValue('fn-xsection-pct')}%` : null)
+        fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null)
     ];
 
     if (hasLag) {
@@ -234,6 +233,7 @@ export function buildNotesReport() {
     rows.push(
         divider(),
         fieldRow('Number of usable transects', textValue('fn-transects')),
+        fieldRow('% of x-section measured', textValue('fn-xsection-pct') ? `${textValue('fn-xsection-pct')}%` : null),
         fieldRow('CoV', textValue('fn-cov') ? `${textValue('fn-cov')}%` : null)
     );
 
