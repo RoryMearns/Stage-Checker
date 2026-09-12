@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shag-shell-v1';
+const CACHE_NAME = 'shag-shell-v2';
 
 const NEVER_CACHE = [
     'yop7qymjl5.execute-api.ap-southeast-2.amazonaws.com',
@@ -19,6 +19,7 @@ const PRECACHE_URLS = [
     '/js/icons.js',
     '/js/utils.js',
     '/js/register-sw.js',
+    '/js/navbar.js',
     '/images/shag.svg',
     '/images/flowtracker.svg',
     '/images/microboard.svg',
@@ -49,7 +50,15 @@ function isNeverCache(url) {
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(PRECACHE_URLS))
+            .then(cache => Promise.all(
+                PRECACHE_URLS.map(url =>
+                    fetch(url, { mode: 'cors' })
+                        .then(response => {
+                            if (response.ok) return cache.put(url, response);
+                        })
+                        .catch(() => {})
+                )
+            ))
             .then(() => self.skipWaiting())
     );
 });
