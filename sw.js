@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shag-shell-v3';
+const CACHE_NAME = 'shag-shell-v5';
 
 const NEVER_CACHE = [
     'yop7qymjl5.execute-api.ap-southeast-2.amazonaws.com',
@@ -21,6 +21,7 @@ const PRECACHE_URLS = [
     '/js/register-sw.js',
     '/js/navbar.js',
     '/images/shag.svg',
+    '/images/favicon.png',
     '/images/flowtracker.svg',
     '/images/microboard.svg',
     '/images/moving-boat.svg',
