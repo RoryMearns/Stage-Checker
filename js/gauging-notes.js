@@ -188,6 +188,10 @@ export function buildNotesReport() {
         fieldRow('Party', party),
         fieldRow('Measurement location', textValue('fn-location')),
         divider(),
+        fieldRow('Wind speed', radioValue('fn-wind-speed')),
+        fieldRow('Wind direction', radioValue('fn-wind-direction')),
+        fieldRow('Water clarity', radioValue('fn-clarity')),
+        divider(),
         fieldRow('Rugged laptop used', withOther(radioValue('fn-laptop'), 'fn-laptop-other')),
         fieldRow('RS5 ADCP serial No', withOther(radioValue('fn-rs5'), 'fn-rs5-other')),
         fieldRow('M9 ADCP serial No', withOther(radioValue('fn-m9'), 'fn-m9-other')),
@@ -195,10 +199,6 @@ export function buildNotesReport() {
         fieldRow('Measurement Method', radioValue('fn-method')),
         fieldRow('Platform', withOther(radioValue('fn-platform'), 'fn-platform-other')),
         fieldRow('Traverse method', radioValue('fn-traverse')),
-        divider(),
-        fieldRow('Wind speed', radioValue('fn-wind-speed')),
-        fieldRow('Wind direction', radioValue('fn-wind-direction')),
-        fieldRow('Water clarity', radioValue('fn-clarity')),
         divider(),
         fieldRow('System test completed', radioValue('fn-system-test')),
         fieldRow('Compass cal completed', radioValue('fn-compass-cal')),
@@ -210,8 +210,8 @@ export function buildNotesReport() {
         fieldRow('Rangefinder channel width', textValue('fn-channel-width') ? `${textValue('fn-channel-width')}m` : null),
         fieldRow('External water temp', textValue('fn-water-temp') ? `${textValue('fn-water-temp')}&deg;C` : null),
         fieldRow('% of x-section measured', textValue('fn-xsection-pct') ? `${textValue('fn-xsection-pct')}%` : null),
-        fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null),
-        fieldRow('Distance to recorder', textValue('fn-distance-recorder') ? `${textValue('fn-distance-recorder')} m` : null)
+        fieldRow('Distance to recorder', textValue('fn-distance-recorder') ? `${textValue('fn-distance-recorder')} m` : null),
+        fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null)
     ];
 
     if (hasLag) {
