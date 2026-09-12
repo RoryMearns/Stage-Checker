@@ -100,7 +100,7 @@ html, body {
     box-shadow: 0 1px 3px rgba(31, 59, 60, 0.06);
 }
 
-.page-gauging .run-section {
+.page-wide-cards .run-section {
     margin-bottom: 1.25rem;
 }
 
@@ -343,6 +343,73 @@ html, body {
     display: none;
 }
 
+.table-scroll {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.nems-coded-table {
+    min-width: 700px;
+}
+
+.nems-coded-table td {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.nems-sticky-first-col th:first-child,
+.nems-sticky-first-col td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: #ffffff;
+    box-shadow: 2px 0 4px rgba(31, 59, 60, 0.1);
+}
+
+.nems-row-missing td {
+    background-color: #FF0000 !important;
+    color: #ffffff !important;
+}
+
+.nems-row-unverified td {
+    background-color: #8B5A00 !important;
+    color: #ffffff !important;
+}
+
+.nems-row-synthetic td {
+    background-color: #D3D3D3 !important;
+    color: #1F3B3C !important;
+}
+
+.nems-row-poor td {
+    background-color: #FFA500 !important;
+    color: #ffffff !important;
+}
+
+.nems-row-fair td {
+    background-color: #00BFFF !important;
+    color: #ffffff !important;
+}
+
+.nems-row-good td {
+    background-color: #006400 !important;
+    color: #ffffff !important;
+}
+
+.nems-cell-poor {
+    background-color: #FFA500 !important;
+    color: #ffffff !important;
+}
+
+.nems-cell-fair {
+    background-color: #00BFFF !important;
+    color: #ffffff !important;
+}
+
+.nems-cell-good {
+    background-color: #006400 !important;
+    color: #ffffff !important;
+}
+
 .gq-option input[type="radio"] {
     flex-shrink: 0;
     width: 1rem;
@@ -411,9 +478,21 @@ html, body {
 
 /* Desktop/tablet: lay Poor/Fair/Good out side by side, mirroring the paper form's columns */
 @media screen and (min-width: 769px) {
+    .gq-criterion {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .gq-criterion-header {
+        flex: 0 0 220px;
+        margin-bottom: 0;
+    }
+
     .gq-options {
         flex-direction: row;
         align-items: stretch;
+        flex: 1;
         gap: 0.6rem;
     }
 
@@ -443,7 +522,7 @@ html, body {
     min-width: 110px;
     background-color: var(--river-pale);
     border-radius: 8px;
-    padding: 0.5rem 0.75rem;
+    padding: 0.35rem 0.75rem;
     text-align: center;
 }
 
@@ -503,7 +582,7 @@ html, body {
     text-align: center;
     font-weight: 700;
     font-size: 1.1rem;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
     transition: background-color 0.2s ease, color 0.2s ease;

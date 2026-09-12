@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEMS Quality Coding - The Friendly Shag</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-wide-cards">
+<nav class="navbar site-banner" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item banner-brand">
+                <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+                <span class="banner-title">The Friendly Shag</span>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="site-nav-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="site-nav-menu" class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Stage Checker</a>
+                <a href="/tools/" class="navbar-item">Tools</a>
+                <a href="/gauging/" class="navbar-item">Gauging</a>
+                <a href="/nems/" class="navbar-item is-current-page">NEMS</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Data Quality Coding</h2>
+            <p class="calc-help">
+                NEMS data quality codes for processing stage, rainfall, and water temperature data.
+            </p>
+
+            <div class="table-scroll">
+                <table class="table nems-coded-table">
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Category</th>
+                        <th>Stage</th>
+                        <th>Rainfall</th>
+                        <th>Water Temp</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="nems-row-missing">
+                        <td>100</td>
+                        <td>Missing</td>
+                        <td colspan="3">Data is missing from the record</td>
+                    </tr>
+                    <tr class="nems-row-unverified">
+                        <td>200</td>
+                        <td>Unverified</td>
+                        <td colspan="3">Data is either raw, of unknown quality or no relevant NEMS standard exists</td>
+                    </tr>
+                    <tr class="nems-row-synthetic">
+                        <td>300</td>
+                        <td>Synthetic</td>
+                        <td colspan="3">Data is estimated from either; relationships, calculations, models, or limited measured data.</td>
+                    </tr>
+                    <tr class="nems-row-poor">
+                        <td>400</td>
+                        <td>Poor</td>
+                        <td>&gt;10mm</td>
+                        <td>&gt;20% or env factors (snow)</td>
+                        <td>&gt;1.2&deg;C</td>
+                    </tr>
+                    <tr class="nems-row-fair">
+                        <td>500</td>
+                        <td>Fair</td>
+                        <td>&le;10mm</td>
+                        <td>&le;50mm total: &gt;5mm<br>&gt;50mm total: &gt;10%</td>
+                        <td>&le;1.2&deg;C</td>
+                    </tr>
+                    <tr class="nems-row-good">
+                        <td>600</td>
+                        <td>Good</td>
+                        <td>&le;3mm</td>
+                        <td>&le;50mm total: &le;5mm<br>&gt;50mm total: &le;10%</td>
+                        <td>&le;0.8&deg;C</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Flowtracker &amp; Stationary ADCP Quality Coding</h2>
+            <p class="calc-help">
+                NEMS data quality codes for processing Flowtracker and Stationary ADCP quality data.
+            </p>
+
+            <div class="table-scroll">
+                <table class="table nems-coded-table nems-sticky-first-col">
+                    <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>400 Poor</th>
+                        <th>500 Fair</th>
+                        <th>600 Good</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Gauging section</td>
+                        <td class="nems-cell-poor">Poor conditions affected by weed, turbulent flow etc</td>
+                        <td class="nems-cell-fair">Fair conditions</td>
+                        <td class="nems-cell-good">Good conditions, reasonably laminar flow, straight channel</td>
+                    </tr>
+                    <tr>
+                        <td>Channel flow</td>
+                        <td class="nems-cell-poor">Most conditions met, measurement is compromised and/or undergone significant modifications</td>
+                        <td class="nems-cell-fair">Most conditions met, minor modifications. Fair representation of flow</td>
+                        <td class="nems-cell-good">Most conditions met. Good representation of flow</td>
+                    </tr>
+                    <tr>
+                        <td>Wind</td>
+                        <td class="nems-cell-poor">Strong wind visibly affecting water surface</td>
+                        <td class="nems-cell-fair">Moderate to strong wind only occasionally affecting water surface</td>
+                        <td class="nems-cell-good">Light to moderate wind</td>
+                    </tr>
+                    <tr>
+                        <td>Station count</td>
+                        <td class="nems-cell-poor">Sufficient verticals to only crudely map x-section</td>
+                        <td class="nems-cell-fair">Sufficient verticals to map x-section</td>
+                        <td class="nems-cell-good">22 or more verticals, with a minimum of 20 'velocity' verticals</td>
+                    </tr>
+                    <tr>
+                        <td>Discharge %</td>
+                        <td class="nems-cell-poor">N/A</td>
+                        <td class="nems-cell-fair">&gt;10% in any segment</td>
+                        <td class="nems-cell-good">&lt;10% for all segments</td>
+                    </tr>
+                    <tr>
+                        <td>Depth increments</td>
+                        <td class="nems-cell-poor">N/A</td>
+                        <td class="nems-cell-fair">10mm increments used and max depth &lt;0.3m</td>
+                        <td class="nems-cell-good">10mm increments used, max depth &gt;0.3m / 5mm increments used, max depth &lt;0.3m</td>
+                    </tr>
+                    <tr>
+                        <td>Gauging time</td>
+                        <td class="nems-cell-poor">20 seconds</td>
+                        <td class="nems-cell-fair">30 seconds</td>
+                        <td class="nems-cell-good">40 seconds</td>
+                    </tr>
+                    <tr>
+                        <td>Uncertainty (stationary only)</td>
+                        <td class="nems-cell-poor">&gt;8%</td>
+                        <td class="nems-cell-fair">7.1% - 8%</td>
+                        <td class="nems-cell-good">7% or less</td>
+                    </tr>
+                    <tr>
+                        <td>Velocity</td>
+                        <td class="nems-cell-poor">N/A</td>
+                        <td class="nems-cell-fair">Depth &ge; 0.5m: 0.6 profile</td>
+                        <td class="nems-cell-good">Depth &ge; 0.5m: 0.2/0.8 or 0.2/0.6/0.8 profile</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<script src="../js/navbar.js"></script>
+<script type="module" src="../js/register-sw.js"></script>
+</body>
+</html>
