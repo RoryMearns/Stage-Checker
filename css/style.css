@@ -610,6 +610,25 @@ html, body {
     color: var(--river-deep);
 }
 
+.clear-all-button {
+    background-color: transparent;
+    border: 1px solid #E8B4AC;
+    color: #8C3B2E;
+    font-weight: 600;
+}
+
+.clear-all-button:hover {
+    background-color: #FBEEEC;
+    border-color: #8C3B2E;
+    color: #6B2C22;
+}
+
+@media screen and (max-width: 480px) {
+    .clear-all-button {
+        width: 100%;
+    }
+}
+
 .fn-share-link {
     margin-top: 0.75rem;
     padding: 0.6rem 0.8rem;

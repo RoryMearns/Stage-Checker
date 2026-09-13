@@ -420,6 +420,7 @@ checkGaugeAddButton.addEventListener('click', () => {
     checkGaugeInput.value = '';
     renderCheckGauge();
     debouncedSaveDraft();
+    checkGaugeInput.focus();
 });
 
 checkGaugeInput.addEventListener('keydown', event => {
