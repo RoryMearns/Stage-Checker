@@ -13,6 +13,10 @@ html, body {
     text-size-adjust: 100%;
 }
 
+.page-no-pull-refresh {
+    overscroll-behavior-y: contain;
+}
+
 .section {
     padding-top: 1rem;
 }
@@ -827,6 +831,10 @@ html, body {
     .gq-actions {
         flex-direction: column;
     }
+
+    .calc-button {
+        width: 100%;
+    }
 }
 
 .gq-notes-field {
@@ -882,6 +890,27 @@ html, body {
     height: 0;
     line-height: 0;
     border-top: 1px solid var(--river-line);
+}
+
+.gq-report-stripe-a {
+    background-color: var(--river-pale);
+    padding: 0.3rem 0.4rem;
+    border-radius: 4px;
+    margin: 0 -0.4rem;
+}
+
+.gq-report-stripe-b {
+    padding: 0.3rem 0.4rem;
+    margin: 0 -0.4rem;
+}
+
+.gq-report-section-heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--river-mid);
+    margin-top: 0.2rem;
 }
 
 .gq-report-num {
@@ -1032,10 +1061,19 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     gap: 0.85rem 1.25rem;
+    margin-top: 0.85rem;
 }
 
-.fn-grid + .fn-grid {
+.fn-field {
     margin-top: 0.85rem;
+}
+
+.sv-spaced-field {
+    margin-top: 0.85rem;
+}
+
+.fn-grid > .fn-field {
+    margin-top: 0;
 }
 
 .fn-grid > .field,
@@ -1076,9 +1114,9 @@ html, body {
 
 .fn-field-label {
     font-weight: 600;
-    color: var(--river-deep);
-    font-size: 0.9rem;
-    margin-bottom: 0.4rem;
+    color: #363636;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .fn-options {
@@ -1139,4 +1177,285 @@ html, body {
     color: var(--river-muted);
     font-size: 0.78rem;
     margin-top: 0.35rem;
+}
+
+.measurement-row {
+    background-color: rgba(31, 59, 60, 0.02);
+    border-radius: 6px;
+    padding: 0.65rem 0.7rem 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.measurement-fields {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr 0.9fr 0.9fr 1.3fr auto;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.measurement-fields .field {
+    margin-bottom: 0;
+    min-width: 0;
+}
+
+.measurement-field-remove .label {
+    visibility: hidden;
+}
+
+@media screen and (max-width: 900px) {
+    .measurement-fields {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .measurement-field-remove {
+        justify-self: end;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .measurement-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .measurement-field-remove {
+        justify-self: stretch;
+    }
+}
+
+.measurement-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0;
+    background-color: transparent;
+    border: 1px solid #E8B4AC;
+    border-radius: 6px;
+    color: #8C3B2E;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.measurement-remove:hover {
+    background-color: #FBEEEC;
+    color: #6B2C22;
+}
+
+.measurement-remove-text {
+    display: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 480px) {
+    .measurement-remove-text {
+        display: inline;
+    }
+
+    .measurement-remove {
+        width: 100%;
+        gap: 0.5rem;
+    }
+}
+
+.sv-add-measurement-button {
+    margin-bottom: 1rem;
+}
+
+.sv-notes-field {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.checkgauge-entry {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.checkgauge-entry .input {
+    flex: 1;
+    min-width: 0;
+}
+
+@media screen and (max-width: 480px) {
+    .checkgauge-entry {
+        flex-direction: column;
+    }
+
+    .checkgauge-entry .input,
+    .checkgauge-entry button {
+        width: 100%;
+    }
+}
+
+.checkgauge-list {
+    list-style: none;
+    margin: 0 0 0.6rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.checkgauge-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--river-pale);
+    border-radius: 999px;
+    padding: 0.25rem 0.4rem 0.25rem 0.7rem;
+    font-size: 0.85rem;
+    color: var(--river-deep);
+}
+
+.checkgauge-remove {
+    background: none;
+    border: none;
+    color: var(--river-muted);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.1rem 0.3rem;
+}
+
+.checkgauge-remove:hover {
+    color: var(--river-deep);
+}
+
+.checkgauge-total {
+    display: inline-block;
+    background-color: var(--river-pale);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    color: var(--river-deep);
+    font-size: 1rem;
+}
+
+.checkgauge-total strong {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.tips-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.tips-stepper {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid var(--river-line);
+    border-radius: 6px;
+    overflow: hidden;
+    height: 40px;
+    width: fit-content;
+}
+
+.tips-value-input {
+    width: 56px;
+    border: none;
+    border-left: 1px solid var(--river-line);
+    border-right: 1px solid var(--river-line);
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--river-deep);
+    background-color: #ffffff;
+    -moz-appearance: textfield;
+}
+
+.tips-value-input::-webkit-outer-spin-button,
+.tips-value-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tips-step-button {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    padding: 0;
+    background-color: var(--river-pale);
+    border: none;
+    color: var(--river-deep);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.tips-step-button:hover {
+    background-color: var(--river-line);
+}
+
+.fn-section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--river-line);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.85rem;
+}
+
+.fn-section-title-row .fn-section-title {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.toggle-track {
+    position: absolute;
+    inset: 0;
+    background-color: var(--river-line);
+    border-radius: 999px;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(31, 59, 60, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.toggle-switch input:checked + .toggle-track {
+    background-color: var(--river-mid);
+}
+
+.toggle-switch input:checked + .toggle-track .toggle-thumb {
+    transform: translateX(20px);
+}
+
+.toggle-switch input:focus-visible + .toggle-track {
+    outline: 2px solid var(--river-mid);
+    outline-offset: 2px;
 }

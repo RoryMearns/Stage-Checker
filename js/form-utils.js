@@ -165,3 +165,39 @@ export async function copyToClipboard(text) {
         return false;
     }
 }
+
+const DRAFT_PREFIX = 'shag-draft:';
+
+export function saveDraft(key, state) {
+    try {
+        localStorage.setItem(DRAFT_PREFIX + key, JSON.stringify(state));
+    } catch (error) {
+        console.error('Failed to save draft:', error);
+    }
+}
+
+export function loadDraft(key) {
+    try {
+        const raw = localStorage.getItem(DRAFT_PREFIX + key);
+        return raw ? JSON.parse(raw) : null;
+    } catch (error) {
+        console.error('Failed to load draft:', error);
+        return null;
+    }
+}
+
+export function clearDraft(key) {
+    try {
+        localStorage.removeItem(DRAFT_PREFIX + key);
+    } catch (error) {
+        console.error('Failed to clear draft:', error);
+    }
+}
+
+export function debounce(fn, delay) {
+    let timer = null;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+}

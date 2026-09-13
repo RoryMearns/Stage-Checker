@@ -1,4 +1,4 @@
-import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng } from './form-utils.js';
+import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce } from './form-utils.js';
 
 function radioValue(name) {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
@@ -87,6 +87,27 @@ const otherSyncs = [
     setupOtherToggle('fn-platform', 'fn-platform-other')
 ];
 
+const NOTES_DRAFT_KEY = 'notes';
+
+function saveNotesDraft() {
+    saveDraft(NOTES_DRAFT_KEY, collectNotesState());
+}
+
+const debouncedSaveNotesDraft = debounce(saveNotesDraft, 400);
+form.addEventListener('input', debouncedSaveNotesDraft);
+form.addEventListener('change', debouncedSaveNotesDraft);
+
+export function restoreNotesDraft() {
+    const draft = loadDraft(NOTES_DRAFT_KEY);
+    if (!draft) return false;
+    applyNotesState(draft);
+    return true;
+}
+
+export function clearNotesDraft() {
+    clearDraft(NOTES_DRAFT_KEY);
+}
+
 resetButton.addEventListener('click', () => {
     form.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => {
         input.value = '';
@@ -97,6 +118,7 @@ resetButton.addEventListener('click', () => {
     notesInput.value = '';
     dateInput.value = todayIsoDate();
     otherSyncs.forEach(sync => sync());
+    clearNotesDraft();
 });
 
 export function collectNotesState() {

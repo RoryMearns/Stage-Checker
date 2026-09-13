@@ -1,6 +1,6 @@
 import { encodeStateToCode, decodeCodeToState, copyToClipboard, downloadElementsSideBySide, sanitizeForFilename } from './form-utils.js';
-import { collectQualityState, applyQualityState, buildQualityReport } from './gauging-quality.js';
-import { collectNotesState, applyNotesState, buildNotesReport } from './gauging-notes.js';
+import { collectQualityState, applyQualityState, buildQualityReport, restoreQualityDraft, clearQualityDraft } from './gauging-quality.js';
+import { collectNotesState, applyNotesState, buildNotesReport, restoreNotesDraft, clearNotesDraft } from './gauging-notes.js';
 
 const shareButton = document.getElementById('share-link-button');
 const downloadAllButton = document.getElementById('download-everything-button');
@@ -62,7 +62,7 @@ downloadAllButton.addEventListener('click', () => {
 
 async function loadFromUrlIfPresent() {
     const code = new URLSearchParams(window.location.search).get('d');
-    if (!code) return;
+    if (!code) return false;
 
     try {
         const state = await decodeCodeToState(code);
@@ -75,6 +75,33 @@ async function loadFromUrlIfPresent() {
         const cleanUrl = window.location.origin + window.location.pathname;
         window.history.replaceState({}, document.title, cleanUrl);
     }
+    return true;
 }
 
-loadFromUrlIfPresent();
+const draftNotice = document.getElementById('draft-restored-notice');
+const dismissDraftNoticeButton = document.getElementById('dismiss-draft-notice');
+const clearAllButton = document.getElementById('clear-all-button');
+
+dismissDraftNoticeButton.addEventListener('click', () => {
+    draftNotice.style.display = 'none';
+});
+
+clearAllButton.addEventListener('click', () => {
+    if (!confirm('Clear all data from both forms on this device? This cannot be undone.')) return;
+    document.getElementById('fn-reset').click();
+    document.getElementById('gq-reset').click();
+    draftNotice.style.display = 'none';
+});
+
+async function init() {
+    const loadedFromLink = await loadFromUrlIfPresent();
+    if (loadedFromLink) return;
+
+    const notesRestored = restoreNotesDraft();
+    const qualityRestored = restoreQualityDraft();
+    if (notesRestored || qualityRestored) {
+        draftNotice.style.display = '';
+    }
+}
+
+init();

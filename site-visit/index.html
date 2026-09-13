@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Visit - The Friendly Shag</title>
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-wide-cards page-no-pull-refresh">
+<nav class="navbar site-banner" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item banner-brand">
+                <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+                <span class="banner-title">The Friendly Shag</span>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="site-nav-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="site-nav-menu" class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Stage &amp; Flow</a>
+                <a href="/site-visit/" class="navbar-item is-current-page">Site Visit</a>
+                <a href="/gauging/" class="navbar-item">Gauging</a>
+                <a href="/tools/" class="navbar-item">Tools</a>
+                <a href="/nems/" class="navbar-item">NEMS</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Clear Form</h2>
+
+            <div id="draft-restored-notice" class="notification is-info" style="display: none;">
+                <button class="delete" id="dismiss-draft-notice"></button>
+                <p>Your previous entries were restored from this device.</p>
+            </div>
+
+            <p class="calc-help">
+                Your progress saves automatically, but you'll need to clear the form below before starting a new site visit.
+            </p>
+
+            <button type="button" id="sv-clear-button" class="button gq-reset-button">Clear Form &amp; Start New Site Visit</button>
+        </div>
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Site Visit</h2>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Visit details</div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="sv-site-name">Site name</label>
+                        <div class="control">
+                            <input class="input" type="text" id="sv-site-name" placeholder="e.g. Taieri at Outram">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="sv-date">Date</label>
+                        <div class="control">
+                            <input class="input" type="date" id="sv-date">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="sv-party">Party</label>
+                        <div class="control">
+                            <input class="input" type="text" id="sv-party" placeholder="Names">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="sv-site-number">Site number</label>
+                        <div class="control">
+                            <input class="input" type="text" id="sv-site-number" placeholder="e.g. EM145">
+                        </div>
+                    </div>
+                </div>
+                <div class="fn-field">
+                    <div class="fn-field-label">Weather</div>
+                    <div class="fn-options">
+                        <label class="fn-option"><input type="radio" name="sv-weather" value="Fine"><span>Fine</span></label>
+                        <label class="fn-option"><input type="radio" name="sv-weather" value="Overcast"><span>Overcast</span></label>
+                        <label class="fn-option"><input type="radio" name="sv-weather" value="Showers"><span>Showers</span></label>
+                        <label class="fn-option"><input type="radio" name="sv-weather" value="Rain"><span>Rain</span></label>
+                    </div>
+                </div>
+                <div class="field sv-spaced-field">
+                    <label class="label" for="sv-weather-notes">Weather notes</label>
+                    <div class="control">
+                        <input class="input" type="text" id="sv-weather-notes" placeholder="e.g. strong gusty wind">
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Measurements</div>
+                <div id="sv-measurements-list"></div>
+                <button type="button" id="sv-add-measurement" class="button gq-reset-button sv-add-measurement-button">+ Add another measurement</button>
+
+                <div class="field sv-notes-field">
+                    <label class="label" for="sv-notes">Visit notes</label>
+                    <div class="control">
+                        <textarea id="sv-notes" class="textarea" rows="4" placeholder="Add any additional notes about this visit..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title-row">
+                    <div class="fn-section-title">Rain gauge</div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sv-raingauge-visited">
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+
+                <div id="sv-raingauge-content" class="is-hidden">
+                    <div class="fn-field">
+                        <div class="fn-field-label">Check gauge (mm)</div>
+                        <div class="checkgauge-entry">
+                            <input class="input" type="number" step="any" min="0" id="sv-checkgauge-input" placeholder="Enter reading">
+                            <button type="button" id="sv-checkgauge-add" class="button calc-button">Add reading</button>
+                        </div>
+                        <ul id="sv-checkgauge-list" class="checkgauge-list"></ul>
+                        <div class="checkgauge-total">Total: <strong id="sv-checkgauge-total">0.0</strong> mm</div>
+                    </div>
+
+                    <div class="tips-row">
+                        <div class="field">
+                            <label class="label" for="sv-manual-tips">Manual tips</label>
+                            <div class="control tips-stepper">
+                                <button type="button" id="sv-tips-decrement" class="tips-step-button" aria-label="Decrease manual tips">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </button>
+                                <input class="tips-value-input" type="number" id="sv-manual-tips" min="0" step="1" value="0" aria-label="Manual tips count">
+                                <button type="button" id="sv-tips-increment" class="tips-step-button" aria-label="Increase manual tips">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="sv-tips-at">Tips at</label>
+                            <div class="control">
+                                <input class="input" type="time" step="60" id="sv-tips-at">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field sv-spaced-field">
+                        <label class="label" for="sv-raingauge-notes">Rain gauge notes</label>
+                        <div class="control">
+                            <textarea id="sv-raingauge-notes" class="textarea" rows="3" placeholder="Add any additional notes about the rain gauge..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title-row">
+                    <div class="fn-section-title">Battery changed</div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sv-battery-changed">
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+
+                <div id="sv-battery-content" class="is-hidden">
+                    <div class="field">
+                        <label class="label" for="sv-battery-notes">Battery notes</label>
+                        <div class="control">
+                            <textarea id="sv-battery-notes" class="textarea" rows="3" placeholder="Add any additional notes about the battery change..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field gq-actions">
+                <button type="button" id="sv-share" class="button calc-button">Copy share link</button>
+                <button type="button" id="sv-download" class="button calc-button">Download site visit</button>
+            </div>
+
+            <p id="sv-share-link" class="fn-share-link" style="display: none;"></p>
+        </div>
+
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<template id="sv-measurement-template">
+    <div class="measurement-row">
+        <div class="measurement-fields">
+            <div class="field measurement-field-type">
+                <label class="label">Type</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select class="measurement-type">
+                            <option value="Staff gauge">Staff gauge</option>
+                            <option value="EPB">EPB</option>
+                            <option value="Sensor">Sensor</option>
+                            <option value="Temperature">Temperature</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field measurement-field-time">
+                <label class="label">Time</label>
+                <div class="control">
+                    <input class="input measurement-time" type="time" step="300">
+                </div>
+            </div>
+            <div class="field measurement-field-value">
+                <label class="label measurement-value-label">Value (m)</label>
+                <div class="control">
+                    <input class="input measurement-value" type="number" step="any">
+                </div>
+            </div>
+            <div class="field measurement-field-uncertainty">
+                <label class="label measurement-uncertainty-label">Uncertainty (mm)</label>
+                <div class="control">
+                    <input class="input measurement-uncertainty" type="number" step="any" value="0">
+                </div>
+            </div>
+            <div class="field measurement-field-note">
+                <label class="label">Note</label>
+                <div class="control">
+                    <input class="input measurement-other" type="text">
+                </div>
+            </div>
+            <div class="field measurement-field-remove">
+                <label class="label">&nbsp;</label>
+                <div class="control">
+                    <button type="button" class="measurement-remove" aria-label="Remove measurement">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                            <path d="M10 11v6"></path>
+                            <path d="M14 11v6"></path>
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                        </svg>
+                        <span class="measurement-remove-text">Remove measurement</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module" src="../js/site-visit.js"></script>
+<script src="../js/navbar.js"></script>
+<script type="module" src="../js/register-sw.js"></script>
+</body>
+</html>

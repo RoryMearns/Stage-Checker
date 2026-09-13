@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="page-wide-cards">
+<body class="page-wide-cards page-no-pull-refresh">
 <nav class="navbar site-banner" role="navigation" aria-label="main navigation">
     <div class="container">
         <div class="navbar-brand">
@@ -27,9 +27,10 @@
         </div>
         <div id="site-nav-menu" class="navbar-menu">
             <div class="navbar-end">
-                <a href="/" class="navbar-item">Stage Checker</a>
-                <a href="/tools/" class="navbar-item">Tools</a>
+                <a href="/" class="navbar-item">Stage &amp; Flow</a>
+                <a href="/site-visit/" class="navbar-item">Site Visit</a>
                 <a href="/gauging/" class="navbar-item is-current-page">Gauging</a>
+                <a href="/tools/" class="navbar-item">Tools</a>
                 <a href="/nems/" class="navbar-item">NEMS</a>
             </div>
         </div>
@@ -40,13 +41,28 @@
     <div class="container">
 
         <div class="run-section">
+            <h2 class="run-heading calc-title">Clear All Forms</h2>
+
+            <div id="draft-restored-notice" class="notification is-info" style="display: none;">
+                <button class="delete" id="dismiss-draft-notice"></button>
+                <p>Your previous entries were restored from this device.</p>
+            </div>
+
+            <p class="calc-help">
+                Your progress saves automatically, but you'll need to clear both forms below before starting a new gauging.
+            </p>
+
+            <button type="button" id="clear-all-button" class="button gq-reset-button">Clear Forms &amp; Start New Gauging</button>
+        </div>
+
+        <div class="run-section">
             <h2 class="run-heading calc-title">ADCP Field Measurement Notes</h2>
             <p class="calc-help">
                 Record field details for this gauging.
             </p>
 
             <div class="fn-section">
-                <div class="fn-section-title">Identification</div>
+                <div class="fn-section-title">Visit details</div>
                 <div class="fn-grid">
                     <div class="field">
                         <label class="label" for="fn-site-name">Site name</label>

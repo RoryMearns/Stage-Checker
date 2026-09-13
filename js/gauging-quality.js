@@ -1,4 +1,4 @@
-import { formatDateForDisplay, sanitizeForFilename, downloadElementAsPng } from './form-utils.js';
+import { formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce } from './form-utils.js';
 
 const POINTS = { poor: 3, fair: 1, good: 0 };
 
@@ -110,6 +110,27 @@ criteriaContainer.addEventListener('change', event => {
     }
 });
 
+const QUALITY_DRAFT_KEY = 'quality';
+
+function saveQualityDraft() {
+    saveDraft(QUALITY_DRAFT_KEY, collectQualityState());
+}
+
+const debouncedSaveQualityDraft = debounce(saveQualityDraft, 400);
+criteriaContainer.addEventListener('change', debouncedSaveQualityDraft);
+notesInput.addEventListener('input', debouncedSaveQualityDraft);
+
+export function restoreQualityDraft() {
+    const draft = loadDraft(QUALITY_DRAFT_KEY);
+    if (!draft) return false;
+    applyQualityState(draft);
+    return true;
+}
+
+export function clearQualityDraft() {
+    clearDraft(QUALITY_DRAFT_KEY);
+}
+
 resetButton.addEventListener('click', () => {
     criteria.forEach(criterion => {
         criterion.querySelectorAll('input[type="radio"]').forEach(input => {
@@ -118,6 +139,7 @@ resetButton.addEventListener('click', () => {
     });
     notesInput.value = '';
     recalculate();
+    clearQualityDraft();
 });
 
 export function buildQualityReport() {
