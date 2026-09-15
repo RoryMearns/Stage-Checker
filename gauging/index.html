@@ -105,8 +105,8 @@
                     <div class="fn-field">
                         <div class="fn-field-label">Wind direction</div>
                         <div class="fn-options">
-                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Up"><span>Up</span></label>
-                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Down"><span>Down</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Upstream"><span>Upstream</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Downstream"><span>Downstream</span></label>
                             <label class="fn-option"><input type="radio" name="fn-wind-direction" value="Across"><span>Across</span></label>
                         </div>
                     </div>
@@ -134,19 +134,28 @@
                             <label class="fn-option"><input type="radio" name="fn-laptop" value="Other"><span>Other</span></label>
                         </div>
                         <input class="input fn-other-input is-hidden" type="text" id="fn-laptop-other" placeholder="If Other, specify">
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-laptop-account" placeholder="Account">
                     </div>
                     <div class="fn-field">
-                        <div class="fn-field-label">RS5 ADCP serial No</div>
+                        <div class="fn-field-label">ADCP used</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-adcp-device" value="RS5"><span>RS5</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-device" value="M9"><span>M9</span></label>
+                        </div>
+                    </div>
+                    <div class="fn-field is-hidden" id="fn-rs5-block">
+                        <div class="fn-field-label">RS5 serial No</div>
                         <div class="fn-options">
                             <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52126005"><span>RS52126005</span></label>
                             <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52126006"><span>RS52126006</span></label>
                             <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52537002"><span>RS52537002</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52035002"><span>RS52035002</span></label>
                             <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="Other-RS5"><span>Other</span></label>
                         </div>
                         <input class="input fn-other-input is-hidden" type="text" id="fn-rs5-other" placeholder="If Other, specify">
                     </div>
-                    <div class="fn-field">
-                        <div class="fn-field-label">M9 ADCP serial No</div>
+                    <div class="fn-field is-hidden" id="fn-m9-block">
+                        <div class="fn-field-label">M9 serial No</div>
                         <div class="fn-options">
                             <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="401"><span>401</span></label>
                             <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="5755"><span>5755</span></label>
@@ -245,7 +254,7 @@
                         <div class="control">
                             <input class="input" type="number" id="fn-screening-distance" step="any" min="0">
                         </div>
-                        <p class="fn-help">= transducer depth + 0.16m</p>
+                        <p id="fn-screening-hint" class="fn-help" style="display: none;">= transducer depth + 0.16m for the M9</p>
                     </div>
                     <div class="field">
                         <label class="label" for="fn-channel-width">Rangefinder channel width (m)</label>
@@ -291,18 +300,25 @@
                         </div>
                     </div>
                     <div class="field">
+                        <label class="label" for="fn-cov">CoV (%)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-cov" step="any">
+                        </div>
+                    </div>
+                    <div class="field">
                         <label class="label" for="fn-mean-q">Mean Q (m&sup3;/s)</label>
                         <div class="control">
                             <input class="input" type="number" id="fn-mean-q" step="any">
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="fn-cov">CoV (%)</label>
+                        <label class="label" for="fn-rated-q">Rated Q (m&sup3;/s)</label>
                         <div class="control">
-                            <input class="input" type="number" id="fn-cov" step="any">
+                            <input class="input" type="number" id="fn-rated-q" step="any">
                         </div>
                     </div>
                 </div>
+                <div id="gq-flow-diff" class="flow-diff" style="display: none;"></div>
             </div>
 
             <div class="field gq-notes-field">

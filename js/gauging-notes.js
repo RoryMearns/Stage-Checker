@@ -1,4 +1,4 @@
-import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce } from './form-utils.js';
+import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce, updateFlowDifferenceDisplay, buildFlowDifferenceHtml } from './form-utils.js';
 
 function radioValue(name) {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
@@ -54,6 +54,53 @@ function setupOtherToggle(radioName, otherInputId, otherValue = 'Other') {
     return sync;
 }
 
+function setupConditionalToggle(radioName, targetInputId, predicate) {
+    const targetInput = document.getElementById(targetInputId);
+    const radios = document.querySelectorAll(`input[name="${radioName}"]`);
+
+    function sync() {
+        const checked = document.querySelector(`input[name="${radioName}"]:checked`);
+        const shouldShow = Boolean(checked && predicate(checked.value));
+        targetInput.classList.toggle('is-hidden', !shouldShow);
+    }
+
+    radios.forEach(radio => radio.addEventListener('change', sync));
+    return sync;
+}
+
+const rs5Block = document.getElementById('fn-rs5-block');
+const m9Block = document.getElementById('fn-m9-block');
+const screeningHint = document.getElementById('fn-screening-hint');
+
+function syncAdcpDevice() {
+    const checked = document.querySelector('input[name="fn-adcp-device"]:checked');
+    const device = checked ? checked.value : null;
+    rs5Block.classList.toggle('is-hidden', device !== 'RS5');
+    m9Block.classList.toggle('is-hidden', device !== 'M9');
+
+    if (device === 'M9') {
+        screeningHint.textContent = '= transducer depth + 0.16m for the M9';
+        screeningHint.style.display = '';
+    } else {
+        screeningHint.style.display = 'none';
+    }
+}
+
+function deviceForSerial(value) {
+    if (!value) return null;
+    return M9_VALUES.includes(value) ? 'M9' : 'RS5';
+}
+
+document.querySelectorAll('input[name="fn-adcp-device"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        document.querySelectorAll('input[name="fn-adcp-serial"]').forEach(r => { r.checked = false; });
+        document.getElementById('fn-rs5-other').classList.add('is-hidden');
+        document.getElementById('fn-m9-other').classList.add('is-hidden');
+        syncAdcpDevice();
+        debouncedSaveNotesDraft();
+    });
+});
+
 function setRadio(name, value) {
     if (value === undefined || value === null) return;
     const input = document.querySelector(`input[name="${name}"][value="${value}"]`);
@@ -77,15 +124,26 @@ const form = siteNameInput.closest('.run-section');
 const resetButton = document.getElementById('fn-reset');
 const downloadButton = document.getElementById('fn-download');
 const notesInput = document.getElementById('fn-notes');
+const meanQInput = document.getElementById('fn-mean-q');
+const ratedQInput = document.getElementById('fn-rated-q');
+const flowDiffEl = document.getElementById('gq-flow-diff');
 
 dateInput.value = todayIsoDate();
 
 const otherSyncs = [
     setupOtherToggle('fn-laptop', 'fn-laptop-other'),
+    setupConditionalToggle('fn-laptop', 'fn-laptop-account', value => ['1', '2', '3', '4'].includes(value)),
     setupOtherToggle('fn-adcp-serial', 'fn-rs5-other', 'Other-RS5'),
     setupOtherToggle('fn-adcp-serial', 'fn-m9-other', 'Other-M9'),
     setupOtherToggle('fn-platform', 'fn-platform-other')
 ];
+
+function updateFlowDiff() {
+    updateFlowDifferenceDisplay(flowDiffEl, ratedQInput.value, meanQInput.value);
+}
+
+ratedQInput.addEventListener('input', updateFlowDiff);
+meanQInput.addEventListener('input', updateFlowDiff);
 
 const NOTES_DRAFT_KEY = 'notes';
 
@@ -118,6 +176,8 @@ resetButton.addEventListener('click', () => {
     notesInput.value = '';
     dateInput.value = todayIsoDate();
     otherSyncs.forEach(sync => sync());
+    syncAdcpDevice();
+    updateFlowDiff();
     clearNotesDraft();
 });
 
@@ -131,6 +191,7 @@ export function collectNotesState() {
     set('l', textValue('fn-location'));
     set('lt', radioValue('fn-laptop'));
     set('lto', textValue('fn-laptop-other'));
+    set('la', textValue('fn-laptop-account'));
     set('as', radioValue('fn-adcp-serial'));
     set('r5o', textValue('fn-rs5-other'));
     set('m9o', textValue('fn-m9-other'));
@@ -154,6 +215,7 @@ export function collectNotesState() {
     set('dr', textValue('fn-distance-recorder'));
     set('tx', textValue('fn-transects'));
     set('mq', textValue('fn-mean-q'));
+    set('rq', textValue('fn-rated-q'));
     set('cv', textValue('fn-cov'));
     set('n', notesInput.value.trim());
 
@@ -169,9 +231,11 @@ export function applyNotesState(state) {
     setInputValue('fn-location', state.l);
     setRadio('fn-laptop', state.lt);
     setInputValue('fn-laptop-other', state.lto);
+    setInputValue('fn-laptop-account', state.la);
     setRadio('fn-adcp-serial', state.as);
     setInputValue('fn-rs5-other', state.r5o);
     setInputValue('fn-m9-other', state.m9o);
+    setRadio('fn-adcp-device', deviceForSerial(state.as));
     setRadio('fn-method', state.md);
     setRadio('fn-platform', state.pf);
     setInputValue('fn-platform-other', state.pfo);
@@ -192,10 +256,13 @@ export function applyNotesState(state) {
     setInputValue('fn-distance-recorder', state.dr);
     setInputValue('fn-transects', state.tx);
     setInputValue('fn-mean-q', state.mq);
+    setInputValue('fn-rated-q', state.rq);
     setInputValue('fn-cov', state.cv);
     if (state.n) notesInput.value = state.n;
 
     otherSyncs.forEach(sync => sync());
+    syncAdcpDevice();
+    updateFlowDiff();
 }
 
 export function buildNotesReport() {
@@ -244,6 +311,10 @@ export function buildNotesReport() {
         fieldRow('Mean velocity', textValue('fn-mean-velocity') ? `${textValue('fn-mean-velocity')} m/s` : null)
     ];
 
+    if (['1', '2', '3', '4'].includes(radioValue('fn-laptop'))) {
+        rows.splice(5, 0, fieldRow('Account', textValue('fn-laptop-account')));
+    }
+
     if (hasLag) {
         rows.push(fieldRowWithNote(
             'Lag time',
@@ -278,6 +349,22 @@ export function buildNotesReport() {
         highlight.className = 'gq-report-highlight';
         highlight.innerHTML = `Mean Q: <strong>${meanQValue} m&sup3;/s</strong>`;
         report.appendChild(highlight);
+    }
+
+    const ratedQValue = textValue('fn-rated-q');
+    if (ratedQValue) {
+        const ratedRow = document.createElement('p');
+        ratedRow.className = 'gq-report-rated-q';
+        ratedRow.innerHTML = `Rated Q: <strong>${ratedQValue} m&sup3;/s</strong>`;
+        report.appendChild(ratedRow);
+    }
+
+    const flowDiffHtml = buildFlowDifferenceHtml(ratedQInput.value, meanQInput.value);
+    if (flowDiffHtml) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'gq-report-flow-diff-wrap';
+        wrapper.innerHTML = flowDiffHtml;
+        report.appendChild(wrapper);
     }
 
     return report;
