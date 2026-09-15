@@ -1,4 +1,4 @@
-import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce, encodeStateToCode, decodeCodeToState, copyToClipboard } from './form-utils.js';
+import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce, encodeStateToCode, decodeCodeToState, copyToClipboard, updateFlowDifferenceDisplay, buildFlowDifferenceHtml } from './form-utils.js';
 
 const DRAFT_KEY = 'site-visit';
 
@@ -85,6 +85,11 @@ function fieldRow(label, value) {
     return `<li><span class="gq-report-name">${label}:</span> <span class="gq-report-value">${value ?? '—'}</span></li>`;
 }
 
+function notesRow(label, value) {
+    if (!value) return fieldRow(label, null);
+    return `<li class="gq-report-notes-row"><span class="gq-report-name">${label}:</span><div class="gq-report-notes-text">${value.replace(/\n/g, '<br>')}</div></li>`;
+}
+
 function stripedRow(label, value, stripeIndex) {
     const stripeClass = stripeIndex % 2 === 0 ? 'gq-report-stripe-a' : 'gq-report-stripe-b';
     return `<li class="${stripeClass}"><span class="gq-report-name">${label}:</span> <span class="gq-report-value">${value ?? '—'}</span></li>`;
@@ -115,6 +120,9 @@ const measurementTemplate = document.getElementById('sv-measurement-template');
 
 const raingaugeContent = document.getElementById('sv-raingauge-content');
 const raingaugeToggle = document.getElementById('sv-raingauge-visited');
+const checkTotalStartInput = document.getElementById('sv-checktotal-start');
+const checkTotalEndInput = document.getElementById('sv-checktotal-end');
+const checkTotalDeltaEl = document.getElementById('sv-checktotal-delta');
 const checkGaugeInput = document.getElementById('sv-checkgauge-input');
 const checkGaugeAddButton = document.getElementById('sv-checkgauge-add');
 const checkGaugeListEl = document.getElementById('sv-checkgauge-list');
@@ -124,6 +132,13 @@ const tipsIncrementButton = document.getElementById('sv-tips-increment');
 const tipsDecrementButton = document.getElementById('sv-tips-decrement');
 const tipsAtInput = document.getElementById('sv-tips-at');
 const raingaugeNotesInput = document.getElementById('sv-raingauge-notes');
+
+const gaugingContent = document.getElementById('sv-gauging-content');
+const gaugingToggle = document.getElementById('sv-gauging-done');
+const ratedFlowInput = document.getElementById('sv-rated-flow');
+const gaugedFlowInput = document.getElementById('sv-gauged-flow');
+const flowDiffEl = document.getElementById('sv-flow-diff');
+const gaugingNotesInput = document.getElementById('sv-gauging-notes');
 
 const batteryContent = document.getElementById('sv-battery-content');
 const batteryToggle = document.getElementById('sv-battery-changed');
@@ -175,7 +190,7 @@ function addMeasurementRow(data = null) {
         typeSelect.value = data.type || 'Staff gauge';
         timeInput.value = data.time || '';
         valueInput.value = data.value ?? '';
-        uncertaintyInput.value = data.uncertainty ?? '0';
+        uncertaintyInput.value = data.uncertainty ?? '';
         otherInput.value = data.other || '';
     } else {
         timeInput.value = nzTimeRoundedToFive();
@@ -221,6 +236,18 @@ function renderCheckGauge() {
     checkGaugeTotalEl.textContent = total.toFixed(1);
 }
 
+function updateCheckTotalDelta() {
+    const start = parseFloat(checkTotalStartInput.value);
+    const end = parseFloat(checkTotalEndInput.value);
+    if (isNaN(start) || isNaN(end)) {
+        checkTotalDeltaEl.style.display = 'none';
+        return;
+    }
+    const delta = end - start;
+    checkTotalDeltaEl.textContent = `Check total increased by ${delta.toFixed(1)} mm`;
+    checkTotalDeltaEl.style.display = '';
+}
+
 function syncToggle(checkboxEl, contentEl) {
     contentEl.classList.toggle('is-hidden', !checkboxEl.checked);
 }
@@ -251,11 +278,18 @@ function collectSiteVisitState() {
     set('notes', textValue(notesInput));
 
     set('rg', raingaugeToggle.checked ? 'Yes' : null);
+    set('cts', checkTotalStartInput.value);
+    set('cte', checkTotalEndInput.value);
     if (checkGaugeReadings.length) state.checkGauge = checkGaugeReadings.slice();
     const tips = parseInt(manualTipsInput.value, 10);
     if (tips) state.tips = tips;
     set('tipsAt', tipsAtInput.value);
     set('rgNotes', textValue(raingaugeNotesInput));
+
+    set('gd', gaugingToggle.checked ? 'Yes' : null);
+    set('rf', ratedFlowInput.value);
+    set('gf', gaugedFlowInput.value);
+    set('gNotes', textValue(gaugingNotesInput));
 
     set('bc', batteryToggle.checked ? 'Yes' : null);
     set('bcNotes', textValue(batteryNotesInput));
@@ -276,24 +310,32 @@ function applySiteVisitState(state) {
     measurementsList.innerHTML = '';
     if (Array.isArray(state.measurements) && state.measurements.length) {
         state.measurements.forEach(m => addMeasurementRow(m));
-    } else {
-        addMeasurementRow();
     }
 
     if (state.notes) notesInput.value = state.notes;
 
     raingaugeToggle.checked = state.rg === 'Yes';
+    if (state.cts) checkTotalStartInput.value = state.cts;
+    if (state.cte) checkTotalEndInput.value = state.cte;
+    updateCheckTotalDelta();
     checkGaugeReadings = Array.isArray(state.checkGauge) ? state.checkGauge.slice() : [];
     renderCheckGauge();
     if (state.tips) manualTipsInput.value = state.tips;
     if (state.tipsAt) tipsAtInput.value = state.tipsAt;
     if (state.rgNotes) raingaugeNotesInput.value = state.rgNotes;
 
+    gaugingToggle.checked = state.gd === 'Yes';
+    if (state.rf) ratedFlowInput.value = state.rf;
+    if (state.gf) gaugedFlowInput.value = state.gf;
+    updateFlowDiff();
+    if (state.gNotes) gaugingNotesInput.value = state.gNotes;
+
     batteryToggle.checked = state.bc === 'Yes';
     if (state.bcNotes) batteryNotesInput.value = state.bcNotes;
 
     syncRaingaugeToggle();
     syncBatteryToggle();
+    syncGaugingToggle();
 }
 
 function buildSiteVisitReport() {
@@ -329,24 +371,43 @@ function buildSiteVisitReport() {
     }
 
     rows.push(divider());
-    rows.push(fieldRow('Visit notes', textValue(notesInput)));
+    rows.push(notesRow('Visit notes', textValue(notesInput)));
+
+    if (gaugingToggle.checked) {
+        rows.push(divider());
+        rows.push(sectionHeading('Gauging'));
+        rows.push(fieldRow('Rated flow', ratedFlowInput.value ? `${ratedFlowInput.value} m&sup3;/s` : null));
+        rows.push(fieldRow('Gauged flow', gaugedFlowInput.value ? `${gaugedFlowInput.value} m&sup3;/s` : null));
+        const gaugingFlowDiffHtml = buildFlowDifferenceHtml(ratedFlowInput.value, gaugedFlowInput.value);
+        if (gaugingFlowDiffHtml) {
+            rows.push(`<li class="gq-report-flow-diff-row">${gaugingFlowDiffHtml}</li>`);
+        }
+        rows.push(notesRow('Gauging notes', textValue(gaugingNotesInput)));
+    }
 
     if (raingaugeToggle.checked) {
         rows.push(divider());
         rows.push(sectionHeading('Rain Gauge'));
+        rows.push(fieldRow('Check total start', checkTotalStartInput.value ? `${checkTotalStartInput.value} mm` : null));
+        rows.push(fieldRow('Check total end', checkTotalEndInput.value ? `${checkTotalEndInput.value} mm` : null));
+        const startVal = parseFloat(checkTotalStartInput.value);
+        const endVal = parseFloat(checkTotalEndInput.value);
+        if (!isNaN(startVal) && !isNaN(endVal)) {
+            rows.push(fieldRow('Check total increase', `${(endVal - startVal).toFixed(1)} mm`));
+        }
         const checkGaugeText = checkGaugeReadings.length
             ? `${checkGaugeReadings.reduce((sum, v) => sum + v, 0).toFixed(1)} mm (${checkGaugeReadings.join(', ')})`
             : null;
         rows.push(fieldRow('Check gauge total', checkGaugeText));
         rows.push(fieldRow('Manual tips', manualTipsInput.value || '0'));
         rows.push(fieldRow('Tips at', textValue(tipsAtInput)));
-        rows.push(fieldRow('Rain gauge notes', textValue(raingaugeNotesInput)));
+        rows.push(notesRow('Rain gauge notes', textValue(raingaugeNotesInput)));
     }
 
     if (batteryToggle.checked) {
         rows.push(divider());
         rows.push(sectionHeading('Battery'));
-        rows.push(fieldRow('Battery notes', textValue(batteryNotesInput)));
+        rows.push(notesRow('Battery notes', textValue(batteryNotesInput)));
     }
 
     const list = document.createElement('ul');
@@ -404,6 +465,17 @@ function restoreDraftIfPresent() {
 
 const syncRaingaugeToggle = setupToggle(raingaugeToggle, raingaugeContent);
 const syncBatteryToggle = setupToggle(batteryToggle, batteryContent);
+const syncGaugingToggle = setupToggle(gaugingToggle, gaugingContent);
+
+checkTotalStartInput.addEventListener('input', updateCheckTotalDelta);
+checkTotalEndInput.addEventListener('input', updateCheckTotalDelta);
+
+function updateFlowDiff() {
+    updateFlowDifferenceDisplay(flowDiffEl, ratedFlowInput.value, gaugedFlowInput.value);
+}
+
+ratedFlowInput.addEventListener('input', updateFlowDiff);
+gaugedFlowInput.addEventListener('input', updateFlowDiff);
 
 form.addEventListener('input', debouncedSaveDraft);
 form.addEventListener('change', debouncedSaveDraft);
@@ -486,11 +558,19 @@ clearButton.addEventListener('click', () => {
     weatherNotesInput.value = '';
 
     measurementsList.innerHTML = '';
-    addMeasurementRow();
 
     notesInput.value = '';
 
+    gaugingToggle.checked = false;
+    ratedFlowInput.value = '';
+    gaugedFlowInput.value = '';
+    updateFlowDiff();
+    gaugingNotesInput.value = '';
+
     raingaugeToggle.checked = false;
+    checkTotalStartInput.value = '';
+    checkTotalEndInput.value = '';
+    updateCheckTotalDelta();
     checkGaugeReadings = [];
     renderCheckGauge();
     checkGaugeInput.value = '';
@@ -503,6 +583,7 @@ clearButton.addEventListener('click', () => {
 
     syncRaingaugeToggle();
     syncBatteryToggle();
+    syncGaugingToggle();
 
     clearDraft(DRAFT_KEY);
     draftNotice.style.display = 'none';
@@ -521,7 +602,6 @@ async function init() {
         return;
     }
 
-    addMeasurementRow();
     tipsAtInput.value = currentNzTimeExact();
 }
 

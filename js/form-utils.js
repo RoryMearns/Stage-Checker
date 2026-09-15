@@ -201,3 +201,36 @@ export function debounce(fn, delay) {
         timer = setTimeout(() => fn(...args), delay);
     };
 }
+
+const FLOW_DIFF_GOOD_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+const FLOW_DIFF_WARNING_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>';
+
+export function computeFlowDifferencePercent(ratedValue, measuredValue) {
+    const rated = parseFloat(ratedValue);
+    const measured = parseFloat(measuredValue);
+    if (isNaN(rated) || isNaN(measured) || rated === 0) return null;
+    const raw = Math.abs((measured - rated) / rated) * 100;
+    return Math.round(raw * 10) / 10;
+}
+
+export function updateFlowDifferenceDisplay(displayEl, ratedValue, measuredValue, goodThreshold = 8.0) {
+    const pct = computeFlowDifferencePercent(ratedValue, measuredValue);
+    if (pct === null) {
+        displayEl.style.display = 'none';
+        return;
+    }
+    const isGood = pct <= goodThreshold;
+    displayEl.innerHTML = `${isGood ? FLOW_DIFF_GOOD_ICON : FLOW_DIFF_WARNING_ICON}<span>Unprocessed gauging is ${pct.toFixed(1)}% from the rated flow</span>`;
+    displayEl.classList.toggle('flow-diff-good', isGood);
+    displayEl.classList.toggle('flow-diff-warning', !isGood);
+    displayEl.style.display = '';
+}
+
+export function buildFlowDifferenceHtml(ratedValue, measuredValue, goodThreshold = 8.0) {
+    const pct = computeFlowDifferencePercent(ratedValue, measuredValue);
+    if (pct === null) return '';
+    const isGood = pct <= goodThreshold;
+    const stateClass = isGood ? 'flow-diff-good' : 'flow-diff-warning';
+    const icon = isGood ? FLOW_DIFF_GOOD_ICON : FLOW_DIFF_WARNING_ICON;
+    return `<div class="flow-diff ${stateClass}">${icon}<span>Unprocessed gauging is ${pct.toFixed(1)}% from the rated flow</span></div>`;
+}

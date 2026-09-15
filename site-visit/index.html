@@ -118,6 +118,41 @@
 
             <div class="fn-section">
                 <div class="fn-section-title-row">
+                    <div class="fn-section-title">Gauging</div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sv-gauging-done">
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+
+                <div id="sv-gauging-content" class="is-hidden">
+                    <div class="fn-grid">
+                        <div class="field">
+                            <label class="label" for="sv-rated-flow">Rated flow (m&sup3;/s)</label>
+                            <div class="control">
+                                <input class="input" type="number" step="any" id="sv-rated-flow">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="sv-gauged-flow">Gauged flow (m&sup3;/s)</label>
+                            <div class="control">
+                                <input class="input" type="number" step="any" id="sv-gauged-flow">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sv-flow-diff" class="flow-diff" style="display: none;"></div>
+
+                    <div class="field sv-spaced-field">
+                        <label class="label" for="sv-gauging-notes">Gauging notes</label>
+                        <div class="control">
+                            <textarea id="sv-gauging-notes" class="textarea" rows="4" placeholder="Add any additional notes about this gauging..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title-row">
                     <div class="fn-section-title">Rain gauge</div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="sv-raingauge-visited">
@@ -126,6 +161,22 @@
                 </div>
 
                 <div id="sv-raingauge-content" class="is-hidden">
+                    <div class="fn-grid">
+                        <div class="field">
+                            <label class="label" for="sv-checktotal-start">Check total start (mm)</label>
+                            <div class="control">
+                                <input class="input" type="number" step="any" id="sv-checktotal-start">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="sv-checktotal-end">Check total end (mm)</label>
+                            <div class="control">
+                                <input class="input" type="number" step="any" id="sv-checktotal-end">
+                            </div>
+                        </div>
+                    </div>
+                    <p id="sv-checktotal-delta" class="fn-help" style="display: none;"></p>
+
                     <div class="fn-field">
                         <div class="fn-field-label">Check gauge (mm)</div>
                         <div class="checkgauge-entry">
@@ -232,8 +283,9 @@
             <div class="field measurement-field-uncertainty">
                 <label class="label measurement-uncertainty-label">Uncertainty (mm)</label>
                 <div class="control">
-                    <input class="input measurement-uncertainty" type="number" step="any" value="0">
+                    <input class="input measurement-uncertainty" type="number" step="any">
                 </div>
+                <p class="fn-help">Left blank counts as 0</p>
             </div>
             <div class="field measurement-field-note">
                 <label class="label">Note</label>
