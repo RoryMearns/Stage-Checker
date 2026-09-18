@@ -347,7 +347,7 @@ export function buildNotesReport() {
     if (meanQValue) {
         const highlight = document.createElement('div');
         highlight.className = 'gq-report-highlight';
-        highlight.innerHTML = `Mean Q: <strong>${meanQValue} m&sup3;/s</strong>`;
+        highlight.innerHTML = `Mean Q: <strong>${parseFloat(meanQValue).toFixed(3)} m&sup3;/s</strong>`;
         report.appendChild(highlight);
     }
 
@@ -355,7 +355,7 @@ export function buildNotesReport() {
     if (ratedQValue) {
         const ratedRow = document.createElement('p');
         ratedRow.className = 'gq-report-rated-q';
-        ratedRow.innerHTML = `Rated Q: <strong>${ratedQValue} m&sup3;/s</strong>`;
+        ratedRow.innerHTML = `Rated Q: <strong>${parseFloat(ratedQValue).toFixed(3)} m&sup3;/s</strong>`;
         report.appendChild(ratedRow);
     }
 

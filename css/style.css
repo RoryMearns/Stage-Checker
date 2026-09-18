@@ -1426,6 +1426,10 @@ html, body {
     background-color: var(--river-line);
 }
 
+#rating-flow-diff {
+    width: 100%;
+}
+
 .flow-diff {
     display: inline-flex;
     align-items: center;
@@ -1465,6 +1469,11 @@ html, body {
         display: flex;
         width: 100%;
     }
+}
+
+#rating-flow-diff {
+    display: flex;
+    width: 100%;
 }
 
 .gq-report-notes-row {

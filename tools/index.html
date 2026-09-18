@@ -40,6 +40,27 @@
 <section class="section">
     <div class="container">
         <div class="run-section calc-card">
+            <h2 class="run-heading calc-title">Rating Calculator</h2>
+            <p class="calc-help">
+                Compare a gauged flow against the rated flow to see how far apart they are.
+            </p>
+
+            <div class="field">
+                <label class="label" for="rating-rated-flow">Rated flow (m&sup3;/s)</label>
+                <div class="control">
+                    <input class="input" type="number" id="rating-rated-flow" step="any">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label" for="rating-gauged-flow">Gauged flow (m&sup3;/s)</label>
+                <div class="control">
+                    <input class="input" type="number" id="rating-gauged-flow" step="any">
+                </div>
+            </div>
+            <div id="rating-flow-diff" class="flow-diff" style="display: none;"></div>
+        </div>
+
+        <div class="run-section calc-card">
             <h2 class="run-heading calc-title">Lag Time Calculator</h2>
             <p class="calc-help">
                 Calculate how much your gauging time needs to change based on the distance between the
@@ -114,6 +135,7 @@
     <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
 </footer>
 
+<script type="module" src="../js/rating-calculator.js"></script>
 <script type="module" src="../js/lag.js"></script>
 <script type="module" src="../js/declination.js"></script>
 <script src="../js/navbar.js"></script>

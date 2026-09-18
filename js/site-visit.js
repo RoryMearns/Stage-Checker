@@ -376,8 +376,8 @@ function buildSiteVisitReport() {
     if (gaugingToggle.checked) {
         rows.push(divider());
         rows.push(sectionHeading('Gauging'));
-        rows.push(fieldRow('Rated flow', ratedFlowInput.value ? `${ratedFlowInput.value} m&sup3;/s` : null));
-        rows.push(fieldRow('Gauged flow', gaugedFlowInput.value ? `${gaugedFlowInput.value} m&sup3;/s` : null));
+        rows.push(fieldRow('Rated flow', ratedFlowInput.value ? `${parseFloat(ratedFlowInput.value).toFixed(3)} m&sup3;/s` : null));
+        rows.push(fieldRow('Gauged flow', gaugedFlowInput.value ? `${parseFloat(gaugedFlowInput.value).toFixed(3)} m&sup3;/s` : null));
         const gaugingFlowDiffHtml = buildFlowDifferenceHtml(ratedFlowInput.value, gaugedFlowInput.value);
         if (gaugingFlowDiffHtml) {
             rows.push(`<li class="gq-report-flow-diff-row">${gaugingFlowDiffHtml}</li>`);
