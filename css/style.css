@@ -1437,6 +1437,7 @@ html, body {
     margin-top: 0.6rem;
     line-height: 1.3;
     box-sizing: border-box;
+    width: calc(25% - 0.9375rem);
 }
 
 .flow-diff svg {
@@ -1451,6 +1452,12 @@ html, body {
 .flow-diff-warning {
     background-color: #FBF0DE;
     color: #92600B;
+}
+
+@media screen and (max-width: 1024px) {
+    .flow-diff {
+        width: calc(50% - 0.625rem);
+    }
 }
 
 @media screen and (max-width: 768px) {
