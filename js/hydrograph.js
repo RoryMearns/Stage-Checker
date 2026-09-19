@@ -1,6 +1,6 @@
 import { formatNzTime, parseApiTimeAsNzLocal } from './form-utils.js';
 
-function formatFlowValue(value) {
+export function formatFlowValue(value) {
     if (value < 10.0) return value.toFixed(3);
     if (value < 100.0) return value.toFixed(2);
     if (value < 1000.0) return value.toFixed(1);
@@ -28,7 +28,7 @@ export function parseTimeSeriesResponse(raw) {
     return { points, nowTime };
 }
 
-export function renderHydrograph(el, points, windowRange = null, nowTime = null, extrapolatedPoints = [], methodThresholds = null) {
+export function renderHydrograph(el, points, windowRange = null, nowTime = null, extrapolatedPoints = [], methodThresholds = null, gaugedFlow = null) {
     if (!points.length) {
         el.innerHTML = '<p class="calc-help">No data points to show.</p>';
         return;
@@ -43,14 +43,20 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
         && typeof methodThresholds.ftUpperLimit === 'number'
         && typeof methodThresholds.sxsUpperLimit === 'number';
     const padLeft = hasMethodIcons ? 34 : 3;
+    const hasGaugedFlow = windowRange && typeof gaugedFlow === 'number' && !isNaN(gaugedFlow);
 
     const scalePoints = points.concat(extrapolatedPoints);
     const times = scalePoints.map(p => p.time.getTime());
     const values = scalePoints.map(p => p.value);
     let minTime = Math.min(...times);
     let maxTime = Math.max(...times);
-    const minVal = Math.min(...values);
-    const maxVal = Math.max(...values);
+    let minVal = Math.min(...values);
+    let maxVal = Math.max(...values);
+
+    if (hasGaugedFlow) {
+        minVal = Math.min(minVal, gaugedFlow);
+        maxVal = Math.max(maxVal, gaugedFlow);
+    }
     const valRange = maxVal - minVal || 1;
 
     if (windowRange) {
@@ -132,6 +138,36 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
         }
     }
 
+    let gaugedFlowLineHtml = '';
+    let gaugedFlowMarkerHtml = '';
+    if (hasGaugedFlow) {
+        const gaugedY = y(gaugedFlow);
+        const startX = clampX(x(windowRange.start.getTime()));
+        const endX = clampX(x(windowRange.end.getTime()));
+
+        gaugedFlowLineHtml = `<line x1="${startX.toFixed(1)}" y1="${gaugedY.toFixed(1)}" x2="${endX.toFixed(1)}" y2="${gaugedY.toFixed(1)}" stroke="var(--river-deep)" stroke-width="1.75" vector-effect="non-scaling-stroke" />`;
+
+        const anchorTime = windowRange.start.getTime();
+        let closestPoint = scalePoints[0];
+        let closestDiff = Math.abs(scalePoints[0].time.getTime() - anchorTime);
+        for (const p of scalePoints) {
+            const diff = Math.abs(p.time.getTime() - anchorTime);
+            if (diff < closestDiff) {
+                closestPoint = p;
+                closestDiff = diff;
+            }
+        }
+        const curveValueAtAnchor = closestPoint.value;
+
+        const topPct = ((gaugedY / height) * 100).toFixed(2);
+        const leftPct = ((startX / width) * 100).toFixed(2);
+        const side = gaugedFlow < curveValueAtAnchor ? 'is-below' : 'is-above';
+        gaugedFlowMarkerHtml = `
+            <div class="sparkline-gauged-dot" style="left: ${leftPct}%; top: ${topPct}%;"></div>
+            <div class="sparkline-gauged-label ${side}" style="left: ${leftPct}%; top: ${topPct}%;">Gauged ${formatFlowValue(gaugedFlow)}</div>
+        `;
+    }
+
     let peak = points[0];
     let low = points[0];
     for (const p of points) {
@@ -188,10 +224,12 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
                 <path d="${areaPath}" fill="url(#sparkline-fill)" stroke="none" />
                 <path d="${linePath}" fill="none" stroke="var(--river-mid)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
                 ${extrapolatedPath ? `<path d="${extrapolatedPath}" fill="none" stroke="var(--river-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,4" opacity="0.6" vector-effect="non-scaling-stroke" />` : ''}
+                ${gaugedFlowLineHtml}
             </svg>
             <div class="sparkline-end-marker" style="left: ${endMarkerLeftPct}%; top: ${endMarkerTopPct}%;"></div>
             ${methodLineMarkers.join('')}
             ${methodIconMarkers.join('')}
+            ${gaugedFlowMarkerHtml}
         </div>
         ${legendHtml}
     `;
