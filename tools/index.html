@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lag Time Calculator - The Friendly Shag</title>
+    <title>Gauging Tools - The Friendly Shag</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -39,6 +39,85 @@
 
 <section class="section">
     <div class="container">
+        <div class="run-section calc-card">
+            <h2 class="run-heading calc-title">Gauging Tool</h2>
+            <p class="calc-help">
+                Select a site to pull its latest recorded flow, then compare it against a gauged flow across your gauging time span.
+            </p>
+
+            <div class="field site-autocomplete-field">
+                <label class="label" for="gauging-tool-site">Site name</label>
+                <div class="control">
+                    <input class="input" type="text" id="gauging-tool-site" placeholder="Start typing a site name..." autocomplete="off">
+                </div>
+                <ul id="gauging-tool-site-list" class="site-autocomplete-list" style="display: none;"></ul>
+            </div>
+
+            <div class="two-col-grid">
+                <div class="field">
+                    <label class="label" for="gauging-tool-start">Gauging start</label>
+                    <div class="control">
+                        <input class="input" type="time" step="60" id="gauging-tool-start">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="gauging-tool-end">Gauging end</label>
+                    <div class="control">
+                        <input class="input" type="time" step="60" id="gauging-tool-end">
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-field toggle-field sv-spaced-field">
+                <span class="fn-field-label">Factor lag time</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="gauging-tool-lag-toggle">
+                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </label>
+            </div>
+
+            <div id="gauging-tool-lag-content" class="is-hidden">
+                <div class="two-col-grid">
+                    <div class="field">
+                        <label class="label" for="gauging-tool-lag-velocity">Mean velocity (m/s)</label>
+                        <div class="control">
+                            <input class="input" type="number" step="any" min="0" id="gauging-tool-lag-velocity">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="gauging-tool-lag-distance">Distance to site (m)</label>
+                        <div class="control">
+                            <input class="input" type="number" step="any" min="0" id="gauging-tool-lag-distance">
+                        </div>
+                    </div>
+                </div>
+                <div class="fn-field">
+                    <div class="fn-field-label">Gauging upstream or downstream of recorder?</div>
+                    <div class="fn-options">
+                        <label class="fn-option"><input type="radio" name="gauging-tool-lag-direction" value="Upstream"><span>Upstream</span></label>
+                        <label class="fn-option"><input type="radio" name="gauging-tool-lag-direction" value="Downstream"><span>Downstream</span></label>
+                    </div>
+                </div>
+                <p id="gauging-tool-lag-result" class="fn-help" style="display: none;"></p>
+            </div>
+
+            <div class="field sv-spaced-field">
+                <label class="label" for="gauging-tool-gauged-flow">Gauged flow (m&sup3;/s)</label>
+                <div class="control checkgauge-entry">
+                    <input class="input" type="number" step="any" id="gauging-tool-gauged-flow">
+                    <button type="button" id="gauging-tool-refresh" class="button calc-button">Refresh flow data</button>
+                </div>
+            </div>
+
+            <p id="gauging-tool-status" class="calc-help" style="display: none;"></p>
+
+            <div id="gauging-tool-sparkline-wrap" style="display: none;">
+                <div id="gauging-tool-sparkline"></div>
+            </div>
+
+            <div id="gauging-tool-flow-diffs" style="display: none;"></div>
+        </div>
+
         <div class="run-section calc-card">
             <h2 class="run-heading calc-title">Rating Calculator</h2>
             <p class="calc-help">
@@ -135,6 +214,7 @@
     <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
 </footer>
 
+<script type="module" src="../js/gauging-tool.js"></script>
 <script type="module" src="../js/rating-calculator.js"></script>
 <script type="module" src="../js/lag.js"></script>
 <script type="module" src="../js/declination.js"></script>

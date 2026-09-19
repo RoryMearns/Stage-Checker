@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shag-shell-v7';
+const CACHE_NAME = 'shag-shell-v9';
 
 const NEVER_CACHE = [
     'yop7qymjl5.execute-api.ap-southeast-2.amazonaws.com',
@@ -29,6 +29,10 @@ const PRECACHE_URLS = [
 
     '/tools/',
     '/tools/index.html',
+    '/js/rating-calculator.js',
+    '/js/gauging-tool.js',
+    '/js/site-lookup.js',
+    '/data/sites.json',
     '/js/lag.js',
     '/js/declination.js',
 

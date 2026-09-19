@@ -1,0 +1,437 @@
+[
+  {
+    "name": "3 OClock Stream at Lambhill",
+    "code": "EW387",
+    "datasetId": 8607
+  },
+  {
+    "name": "Amisfield Burn at Top Take u/s",
+    "code": "EY217",
+    "datasetId": 16959
+  },
+  {
+    "name": "Arrow at Cornwall street d/s",
+    "code": "EW734",
+    "datasetId": 6609
+  },
+  {
+    "name": "Bannockburn at Cairnmuir Road",
+    "code": "FA888",
+    "datasetId": 5242
+  },
+  {
+    "name": "Benger burn at Booths",
+    "code": "EX154",
+    "datasetId": 14570
+  },
+  {
+    "name": "Branch Burn at Cardrona Valley",
+    "code": "EN146",
+    "datasetId": 273624
+  },
+  {
+    "name": "Bullock Creek at Dunmore Street Footbridge",
+    "code": "FG697",
+    "datasetId": 11229
+  },
+  {
+    "name": "Cardrona at Callaghans Creek d/s",
+    "code": "EN148",
+    "datasetId": 5357
+  },
+  {
+    "name": "Cardrona at Clutha Confluence",
+    "code": "EM872",
+    "datasetId": 19601
+  },
+  {
+    "name": "Cardrona at Mt Barker",
+    "code": "FA780",
+    "datasetId": 18758
+  },
+  {
+    "name": "Catlins at Houipapa",
+    "code": "EM481",
+    "datasetId": 20800
+  },
+  {
+    "name": "Chatto Creek at Manuherekia Confluence 100m Upstream",
+    "code": "EN204",
+    "datasetId": 4554
+  },
+  {
+    "name": "Cluden Stream at Stock Yards",
+    "code": "EY113",
+    "datasetId": 9001
+  },
+  {
+    "name": "Clutha Mata-Au at Tuapeka Mouth Ferry",
+    "code": "GT145",
+    "datasetId": 253662
+  },
+  {
+    "name": "Clutha at Balclutha (ESNZ/ORC)",
+    "code": "EM287",
+    "datasetId": 174102
+  },
+  {
+    "name": "Clutha at Below Cardrona Confluence (ESNZ)",
+    "code": "EM381",
+    "datasetId": 251185
+  },
+  {
+    "name": "Clutha at Clyde (ESNZ)",
+    "code": "EM193",
+    "datasetId": 134420
+  },
+  {
+    "name": "Clutha below Roxburgh Dam (ESNZ)",
+    "code": "EM608",
+    "datasetId": 134639
+  },
+  {
+    "name": "Dart at The Hillocks",
+    "code": "EM759",
+    "datasetId": 255905
+  },
+  {
+    "name": "Deep Stream at SH87",
+    "code": "EM469",
+    "datasetId": 15635
+  },
+  {
+    "name": "Dunstan Creek at Beattie Road 100m Downstream",
+    "code": "FK317",
+    "datasetId": 76761
+  },
+  {
+    "name": "Dunstan Creek at Gorge 500m Downstream",
+    "code": "FL470",
+    "datasetId": 256802
+  },
+  {
+    "name": "Fraser at Old Man Range",
+    "code": "EM206",
+    "datasetId": 255321
+  },
+  {
+    "name": "Hawea at Camphill Bridge (ESNZ/ORC)",
+    "code": "EM218",
+    "datasetId": 148023
+  },
+  {
+    "name": "Hayes Creek at Lake Hayes Estate",
+    "code": "FJ924",
+    "datasetId": 264145
+  },
+  {
+    "name": "Heriot Burn at Park Hill Road",
+    "code": "EM893",
+    "datasetId": 10473
+  },
+  {
+    "name": "Kaikorai Stream at Stone Street",
+    "code": "GT533",
+    "datasetId": 263115
+  },
+  {
+    "name": "Kakanui at Clifton Falls Bridge",
+    "code": "EM131",
+    "datasetId": 16067
+  },
+  {
+    "name": "Kakanui at McCones",
+    "code": "EM617",
+    "datasetId": 2554
+  },
+  {
+    "name": "Kakanui at Mill Dam",
+    "code": "EM376",
+    "datasetId": 15278
+  },
+  {
+    "name": "Kauru at Kauru Hill Rd 700m Upstream",
+    "code": "EM462",
+    "datasetId": 21660
+  },
+  {
+    "name": "Kawarau at Chard Road (ESNZ/ORC)",
+    "code": "EM209",
+    "datasetId": 156222
+  },
+  {
+    "name": "Kye Burn at Water Take d/s 300m",
+    "code": "EX666",
+    "datasetId": 8611
+  },
+  {
+    "name": "Lauder Creek at Cattle Yards",
+    "code": "EN015",
+    "datasetId": 20062
+  },
+  {
+    "name": "Lauder Creek at Rail Trail",
+    "code": "EN203",
+    "datasetId": 5752
+  },
+  {
+    "name": "Lee Stream at SH87 1000m Downstream",
+    "code": "FF416",
+    "datasetId": 9628
+  },
+  {
+    "name": "Leith at George Street",
+    "code": "EM135",
+    "datasetId": 16069
+  },
+  {
+    "name": "Leith at Leith Street",
+    "code": "EY199",
+    "datasetId": 18946
+  },
+  {
+    "name": "Lindis at Ardgour Road",
+    "code": "EM631",
+    "datasetId": 10511
+  },
+  {
+    "name": "Lindis at Lindis Peak (ESNZ/ORC)",
+    "code": "EM195",
+    "datasetId": 260961
+  },
+  {
+    "name": "Lindsays Creek at North Road Bridge",
+    "code": "EM136",
+    "datasetId": 2937
+  },
+  {
+    "name": "Lovells Creek at SH1",
+    "code": "EM196",
+    "datasetId": 3336
+  },
+  {
+    "name": "Lowburn at Sugarloaf Drive",
+    "code": "GT155",
+    "datasetId": 255907
+  },
+  {
+    "name": "Luggate Creek at SH6 Bridge",
+    "code": "EM869",
+    "datasetId": 12103
+  },
+  {
+    "name": "Manuherikia at Blackstone Hill Runs Road",
+    "code": "GT232",
+    "datasetId": 255548
+  },
+  {
+    "name": "Manuherikia at Campground",
+    "code": "EM837",
+    "datasetId": 18059
+  },
+  {
+    "name": "Manuherikia at Chatto Creek u/s",
+    "code": "EX375",
+    "datasetId": 259328
+  },
+  {
+    "name": "Manuherikia at Falls Dam 1000m Downstream",
+    "code": "FJ930",
+    "datasetId": 18792
+  },
+  {
+    "name": "Manuherikia at Ophir (ESNZ/ORC)",
+    "code": "EM201",
+    "datasetId": 136915
+  },
+  {
+    "name": "Manuherikia downstream of Fork",
+    "code": "EM200",
+    "datasetId": 12090
+  },
+  {
+    "name": "Matukituki at West Wanaka (ESNZ/ORC)",
+    "code": "EM221",
+    "datasetId": 149817
+  },
+  {
+    "name": "Mill Creek at Fish Trap",
+    "code": "EM212",
+    "datasetId": 17659
+  },
+  {
+    "name": "Nenthorn at Mt Stoker Road",
+    "code": "EM161",
+    "datasetId": 12085
+  },
+  {
+    "name": "Nevis at Wentworth Station (ESNZ/ORC)",
+    "code": "EM211",
+    "datasetId": 261445
+  },
+  {
+    "name": "Owaka at Katea Road",
+    "code": "EN348",
+    "datasetId": 8529
+  },
+  {
+    "name": "Pig Burn at 400m us Top Intake",
+    "code": "FA784",
+    "datasetId": 4440
+  },
+  {
+    "name": "Pleasant River at Patterson Road Ford",
+    "code": "FH844",
+    "datasetId": 258019
+  },
+  {
+    "name": "Pomahaka at Burkes Ford",
+    "code": "EM289",
+    "datasetId": 16463
+  },
+  {
+    "name": "Pomahaka at Glenken",
+    "code": "EM295",
+    "datasetId": 10104
+  },
+  {
+    "name": "Poolburn at Cob Cottage",
+    "code": "EM306",
+    "datasetId": 17660
+  },
+  {
+    "name": "Rees at Invincible",
+    "code": "GT149",
+    "datasetId": 251924
+  },
+  {
+    "name": "Shag at Craig Road",
+    "code": "EM495",
+    "datasetId": 15674
+  },
+  {
+    "name": "Shag at The Grange",
+    "code": "EM375",
+    "datasetId": 12890
+  },
+  {
+    "name": "Shingle Creek at SH8",
+    "code": "EY474",
+    "datasetId": 253736
+  },
+  {
+    "name": "Shotover at Bowens Peak (ESNZ/ORC)",
+    "code": "EM215",
+    "datasetId": 134140
+  },
+  {
+    "name": "Shotover at Peats",
+    "code": "EM564",
+    "datasetId": 6910
+  },
+  {
+    "name": "Silverstream at Gordon Road",
+    "code": "EM156",
+    "datasetId": 16070
+  },
+  {
+    "name": "Sutton Stream at SH87",
+    "code": "EM293",
+    "datasetId": 20837
+  },
+  {
+    "name": "Taieri at Canadian Flat (ESNZ)",
+    "code": "EM149",
+    "datasetId": 159610
+  },
+  {
+    "name": "Taieri at Hindon",
+    "code": "EM141",
+    "datasetId": 80717
+  },
+  {
+    "name": "Taieri at Outram",
+    "code": "EM140",
+    "datasetId": 19643
+  },
+  {
+    "name": "Taieri at Sutton",
+    "code": "EM142",
+    "datasetId": 12484
+  },
+  {
+    "name": "Taieri at Tiroiti",
+    "code": "EM144",
+    "datasetId": 10901
+  },
+  {
+    "name": "Taieri at Waipiata",
+    "code": "EM145",
+    "datasetId": 15669
+  },
+  {
+    "name": "Thomsons Creek at Diversion Weir u/s",
+    "code": "EN017",
+    "datasetId": 10122
+  },
+  {
+    "name": "Thomsons Creek at SH85",
+    "code": "EN047",
+    "datasetId": 10521
+  },
+  {
+    "name": "Tokomairiro at West Branch Bridge",
+    "code": "EM182",
+    "datasetId": 14472
+  },
+  {
+    "name": "Waianakarua at Browns",
+    "code": "EM618",
+    "datasetId": 18466
+  },
+  {
+    "name": "Waiareka Creek at Taipo Road",
+    "code": "EM764",
+    "datasetId": 6528
+  },
+  {
+    "name": "Waikouaiti at 200m d/s DCC intake",
+    "code": "EY527",
+    "datasetId": 3840
+  },
+  {
+    "name": "Waipahi at Waipahi",
+    "code": "EM525",
+    "datasetId": 18465
+  },
+  {
+    "name": "Waipori at Berwick",
+    "code": "EM151",
+    "datasetId": 15274
+  },
+  {
+    "name": "Wairuna at Millar Road",
+    "code": "EN063",
+    "datasetId": 8923
+  },
+  {
+    "name": "Waitahuna at Tweeds Bridge",
+    "code": "EM294",
+    "datasetId": 10504
+  },
+  {
+    "name": "Waitati at Harvey Street Bridge",
+    "code": "FK293",
+    "datasetId": 253711
+  },
+  {
+    "name": "Waiwera at Maws Farm",
+    "code": "EN422",
+    "datasetId": 4950
+  },
+  {
+    "name": "Wilkin at Kerin Forks Flat 50m Downstream",
+    "code": "FA805",
+    "datasetId": 7635
+  }
+]

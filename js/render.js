@@ -4,6 +4,17 @@ import {flowIconName, flowIconUrl, FLOW_ICON_LABELS} from "./icons.js";
 
 const CHEVRON_SVG = `<svg class="chevron" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
 
+// AQWebPortal's EndOfRecord strings (e.g. "2026-09-19T09:35:00") carry no timezone marker
+// at all. They're already NZ local time (the request sends a fixed NZ utcOffset), so this
+// extracts the HH:MM digits directly rather than going through Date/timezone conversion,
+// which would depend on the viewing device's own system timezone for an unmarked string.
+function extractTimeFromEndOfRecord(endOfRecord) {
+    if (!endOfRecord) return null;
+    const match = endOfRecord.match(/T(\d{2}):(\d{2})/);
+    if (!match) return null;
+    return `${match[1]}:${match[2]}`;
+}
+
 function formatValueCell(dataItem, extraTag = '') {
     const isOverdue = dataItem?.State === 'OVERDUE';
     const hasValue = dataItem && typeof dataItem.ValueNumber === 'number';
@@ -13,7 +24,10 @@ function formatValueCell(dataItem, extraTag = '') {
         ? ' class="is-overdue" title="Equipment overdue — this site has stopped reporting, value may be stale"'
         : '';
 
-    return `<span class="value-cell">${extraTag}<span${overdueAttrs}>${text}</span></span>`;
+    const time = hasValue ? extractTimeFromEndOfRecord(dataItem.EndOfRecord) : null;
+    const timestampHtml = time ? `<span class="value-timestamp">at ${time}</span>` : '';
+
+    return `<span class="value-cell-wrap"><span class="value-cell">${extraTag}<span${overdueAttrs}>${text}</span></span>${timestampHtml}</span>`;
 }
 
 function buildSectionHeader(sectionId, name, bodyId) {
