@@ -1,6 +1,7 @@
 import { fetchDischargeTimeSeries } from './api.js';
-import { computeFlowDifferencePercent } from './form-utils.js';
+import { computeFlowDifferencePercent, nzUtcOffset, todayIsoNz, formatNzTime } from './form-utils.js';
 import { setupSiteAutocomplete } from './site-lookup.js';
+import { parseTimeSeriesResponse, renderHydrograph } from './hydrograph.js';
 
 const siteInput = document.getElementById('gauging-tool-site');
 const siteListEl = document.getElementById('gauging-tool-site-list');
@@ -22,68 +23,9 @@ let timeSeries = [];
 let selectedSite = null;
 let latestNowTime = null;
 
-function nzUtcOffset() {
-    const parts = new Intl.DateTimeFormat('en-NZ', {
-        timeZone: 'Pacific/Auckland',
-        timeZoneName: 'short'
-    }).formatToParts(new Date());
-    const tz = parts.find(p => p.type === 'timeZoneName')?.value;
-    return tz === 'NZDT' ? '+13:00' : '+12:00';
-}
-
-function todayIso() {
-    const parts = new Intl.DateTimeFormat('en-NZ', {
-        timeZone: 'Pacific/Auckland',
-        year: 'numeric', month: '2-digit', day: '2-digit'
-    }).formatToParts(new Date());
-    const partMap = {};
-    parts.forEach(p => { partMap[p.type] = p.value; });
-    return `${partMap.year}-${partMap.month}-${partMap.day}`;
-}
-
-function formatNzTime(date) {
-    const parts = new Intl.DateTimeFormat('en-NZ', {
-        timeZone: 'Pacific/Auckland',
-        hour: '2-digit', minute: '2-digit', hour12: false
-    }).formatToParts(date);
-    const partMap = {};
-    parts.forEach(p => { partMap[p.type] = p.value; });
-    let hours = parseInt(partMap.hour, 10);
-    if (hours === 24) hours = 0;
-    return `${String(hours).padStart(2, '0')}:${partMap.minute}`;
-}
-
 function showStatus(message) {
     statusEl.textContent = message;
     statusEl.style.display = message ? '' : 'none';
-}
-
-function parseApiTime(rawTimeString) {
-    if (!rawTimeString) return null;
-    const stripped = String(rawTimeString).replace(/Z$/, '');
-    const date = new Date(`${stripped}${nzUtcOffset()}`);
-    return isNaN(date.getTime()) ? null : date;
-}
-
-function parseTimeSeriesResponse(raw) {
-    const rawPoints = raw?.Series?.[0]?.Data;
-
-    if (!Array.isArray(rawPoints)) {
-        console.error('Unexpected Dataset_Chart response shape - raw response:', raw);
-        return null;
-    }
-
-    const points = rawPoints
-        .map(p => ({
-            time: parseApiTime(p.Time),
-            value: parseFloat(p.Value)
-        }))
-        .filter(p => p.time !== null && !isNaN(p.value))
-        .sort((a, b) => a.time - b.time);
-
-    const nowTime = parseApiTime(raw?.NowTime);
-
-    return { points, nowTime };
 }
 
 function computeLagAdjustment() {
@@ -111,7 +53,7 @@ function updateLagResult() {
 
 function getWindow() {
     if (!startInput.value || !endInput.value) return null;
-    const today = todayIso();
+    const today = todayIsoNz();
     const offset = nzUtcOffset();
     let start = new Date(`${today}T${startInput.value}:00${offset}`);
     let end = new Date(`${today}T${endInput.value}:00${offset}`);
@@ -143,7 +85,6 @@ function extrapolateFuturePoints(points) {
     const extrapolated = [];
 
     if (recent.length < 2 || lastPoint.value <= 0) {
-        // Not enough valid data to fit a trend - hold flat rather than guess.
         for (let i = 1; i <= steps; i++) {
             extrapolated.push({
                 time: new Date(lastPoint.time.getTime() + i * EXTRAPOLATION_INTERVAL_MS),
@@ -243,134 +184,12 @@ function renderFlowDiffSummary(rows) {
     flowDiffsWrap.style.display = '';
 }
 
-function renderSparkline(points, windowRange, nowTime, extrapolatedPoints = []) {
-    if (!points.length) {
-        sparklineEl.innerHTML = '<p class="calc-help">No data points to show.</p>';
-        return;
-    }
-
-    const width = 600;
-    const height = 100;
-    const padTop = 10;
-    const padBottom = 4;
-    const padX = 3;
-
-    const scalePoints = points.concat(extrapolatedPoints);
-    const times = scalePoints.map(p => p.time.getTime());
-    const values = scalePoints.map(p => p.value);
-    let minTime = Math.min(...times);
-    let maxTime = Math.max(...times);
-    const minVal = Math.min(...values);
-    const maxVal = Math.max(...values);
-    const valRange = maxVal - minVal || 1;
-
-    if (windowRange) {
-        minTime = Math.min(minTime, windowRange.start.getTime());
-        maxTime = Math.max(maxTime, windowRange.end.getTime());
-    }
-    const timeRange = maxTime - minTime || 1;
-
-    const x = t => padX + ((t - minTime) / timeRange) * (width - padX * 2);
-    const y = v => height - padBottom - ((v - minVal) / valRange) * (height - padTop - padBottom);
-
-    function smoothPath(pts) {
-        if (pts.length < 2) return '';
-        let d = `M ${x(pts[0].time.getTime()).toFixed(1)} ${y(pts[0].value).toFixed(1)}`;
-        for (let i = 0; i < pts.length - 1; i++) {
-            const x0 = x(pts[i].time.getTime());
-            const y0 = y(pts[i].value);
-            const x1 = x(pts[i + 1].time.getTime());
-            const y1 = y(pts[i + 1].value);
-            d += ` Q ${x0.toFixed(1)} ${y0.toFixed(1)} ${((x0 + x1) / 2).toFixed(1)} ${((y0 + y1) / 2).toFixed(1)}`;
-        }
-        const last = pts[pts.length - 1];
-        d += ` L ${x(last.time.getTime()).toFixed(1)} ${y(last.value).toFixed(1)}`;
-        return d;
-    }
-
-    const linePath = smoothPath(points);
-    const firstX = x(points[0].time.getTime());
-    const lastPoint = points[points.length - 1];
-    const lastX = x(lastPoint.time.getTime());
-    const lastY = y(lastPoint.value);
-    const areaPath = `${linePath} L ${lastX.toFixed(1)} ${height} L ${firstX.toFixed(1)} ${height} Z`;
-
-    const extrapolatedPath = extrapolatedPoints.length ? smoothPath([lastPoint, ...extrapolatedPoints]) : '';
-
-    const clampX = px => Math.min(Math.max(px, padX), width - padX);
-    const windowBand = windowRange
-        ? `<rect x="${clampX(x(windowRange.start.getTime())).toFixed(1)}" y="0" width="${(clampX(x(windowRange.end.getTime())) - clampX(x(windowRange.start.getTime()))).toFixed(1)}" height="${height}" fill="var(--river-mid)" opacity="0.12" />`
-        : '';
-
-    let peak = points[0];
-    let low = points[0];
-    for (const p of points) {
-        if (p.value > peak.value) peak = p;
-        if (p.value < low.value) low = p;
-    }
-
-    const captionText = nowTime ? `Last 24 hours (as at ${formatNzTime(nowTime)})` : 'Last 24 hours';
-
-    const endMarkerLeftPct = ((lastX / width) * 100).toFixed(2);
-    const endMarkerTopPct = ((lastY / height) * 100).toFixed(2);
-
-    const legendHtml = extrapolatedPoints.length ? `
-        <div class="sparkline-legend">
-            <span class="sparkline-legend-item"><span class="sparkline-legend-swatch is-measured"></span>Measured</span>
-            <span class="sparkline-legend-item"><span class="sparkline-legend-swatch is-extrapolated"></span>Extrapolated</span>
-        </div>
-    ` : '';
-
-    sparklineEl.innerHTML = `
-        <p class="sparkline-caption">${captionText}</p>
-        <div class="sparkline-stats">
-            <div class="sparkline-stat">
-                <span class="sparkline-stat-label">Peak flow</span>
-                <span class="sparkline-stat-line">
-                    <span class="sparkline-stat-value">${peak.value.toFixed(1)}<small> m&sup3;/s</small></span>
-                    <span class="sparkline-stat-time">${formatNzTime(peak.time)}</span>
-                </span>
-            </div>
-            <div class="sparkline-stat">
-                <span class="sparkline-stat-label">Low flow</span>
-                <span class="sparkline-stat-line">
-                    <span class="sparkline-stat-value">${low.value.toFixed(1)}<small> m&sup3;/s</small></span>
-                    <span class="sparkline-stat-time">${formatNzTime(low.time)}</span>
-                </span>
-            </div>
-            <div class="sparkline-stat">
-                <span class="sparkline-stat-label">Latest flow</span>
-                <span class="sparkline-stat-line">
-                    <span class="sparkline-stat-value">${lastPoint.value.toFixed(1)}<small> m&sup3;/s</small></span>
-                    <span class="sparkline-stat-time">${formatNzTime(lastPoint.time)}</span>
-                </span>
-            </div>
-        </div>
-        <div class="sparkline-svg-wrap">
-            <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" class="sparkline-svg">
-                <defs>
-                    <linearGradient id="sparkline-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="var(--river-mid)" stop-opacity="0.25" />
-                        <stop offset="100%" stop-color="var(--river-mid)" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
-                ${windowBand}
-                <path d="${areaPath}" fill="url(#sparkline-fill)" stroke="none" />
-                <path d="${linePath}" fill="none" stroke="var(--river-mid)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
-                ${extrapolatedPath ? `<path d="${extrapolatedPath}" fill="none" stroke="var(--river-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,4" opacity="0.6" />` : ''}
-            </svg>
-            <div class="sparkline-end-marker" style="left: ${endMarkerLeftPct}%; top: ${endMarkerTopPct}%;"></div>
-        </div>
-        ${legendHtml}
-    `;
-}
-
 function updateComparison() {
     if (!timeSeries.length) return;
 
     const windowRange = getWindow();
     const extrapolatedPoints = extrapolateFuturePoints(timeSeries);
-    renderSparkline(timeSeries, windowRange, latestNowTime, extrapolatedPoints);
+    renderHydrograph(sparklineEl, timeSeries, windowRange, latestNowTime, extrapolatedPoints);
 
     if (!windowRange || !gaugedFlowInput.value) {
         flowDiffsWrap.style.display = 'none';
@@ -414,7 +233,7 @@ async function fetchAndRender(site) {
         const raw = await fetchDischargeTimeSeries({
             datasetId: site.datasetId,
             siteCode: site.code,
-            date: todayIso()
+            date: todayIsoNz()
         });
 
         const parsed = parseTimeSeriesResponse(raw);

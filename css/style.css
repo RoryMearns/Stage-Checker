@@ -482,7 +482,6 @@ html, body {
     border-left-color: var(--river-mid);
 }
 
-/* Desktop/tablet: lay Poor/Fair/Good out side by side, mirroring the paper form's columns */
 @media screen and (min-width: 769px) {
     .gq-criterion {
         display: flex;
@@ -884,7 +883,6 @@ html, body {
     flex: 1;
 }
 
-/* Off-screen report built on demand for the downloadable PNG - not part of the visible page */
 .gq-report {
     font-family: 'Poppins', sans-serif;
     background-color: var(--river-bg);
@@ -1485,8 +1483,6 @@ html, body {
     color: #92600B;
 }
 
-/* Gauging page's Results section specifically: match the Rated Q field's width
-   (which sits alone on its own row in that 4-column layout) rather than the full card width. */
 #gq-flow-diff {
     display: inline-flex;
     width: calc(25% - 0.9375rem);
@@ -1806,6 +1802,32 @@ html, body {
     pointer-events: none;
 }
 
+.sparkline-method-icon {
+    position: absolute;
+    left: 6px;
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.sparkline-method-icon.is-above {
+    transform: translateY(calc(-100% - 5px));
+}
+
+.sparkline-method-icon.is-below {
+    transform: translateY(5px);
+}
+
+.sparkline-method-line {
+    position: absolute;
+    left: 6px;
+    right: 3px;
+    border-top: 1px dashed var(--river-muted);
+    opacity: 0.55;
+    pointer-events: none;
+}
+
 .sparkline-legend {
     display: flex;
     flex-wrap: wrap;
@@ -1836,4 +1858,47 @@ html, body {
 .sparkline-legend-swatch.is-extrapolated {
     background-image: repeating-linear-gradient(to right, var(--river-deep) 0, var(--river-deep) 3px, transparent 3px, transparent 6px);
     opacity: 0.6;
+}
+
+.is-clickable-row {
+    cursor: pointer;
+}
+
+.table.is-hoverable tbody tr.hydrograph-row:hover {
+    background-color: transparent;
+}
+
+.hydrograph-panel {
+    position: relative;
+    padding: 1rem 0.5rem 0.75rem;
+}
+
+.hydrograph-close:hover {
+    background-color: #FBEEEC;
+    color: #6B2C22;
+}
+
+.hydrograph-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--river-muted);
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+}
+
+.hydrograph-spinner {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border: 2px solid var(--river-line);
+    border-top-color: var(--river-mid);
+    border-radius: 50%;
+    animation: hydrograph-spin 0.7s linear infinite;
+}
+
+@keyframes hydrograph-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

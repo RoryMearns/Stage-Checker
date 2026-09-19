@@ -1,13 +1,12 @@
 import {toggleCollapsed} from "./state.js";
 import {runSectionId} from "./utils.js";
 import {flowIconName, flowIconUrl, FLOW_ICON_LABELS} from "./icons.js";
+import {fetchDischargeTimeSeries} from "./api.js";
+import {todayIsoNz} from "./form-utils.js";
+import {parseTimeSeriesResponse, renderHydrograph} from "./hydrograph.js";
 
 const CHEVRON_SVG = `<svg class="chevron" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
 
-// AQWebPortal's EndOfRecord strings (e.g. "2026-09-19T09:35:00") carry no timezone marker
-// at all. They're already NZ local time (the request sends a fixed NZ utcOffset), so this
-// extracts the HH:MM digits directly rather than going through Date/timezone conversion,
-// which would depend on the viewing device's own system timezone for an unmarked string.
 function extractTimeFromEndOfRecord(endOfRecord) {
     if (!endOfRecord) return null;
     const match = endOfRecord.match(/T(\d{2}):(\d{2})/);
@@ -73,6 +72,45 @@ function buildTableSkeleton() {
     return table;
 }
 
+function buildHydrographRow(datasetId, siteCode, methodThresholds) {
+    const tr = document.createElement('tr');
+    tr.className = 'hydrograph-row';
+
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.innerHTML = `
+        <div class="hydrograph-panel">
+            <div class="hydrograph-loading">
+                <span class="hydrograph-spinner"></span>
+                <span>Loading hydrograph...</span>
+            </div>
+            <div class="hydrograph-content is-hidden"></div>
+        </div>
+    `;
+    tr.appendChild(td);
+
+    const loadingEl = td.querySelector('.hydrograph-loading');
+    const contentEl = td.querySelector('.hydrograph-content');
+
+    fetchDischargeTimeSeries({ datasetId, siteCode, date: todayIsoNz() })
+        .then(raw => {
+            const parsed = parseTimeSeriesResponse(raw);
+            if (parsed === null || !parsed.points.length) {
+                loadingEl.textContent = 'No recent data available for this site.';
+                return;
+            }
+            loadingEl.classList.add('is-hidden');
+            contentEl.classList.remove('is-hidden');
+            renderHydrograph(contentEl, parsed.points, null, parsed.nowTime, [], methodThresholds);
+        })
+        .catch(error => {
+            console.error('Failed to load hydrograph:', error);
+            loadingEl.textContent = "Couldn't load data for this site.";
+        });
+
+    return tr;
+}
+
 function buildSiteRow(siteId, stageBySite, flowBySite, siteMeta) {
     const item = stageBySite.get(siteId);
     const row = document.createElement('tr');
@@ -99,6 +137,29 @@ function buildSiteRow(siteId, stageBySite, flowBySite, siteMeta) {
         <td class="has-text-right flow-cell">${formatValueCell(flowItem)}</td>
         <td class="has-text-centered icon-cell"><img src="${iconUrl}" alt="${iconLabel}" title="${iconLabel}" class="row-icon"></td>
     `;
+
+    if (flowItem?.DatasetId) {
+        row.classList.add('is-clickable-row');
+        row.addEventListener('click', () => {
+            const next = row.nextElementSibling;
+            if (next && next.classList.contains('hydrograph-row')) {
+                next.remove();
+                return;
+            }
+            const methodThresholds = {
+                ftUpperLimit: meta?.ftUpperLimit,
+                sxsUpperLimit: meta?.sxsUpperLimit,
+                icons: {
+                    flowtracker: flowIconUrl('flowtracker'),
+                    microboard: flowIconUrl('microboard'),
+                    'moving-boat': flowIconUrl('moving-boat')
+                },
+                iconLabels: FLOW_ICON_LABELS
+            };
+            row.insertAdjacentElement('afterend', buildHydrographRow(flowItem.DatasetId, siteId, methodThresholds));
+        });
+    }
+
     return row;
 }
 
