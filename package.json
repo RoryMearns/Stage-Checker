@@ -1,7 +1,9 @@
 {
   "name": "stage-checker",
   "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "npx serve ."
+    "serve": "npx serve .",
+    "test": "node --test tests/*.test.js"
   }
 }

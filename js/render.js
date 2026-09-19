@@ -1,11 +1,9 @@
-import {toggleCollapsed} from "./state.js";
 import {runSectionId} from "./utils.js";
 import {flowIconName, flowIconUrl, FLOW_ICON_LABELS} from "./icons.js";
 import {fetchDischargeTimeSeries} from "./api.js";
 import {todayIsoNz} from "./form-utils.js";
 import {parseTimeSeriesResponse, renderHydrograph} from "./hydrograph.js";
-
-const CHEVRON_SVG = `<svg class="chevron" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+import {makeCollapsible} from "./collapsible.js";
 
 function extractTimeFromEndOfRecord(endOfRecord) {
     if (!endOfRecord) return null;
@@ -27,26 +25,6 @@ function formatValueCell(dataItem, extraTag = '') {
     const timestampHtml = time ? `<span class="value-timestamp">at ${time}</span>` : '';
 
     return `<span class="value-cell-wrap"><span class="value-cell">${extraTag}<span${overdueAttrs}>${text}</span></span>${timestampHtml}</span>`;
-}
-
-function buildSectionHeader(sectionId, name, bodyId) {
-    const header = document.createElement('div');
-    header.className = 'run-header';
-    header.setAttribute('role', 'button');
-    header.setAttribute('tabindex', '0');
-    header.setAttribute('aria-expanded', 'true');
-    header.setAttribute('aria-controls', bodyId);
-    header.innerHTML = `<h2 class="run-heading">${name}</h2>${CHEVRON_SVG}`;
-
-    header.addEventListener('click', () => toggleCollapsed(sectionId));
-    header.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleCollapsed(sectionId);
-        }
-    });
-
-    return header;
 }
 
 function buildTableSkeleton() {
@@ -168,10 +146,10 @@ function buildRunSection(run, stageBySite, flowBySite, siteMeta) {
     const bodyId = `${sectionId}-body`;
 
     const section = document.createElement('div');
-    section.className = 'run-section collapsible-section';
-    section.dataset.sectionId = sectionId;
+    section.className = 'run-section';
 
-    const header = buildSectionHeader(sectionId, run.name, bodyId);
+    const header = document.createElement('div');
+    header.innerHTML = `<h2 class="run-heading">${run.name}</h2>`;
 
     const body = document.createElement('div');
     body.className = 'run-body';
@@ -188,12 +166,21 @@ function buildRunSection(run, stageBySite, flowBySite, siteMeta) {
     section.appendChild(header);
     section.appendChild(body);
 
-    return section;
+    const unsubscribe = makeCollapsible(section, header, body, sectionId);
+
+    return { section, unsubscribe };
 }
 
+let activeUnsubscribers = [];
+
 export function renderRuns(runs, stageBySite, flowBySite, siteMeta, container) {
+    activeUnsubscribers.forEach(unsubscribe => unsubscribe());
+    activeUnsubscribers = [];
+
     container.innerHTML = '';
     runs.forEach(run => {
-        container.appendChild(buildRunSection(run, stageBySite, flowBySite, siteMeta));
+        const { section, unsubscribe } = buildRunSection(run, stageBySite, flowBySite, siteMeta);
+        activeUnsubscribers.push(unsubscribe);
+        container.appendChild(section);
     });
 }

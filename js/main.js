@@ -1,7 +1,8 @@
 import {fetchStageData, fetchFlowData} from "./api.js";
 import {loadRunInfo} from "./runInfo.js";
 import {renderRuns} from "./render.js";
-import {setupCollapseControls} from "./collapse.js";
+import {setupCollapseAllControl} from "./collapse.js";
+import {makeCollapsible} from "./collapsible.js";
 import {runSectionId} from "./utils.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,6 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const legendDiv = document.getElementById('legend');
     const errorMessage = document.getElementById('error-message');
     const reloadButton = document.getElementById('reload-data');
+
+    const legendHeader = legendDiv.querySelector('.run-header');
+    const legendBody = legendDiv.querySelector('.run-body');
+    makeCollapsible(legendDiv, legendHeader, legendBody, 'legend');
+
+    let collapseAllReady = false;
 
     async function loadData() {
         loadingDiv.style.display = 'block';
@@ -36,8 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderRuns(runInfo.runs, stageBySite, flowBySite, siteMeta, runsContainer);
 
-            const sectionIds = ['legend', ...runInfo.runs.map(run => runSectionId(run.name))];
-            setupCollapseControls(sectionIds, runsControls, collapseAllHeader);
+            if (!collapseAllReady) {
+                const sectionIds = ['legend', ...runInfo.runs.map(run => runSectionId(run.name))];
+                setupCollapseAllControl(sectionIds, runsControls, collapseAllHeader);
+                collapseAllReady = true;
+            }
 
             loadingDiv.style.display = 'none';
             runsControls.style.display = 'block';

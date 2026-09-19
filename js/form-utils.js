@@ -210,7 +210,7 @@ export function computeFlowDifferencePercent(ratedValue, measuredValue) {
     return Math.round(raw * 10) / 10;
 }
 
-function flowDifferenceDirectionWord(ratedValue, measuredValue) {
+export function flowDifferenceDirectionWord(ratedValue, measuredValue) {
     const rated = parseFloat(ratedValue);
     const measured = parseFloat(measuredValue);
     if (measured > rated) return 'above';

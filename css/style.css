@@ -214,9 +214,18 @@ html, body {
 .run-heading.calc-title {
     font-size: 1.3rem;
     font-weight: 700;
+}
+
+.run-header.calc-header {
     padding-bottom: 0.6rem;
     margin-bottom: 1rem;
     border-bottom: 2px solid var(--river-mid);
+}
+
+.collapsible-section.is-collapsed .run-header.calc-header {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
 }
 
 .calc-help {
@@ -745,8 +754,14 @@ html, body {
 }
 
 .row-icon {
-    width: 28px;
-    height: 28px;
+    display: block;
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+}
+
+.table td.icon-cell {
+    padding-left: 0.35em;
     vertical-align: middle;
 }
 
@@ -757,10 +772,6 @@ html, body {
 
 .table td.stage-cell {
     padding-right: 0.35em;
-}
-
-.table td.icon-cell {
-    padding-left: 0.35em;
 }
 
 @media screen and (max-width: 768px) {
@@ -846,8 +857,8 @@ html, body {
     }
 
     .row-icon {
-        width: 22px;
-        height: 22px;
+        width: 25px;
+        height: 25px;
     }
 
     .table td, .table th {
@@ -1826,6 +1837,35 @@ html, body {
     border-top: 1px dashed var(--river-muted);
     opacity: 0.55;
     pointer-events: none;
+}
+
+.sparkline-gauged-dot {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 2px solid var(--river-deep);
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.sparkline-gauged-label {
+    position: absolute;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--river-deep);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.sparkline-gauged-label.is-above {
+    transform: translate(6px, calc(-100% - 4px));
+}
+
+.sparkline-gauged-label.is-below {
+    transform: translate(6px, 4px);
 }
 
 .sparkline-legend {
