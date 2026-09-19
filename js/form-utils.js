@@ -117,9 +117,6 @@ function base64UrlToBytes(base64url) {
     return bytes;
 }
 
-// Encodes a plain object into a compact, URL-safe code: JSON -> gzip (if supported) -> base64url.
-// A leading 'g' or 'u' flag records whether gzip was actually used, so decoding always works
-// even if the browser that generated the link supported compression and the one opening it doesn't.
 export async function encodeStateToCode(state) {
     const json = JSON.stringify(state);
     const bytes = new TextEncoder().encode(json);
@@ -243,4 +240,42 @@ export function buildFlowDifferenceHtml(ratedValue, measuredValue, goodThreshold
     const icon = isGood ? FLOW_DIFF_GOOD_ICON : FLOW_DIFF_WARNING_ICON;
     const direction = flowDifferenceDirectionWord(ratedValue, measuredValue);
     return `<div class="flow-diff ${stateClass}">${icon}<span>Unprocessed gauging is ${pct.toFixed(1)}% ${direction} the rated flow</span></div>`;
+}
+
+export function nzUtcOffset() {
+    const parts = new Intl.DateTimeFormat('en-NZ', {
+        timeZone: 'Pacific/Auckland',
+        timeZoneName: 'short'
+    }).formatToParts(new Date());
+    const tz = parts.find(p => p.type === 'timeZoneName')?.value;
+    return tz === 'NZDT' ? '+13:00' : '+12:00';
+}
+
+export function todayIsoNz() {
+    const parts = new Intl.DateTimeFormat('en-NZ', {
+        timeZone: 'Pacific/Auckland',
+        year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(new Date());
+    const partMap = {};
+    parts.forEach(p => { partMap[p.type] = p.value; });
+    return `${partMap.year}-${partMap.month}-${partMap.day}`;
+}
+
+export function formatNzTime(date) {
+    const parts = new Intl.DateTimeFormat('en-NZ', {
+        timeZone: 'Pacific/Auckland',
+        hour: '2-digit', minute: '2-digit', hour12: false
+    }).formatToParts(date);
+    const partMap = {};
+    parts.forEach(p => { partMap[p.type] = p.value; });
+    let hours = parseInt(partMap.hour, 10);
+    if (hours === 24) hours = 0;
+    return `${String(hours).padStart(2, '0')}:${partMap.minute}`;
+}
+
+export function parseApiTimeAsNzLocal(rawTimeString) {
+    if (!rawTimeString) return null;
+    const stripped = String(rawTimeString).replace(/Z$/, '');
+    const date = new Date(`${stripped}${nzUtcOffset()}`);
+    return isNaN(date.getTime()) ? null : date;
 }
