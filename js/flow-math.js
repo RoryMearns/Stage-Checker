@@ -1,7 +1,16 @@
 export const EXTRAPOLATION_INTERVAL_MS = 5 * 60 * 1000;
 export const EXTRAPOLATION_MAX_MS = 2 * 60 * 60 * 1000;
 export const EXTRAPOLATION_DAMPING = 0.98;
-export const EXTRAPOLATION_TREND_POINTS = 6;
+export const EXTRAPOLATION_TREND_POINTS = 12;
+export const EXTRAPOLATION_SMOOTHING_WINDOW = 3;
+
+export function trailingMedianSmooth(values, window = EXTRAPOLATION_SMOOTHING_WINDOW) {
+    return values.map((_, i) => {
+        const start = Math.max(0, i - window + 1);
+        const slice = values.slice(start, i + 1).slice().sort((a, b) => a - b);
+        return slice[Math.floor(slice.length / 2)];
+    });
+}
 
 export function extrapolateFuturePoints(points) {
     if (points.length < 2) return [];
@@ -24,25 +33,28 @@ export function extrapolateFuturePoints(points) {
         return extrapolated;
     }
 
-    const n = recent.length;
+    const smoothedValues = trailingMedianSmooth(recent.map(p => p.value));
+
+    const n = smoothedValues.length;
     const xMean = (n - 1) / 2;
-    const logValues = recent.map(p => Math.log(p.value));
+    const logValues = smoothedValues.map(v => Math.log(v));
     const yMean = logValues.reduce((sum, v) => sum + v, 0) / n;
     let num = 0;
     let den = 0;
-    recent.forEach((p, i) => {
-        num += (i - xMean) * (logValues[i] - yMean);
+    logValues.forEach((logValue, i) => {
+        num += (i - xMean) * (logValue - yMean);
         den += (i - xMean) ** 2;
     });
     const logSlopePerInterval = den !== 0 ? num / den : 0;
 
+    const anchorValue = smoothedValues[smoothedValues.length - 1];
     let cumulativeLogChange = 0;
     let slope = logSlopePerInterval;
 
     for (let i = 1; i <= steps; i++) {
         cumulativeLogChange += slope;
         slope *= EXTRAPOLATION_DAMPING;
-        const value = Math.max(0, lastPoint.value * Math.exp(cumulativeLogChange));
+        const value = Math.max(0, anchorValue * Math.exp(cumulativeLogChange));
         extrapolated.push({
             time: new Date(lastPoint.time.getTime() + i * EXTRAPOLATION_INTERVAL_MS),
             value,

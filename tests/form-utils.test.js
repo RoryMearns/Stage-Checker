@@ -6,7 +6,9 @@ import {
     nzUtcOffset,
     todayIsoNz,
     formatNzTime,
-    parseApiTimeAsNzLocal
+    parseApiTimeAsNzLocal,
+    roundToNearestFiveMinutes,
+    subtractMinutesFromTimeString
 } from '../js/form-utils.js';
 
 describe('computeFlowDifferencePercent', () => {
@@ -96,5 +98,45 @@ describe('parseApiTimeAsNzLocal (regression: the Z-suffix timezone bug)', () => 
         assert.equal(parseApiTimeAsNzLocal(null), null);
         assert.equal(parseApiTimeAsNzLocal(undefined), null);
         assert.equal(parseApiTimeAsNzLocal('not a date'), null);
+    });
+});
+
+describe('roundToNearestFiveMinutes', () => {
+    test('rounds down when closer to the previous 5-minute mark', () => {
+        assert.equal(roundToNearestFiveMinutes(9, 32), '09:30');
+    });
+
+    test('rounds up when closer to the next 5-minute mark', () => {
+        assert.equal(roundToNearestFiveMinutes(9, 33), '09:35');
+    });
+
+    test('rolls over to the next hour when rounding up from :58', () => {
+        assert.equal(roundToNearestFiveMinutes(9, 58), '10:00');
+    });
+
+    test('rolls over past midnight when rounding up from 23:58', () => {
+        assert.equal(roundToNearestFiveMinutes(23, 58), '00:00');
+    });
+
+    test('pads single-digit hours and minutes', () => {
+        assert.equal(roundToNearestFiveMinutes(3, 2), '03:00');
+    });
+});
+
+describe('subtractMinutesFromTimeString', () => {
+    test('subtracts minutes within the same hour', () => {
+        assert.equal(subtractMinutesFromTimeString('08:03', 5), '07:58');
+    });
+
+    test('wraps backward across midnight', () => {
+        assert.equal(subtractMinutesFromTimeString('00:02', 5), '23:57');
+    });
+
+    test('wraps backward from exactly midnight', () => {
+        assert.equal(subtractMinutesFromTimeString('00:00', 5), '23:55');
+    });
+
+    test('handles a subtraction larger than an hour', () => {
+        assert.equal(subtractMinutesFromTimeString('01:00', 90), '23:30');
     });
 });

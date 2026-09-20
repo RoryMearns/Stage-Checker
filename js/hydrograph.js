@@ -1,4 +1,5 @@
 import { formatNzTime, parseApiTimeAsNzLocal } from './form-utils.js';
+import { nearestPoint } from './flow-math.js';
 
 export function formatFlowValue(value) {
     if (value < 10.0) return value.toFixed(3);
@@ -26,6 +27,24 @@ export function parseTimeSeriesResponse(raw) {
     const nowTime = parseApiTimeAsNzLocal(raw?.NowTime);
 
     return { points, nowTime };
+}
+
+export const NEAR_EDGE_PCT = 0.22;
+
+export function canPlaceBelow(pct, nearEdgePct = NEAR_EDGE_PCT) {
+    return pct <= 1 - nearEdgePct;
+}
+
+export function canPlaceAbove(pct, nearEdgePct = NEAR_EDGE_PCT) {
+    return pct >= nearEdgePct;
+}
+
+export function gaugedLabelSide(gaugedValue, curveValueAtAnchor) {
+    return gaugedValue < curveValueAtAnchor ? 'below' : 'above';
+}
+
+export function gaugedLabelHorizontalSide(leftPct, edgeThresholdPct = 75) {
+    return leftPct > edgeThresholdPct ? 'left' : 'right';
 }
 
 export function renderHydrograph(el, points, windowRange = null, nowTime = null, extrapolatedPoints = [], methodThresholds = null, gaugedFlow = null) {
@@ -107,8 +126,6 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
         const ftShown = ft > minVal && ft < maxVal;
         const sxsShown = sxs > minVal && sxs < maxVal;
 
-        const NEAR_EDGE_PCT = 0.22;
-
         function addIcon(iconKey, yPx, side) {
             const topPct = ((yPx / height) * 100).toFixed(2);
             const offsetClass = side === 'above' ? 'is-above' : 'is-below';
@@ -125,16 +142,16 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
             const ftY = y(ft);
             addLine(ftY);
             const pct = ftY / height;
-            if (pct <= 1 - NEAR_EDGE_PCT) addIcon('flowtracker', ftY, 'below');
-            if (pct >= NEAR_EDGE_PCT && !sxsShown) addIcon('microboard', ftY, 'above');
+            if (canPlaceBelow(pct)) addIcon('flowtracker', ftY, 'below');
+            if (canPlaceAbove(pct) && !sxsShown) addIcon('microboard', ftY, 'above');
         }
 
         if (sxsShown) {
             const sxsY = y(sxs);
             addLine(sxsY);
             const pct = sxsY / height;
-            if (pct <= 1 - NEAR_EDGE_PCT) addIcon('microboard', sxsY, 'below');
-            if (pct >= NEAR_EDGE_PCT) addIcon('moving-boat', sxsY, 'above');
+            if (canPlaceBelow(pct)) addIcon('microboard', sxsY, 'below');
+            if (canPlaceAbove(pct)) addIcon('moving-boat', sxsY, 'above');
         }
     }
 
@@ -147,24 +164,21 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
 
         gaugedFlowLineHtml = `<line x1="${startX.toFixed(1)}" y1="${gaugedY.toFixed(1)}" x2="${endX.toFixed(1)}" y2="${gaugedY.toFixed(1)}" stroke="var(--river-deep)" stroke-width="1.75" vector-effect="non-scaling-stroke" />`;
 
-        const anchorTime = windowRange.start.getTime();
-        let closestPoint = scalePoints[0];
-        let closestDiff = Math.abs(scalePoints[0].time.getTime() - anchorTime);
-        for (const p of scalePoints) {
-            const diff = Math.abs(p.time.getTime() - anchorTime);
-            if (diff < closestDiff) {
-                closestPoint = p;
-                closestDiff = diff;
-            }
-        }
-        const curveValueAtAnchor = closestPoint.value;
+        const curveValueAtAnchor = nearestPoint(scalePoints, windowRange.start).value;
 
-        const topPct = ((gaugedY / height) * 100).toFixed(2);
-        const leftPct = ((startX / width) * 100).toFixed(2);
-        const side = gaugedFlow < curveValueAtAnchor ? 'is-below' : 'is-above';
+        const topPctNum = (gaugedY / height) * 100;
+        const leftPctNum = (startX / width) * 100;
+        const topPct = topPctNum.toFixed(2);
+        const leftPct = leftPctNum.toFixed(2);
+
+        const vSide = gaugedLabelSide(gaugedFlow, curveValueAtAnchor);
+        const hSide = gaugedLabelHorizontalSide(leftPctNum);
+        const vTransform = vSide === 'below' ? 'translateY(4px)' : 'translateY(calc(-100% - 4px))';
+        const hTransform = hSide === 'left' ? 'translateX(calc(-100% - 6px))' : 'translateX(6px)';
+
         gaugedFlowMarkerHtml = `
             <div class="sparkline-gauged-dot" style="left: ${leftPct}%; top: ${topPct}%;"></div>
-            <div class="sparkline-gauged-label ${side}" style="left: ${leftPct}%; top: ${topPct}%;">Gauged ${formatFlowValue(gaugedFlow)}</div>
+            <div class="sparkline-gauged-label" style="left: ${leftPct}%; top: ${topPct}%; transform: ${hTransform} ${vTransform};">Gauged ${formatFlowValue(gaugedFlow)}</div>
         `;
     }
 

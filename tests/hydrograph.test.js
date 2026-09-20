@@ -1,6 +1,68 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatFlowValue, parseTimeSeriesResponse } from '../js/hydrograph.js';
+import { formatFlowValue, parseTimeSeriesResponse, canPlaceBelow, canPlaceAbove, gaugedLabelSide, gaugedLabelHorizontalSide } from '../js/hydrograph.js';
+
+describe('canPlaceBelow / canPlaceAbove (regression: method-icon placement swap)', () => {
+    // Regression test: an earlier version had these two conditions swapped, causing a
+    // threshold line near the bottom edge to incorrectly show its icon crowded below it
+    // (where there's no room) instead of above it (where there's plenty of room).
+    test('a line near the top has room below but not above', () => {
+        assert.equal(canPlaceBelow(0.05), true);
+        assert.equal(canPlaceAbove(0.05), false);
+    });
+
+    test('a line near the bottom has room above but not below', () => {
+        assert.equal(canPlaceBelow(0.95), false);
+        assert.equal(canPlaceAbove(0.95), true);
+    });
+
+    test('a line in the middle has room on both sides', () => {
+        assert.equal(canPlaceBelow(0.5), true);
+        assert.equal(canPlaceAbove(0.5), true);
+    });
+
+    test('respects a custom edge threshold', () => {
+        assert.equal(canPlaceAbove(0.15, 0.1), true);
+        assert.equal(canPlaceAbove(0.05, 0.1), false);
+    });
+});
+
+describe('gaugedLabelSide (regression: label landing on the curve)', () => {
+    // Regression test: an earlier version decided above/below based on the gauged value's
+    // position in the whole chart, rather than relative to the curve at that specific time -
+    // so a gauging that was (very commonly) close to the recorded curve would often place
+    // the label directly on top of the curve line, making it unreadable.
+    test('gauged flow below the curve places the label below (away from the curve)', () => {
+        assert.equal(gaugedLabelSide(58.5, 61.05), 'below');
+    });
+
+    test('gauged flow above the curve places the label above (away from the curve)', () => {
+        assert.equal(gaugedLabelSide(61.5, 61.05), 'above');
+    });
+
+    test('an exact match defaults to above', () => {
+        assert.equal(gaugedLabelSide(60, 60), 'above');
+    });
+});
+
+describe('gaugedLabelHorizontalSide (regression: label overflow near the right edge)', () => {
+    // Regression test: the label always extended rightward from its anchor, so a gauging
+    // window near the end of the chart (a very common case - "just gauged, right now")
+    // pushed the label past the chart's edge, worse on narrow mobile screens with no
+    // spare margin.
+    test('extends right when there is room', () => {
+        assert.equal(gaugedLabelHorizontalSide(30), 'right');
+    });
+
+    test('flips to extend left when the anchor is near the right edge', () => {
+        assert.equal(gaugedLabelHorizontalSide(90), 'left');
+    });
+
+    test('respects a custom edge threshold', () => {
+        assert.equal(gaugedLabelHorizontalSide(80, 75), 'left');
+        assert.equal(gaugedLabelHorizontalSide(70, 75), 'right');
+    });
+});
 
 describe('formatFlowValue', () => {
     test('below 10 shows 3 decimal places', () => {
