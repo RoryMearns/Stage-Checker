@@ -279,3 +279,22 @@ export function parseApiTimeAsNzLocal(rawTimeString) {
     const date = new Date(`${stripped}${nzUtcOffset()}`);
     return isNaN(date.getTime()) ? null : date;
 }
+
+export function roundToNearestFiveMinutes(hours, minutes) {
+    let roundedHours = ((hours % 24) + 24) % 24;
+    let roundedMinutes = Math.round(minutes / 5) * 5;
+    if (roundedMinutes === 60) {
+        roundedMinutes = 0;
+        roundedHours = (roundedHours + 1) % 24;
+    }
+    return `${String(roundedHours).padStart(2, '0')}:${String(roundedMinutes).padStart(2, '0')}`;
+}
+
+export function subtractMinutesFromTimeString(timeStr, minutesToSubtract) {
+    const [h, m] = timeStr.split(':').map(Number);
+    let totalMinutes = h * 60 + m - minutesToSubtract;
+    totalMinutes = ((totalMinutes % 1440) + 1440) % 1440;
+    const newH = Math.floor(totalMinutes / 60);
+    const newM = totalMinutes % 60;
+    return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+}

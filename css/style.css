@@ -1860,14 +1860,6 @@ html, body {
     pointer-events: none;
 }
 
-.sparkline-gauged-label.is-above {
-    transform: translate(6px, calc(-100% - 4px));
-}
-
-.sparkline-gauged-label.is-below {
-    transform: translate(6px, 4px);
-}
-
 .sparkline-legend {
     display: flex;
     flex-wrap: wrap;

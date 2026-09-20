@@ -56,8 +56,9 @@
             <div class="two-col-grid">
                 <div class="field">
                     <label class="label" for="gauging-tool-start">Gauging start</label>
-                    <div class="control">
+                    <div class="control checkgauge-entry">
                         <input class="input" type="time" step="60" id="gauging-tool-start">
+                        <button type="button" id="gauging-tool-start-nudge" class="button calc-button" title="Move start back 5 minutes">&minus;5 min</button>
                     </div>
                 </div>
                 <div class="field">
@@ -116,6 +117,8 @@
             </div>
 
             <div id="gauging-tool-flow-diffs" style="display: none;"></div>
+
+            <button type="button" id="gauging-tool-next-site" class="button clear-all-button sv-spaced-field">Clear form</button>
         </div>
 
         <div class="run-section calc-card">
