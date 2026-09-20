@@ -4,8 +4,10 @@ import {
     extrapolateFuturePoints,
     resolveComparisonPoint,
     computeLagShift,
+    trailingMedianSmooth,
     EXTRAPOLATION_INTERVAL_MS,
-    EXTRAPOLATION_MAX_MS
+    EXTRAPOLATION_MAX_MS,
+    EXTRAPOLATION_TREND_POINTS
 } from '../js/flow-math.js';
 
 function makePoints(startTime, values, stepMs = EXTRAPOLATION_INTERVAL_MS) {
@@ -80,6 +82,62 @@ describe('extrapolateFuturePoints', () => {
         const points = makePoints(new Date('2026-01-01T00:00:00+13:00'), [10, 11, 12, 13, 14, 15]);
         const result = extrapolateFuturePoints(points);
         assert.ok(result.every(p => p.isExtrapolated === true));
+    });
+
+    test('regression: a single spurious spike at the very last point does not hijack the forecast', () => {
+        // This is the exact bug reported: a lone anomalous reading right at the end (e.g. a
+        // sensor glitch) previously became the extrapolation's starting point AND skewed the
+        // fitted trend, sending the forecast wildly upward even though the true flow is flat.
+        const points = makePoints(new Date('2026-01-01T00:00:00+13:00'), [59.8, 60.1, 59.9, 60.0, 60.2, 78.5]);
+        const result = extrapolateFuturePoints(points);
+        assert.ok(result[23].value < 65, `expected the spike to be smoothed out, got ${result[23].value} at +2hr`);
+    });
+
+    test('regression: noise scattered across a wider window does not derail the forecast', () => {
+        const points = makePoints(new Date('2026-01-01T00:00:00+13:00'),
+            [59.5, 60.8, 59.2, 60.1, 59.9, 61.5, 59.7, 60.0, 78.5, 59.8, 60.2, 59.9]);
+        const result = extrapolateFuturePoints(points);
+        assert.ok(Math.abs(result[23].value - 60) < 3, `expected to stay near 60, got ${result[23].value} at +2hr`);
+    });
+
+    test('a genuine sustained rise within a wider window is still detected, not washed out by earlier flat readings', () => {
+        const points = makePoints(new Date('2026-01-01T00:00:00+13:00'),
+            [58.0, 58.1, 58.0, 58.2, 58.1, 58.3, 59.0, 60.2, 61.5, 63.0, 64.8, 66.5]);
+        const result = extrapolateFuturePoints(points);
+        assert.ok(result[23].value > 70, `expected continued meaningful rise, got ${result[23].value} at +2hr`);
+    });
+
+    test('uses up to the full widened trend window when enough real points are available', () => {
+        const values = Array.from({ length: 20 }, (_, i) => 50 + i);
+        const points = makePoints(new Date('2026-01-01T00:00:00+13:00'), values);
+        const result = extrapolateFuturePoints(points);
+        // A steadily rising sequence of +1 per interval should extrapolate as a continued rise.
+        assert.ok(result[0].value > values[values.length - 1]);
+    });
+});
+
+describe('trailingMedianSmooth', () => {
+    test('removes an isolated spike at the very end, using only preceding values', () => {
+        assert.deepEqual(trailingMedianSmooth([5, 5, 5, 100, 5]), [5, 5, 5, 5, 5]);
+    });
+
+    test('removes an isolated dip in the middle', () => {
+        assert.deepEqual(trailingMedianSmooth([10, 10, 1, 10, 10]), [10, 10, 10, 10, 10]);
+    });
+
+    test('preserves a genuine, sustained step change', () => {
+        const result = trailingMedianSmooth([10, 10, 20, 20, 20]);
+        assert.equal(result[result.length - 1], 20);
+    });
+
+    test('leaves the first value unchanged (no preceding values to smooth with)', () => {
+        const result = trailingMedianSmooth([42, 1, 1]);
+        assert.equal(result[0], 42);
+    });
+
+    test('handles arrays shorter than the smoothing window', () => {
+        assert.deepEqual(trailingMedianSmooth([7]), [7]);
+        assert.deepEqual(trailingMedianSmooth([7, 9]), [7, 9]);
     });
 });
 
