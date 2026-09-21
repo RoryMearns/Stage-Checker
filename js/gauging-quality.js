@@ -24,7 +24,6 @@ function getSelectedDescription(checkedInput) {
     return clone.textContent.trim();
 }
 
-// Site/Date live on the Field Notes card now - read them directly rather than duplicating the inputs
 function sharedSiteValue() {
     return document.getElementById('fn-site-name')?.value.trim() || '';
 }
@@ -41,7 +40,6 @@ const totalFairEl = document.getElementById('gq-total-fair');
 const totalGoodEl = document.getElementById('gq-total-good');
 const totalGrandEl = document.getElementById('gq-total-grand');
 const qualityCodeEl = document.getElementById('gq-quality-code');
-const resetButton = document.getElementById('gq-reset');
 const notesInput = document.getElementById('gq-notes');
 const downloadButton = document.getElementById('gq-download');
 
@@ -131,7 +129,7 @@ export function clearQualityDraft() {
     clearDraft(QUALITY_DRAFT_KEY);
 }
 
-resetButton.addEventListener('click', () => {
+export function resetQuality() {
     criteria.forEach(criterion => {
         criterion.querySelectorAll('input[type="radio"]').forEach(input => {
             input.checked = false;
@@ -140,7 +138,7 @@ resetButton.addEventListener('click', () => {
     notesInput.value = '';
     recalculate();
     clearQualityDraft();
-});
+}
 
 export function buildQualityReport() {
     const report = document.createElement('div');

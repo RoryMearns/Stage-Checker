@@ -1719,7 +1719,7 @@ html, body {
     color: #92600B;
 }
 
-#gauging-tool-sparkline-wrap {
+.sparkline-card-wrap {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
     padding: 0.85rem 1rem 0.6rem;
@@ -1836,18 +1836,6 @@ html, body {
     right: 3px;
     border-top: 1px dashed var(--river-muted);
     opacity: 0.55;
-    pointer-events: none;
-}
-
-.sparkline-gauged-dot {
-    position: absolute;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background-color: #ffffff;
-    border: 2px solid var(--river-deep);
-    box-sizing: border-box;
-    transform: translate(-50%, -50%);
     pointer-events: none;
 }
 

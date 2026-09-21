@@ -36,10 +36,14 @@ export async function renderElementToCanvas(reportElement) {
     }
 }
 
+function isAndroid() {
+    return /Android/i.test(navigator.userAgent);
+}
+
 async function saveCanvasAsPng(canvas, filename) {
     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 
-    if (navigator.canShare && navigator.share) {
+    if (!isAndroid() && navigator.canShare && navigator.share) {
         const file = new File([blob], filename, { type: 'image/png' });
         if (navigator.canShare({ files: [file] })) {
             try {

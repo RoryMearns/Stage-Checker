@@ -1,8 +1,9 @@
 import { fetchDischargeTimeSeries } from './api.js';
-import { computeFlowDifferencePercent, nzUtcOffset, todayIsoNz, formatNzTime, saveDraft, loadDraft, debounce, roundToNearestFiveMinutes, subtractMinutesFromTimeString } from './form-utils.js';
+import { nzUtcOffset, todayIsoNz, saveDraft, loadDraft, debounce, roundToNearestFiveMinutes, subtractMinutesFromTimeString } from './form-utils.js';
 import { setupSiteAutocomplete } from './site-lookup.js';
 import { parseTimeSeriesResponse, renderHydrograph } from './hydrograph.js';
-import { extrapolateFuturePoints, resolveComparisonPoint, computeLagShift } from './flow-math.js';
+import { extrapolateFuturePoints, computeLagShift } from './flow-math.js';
+import { buildComparisonRows, renderFlowComparisonSummary } from './flow-comparison.js';
 
 const siteInput = document.getElementById('gauging-tool-site');
 const siteListEl = document.getElementById('gauging-tool-site-list');
@@ -128,41 +129,6 @@ function getWindow() {
     return { start, end, isAdjusted };
 }
 
-const ARROW_UP = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="6 11 12 5 18 11"></polyline></svg>';
-const ARROW_DOWN = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="6 13 12 19 18 13"></polyline></svg>';
-
-function renderFlowDiffSummary(rows) {
-    const rowsHtml = rows
-        .filter(row => row.pct !== null)
-        .map(row => {
-            const stateClass = row.isGood ? 'is-good' : 'is-warning';
-            const arrow = row.direction === 'up' ? ARROW_UP : (row.direction === 'down' ? ARROW_DOWN : '');
-            return `
-                <div class="flow-diff-summary-row ${stateClass}">
-                    <span class="flow-diff-summary-left">
-                        <span class="flow-diff-summary-dot"></span>
-                        <span class="flow-diff-summary-label">${row.label}</span>
-                    </span>
-                    <span class="flow-diff-summary-pct">${arrow}${row.pct.toFixed(1)}%</span>
-                </div>
-            `;
-        })
-        .join('');
-
-    if (!rowsHtml) {
-        flowDiffsWrap.style.display = 'none';
-        return;
-    }
-
-    flowDiffsWrap.innerHTML = `
-        <div class="flow-diff-summary">
-            <p class="flow-diff-summary-title">Gauged flow compared to rated flow</p>
-            ${rowsHtml}
-        </div>
-    `;
-    flowDiffsWrap.style.display = '';
-}
-
 function updateComparison() {
     if (!timeSeries.length) return;
 
@@ -175,30 +141,14 @@ function updateComparison() {
         return;
     }
 
-    const midTime = new Date(windowRange.start.getTime() + (windowRange.end.getTime() - windowRange.start.getTime()) / 2);
-
-    const startResolved = resolveComparisonPoint(timeSeries, windowRange.start, extrapolatedPoints);
-    const midResolved = resolveComparisonPoint(timeSeries, midTime, extrapolatedPoints);
-    const endResolved = resolveComparisonPoint(timeSeries, windowRange.end, extrapolatedPoints);
-
-    const labelPrefix = windowRange.isAdjusted ? 'Adjusted ' : '';
-    const gauged = gaugedFlowInput.value;
-    const gaugedNum = parseFloat(gauged);
-    const rows = [
-        { resolved: startResolved, targetTime: windowRange.start, label: `${labelPrefix}start` },
-        { resolved: midResolved, targetTime: midTime, label: `${labelPrefix}middle` },
-        { resolved: endResolved, targetTime: windowRange.end, label: `${labelPrefix}end` }
-    ].map(row => {
-        const ratedValue = row.resolved.point.value;
-        const pct = computeFlowDifferencePercent(ratedValue, gauged);
-        const direction = isNaN(gaugedNum) ? null : (gaugedNum > ratedValue ? 'up' : (gaugedNum < ratedValue ? 'down' : null));
-        const suffix = row.resolved.isExtrapolated ? ' (extrapolated)' : '';
-        const capitalizedLabel = row.label.charAt(0).toUpperCase() + row.label.slice(1);
-        const fullLabel = `${capitalizedLabel} &middot; ${formatNzTime(row.targetTime)}${suffix}`;
-        return { label: fullLabel, pct, isGood: pct !== null && pct <= 8.0, direction };
+    const rows = buildComparisonRows({
+        timeSeries,
+        extrapolatedPoints,
+        windowRange,
+        gaugedFlow: gaugedFlowInput.value
     });
 
-    renderFlowDiffSummary(rows);
+    renderFlowComparisonSummary(flowDiffsWrap, rows, 'Gauged flow compared to rated flow');
 }
 
 async function fetchAndRender(site) {
