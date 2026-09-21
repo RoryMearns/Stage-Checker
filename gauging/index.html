@@ -50,7 +50,7 @@
             </div>
 
             <p class="calc-help">
-                Your progress saves automatically, but you'll need to clear both forms below before starting a new gauging.
+                Your progress saves automatically.
             </p>
 
             <button type="button" id="clear-all-button" class="button clear-all-button">Clear Forms &amp; Start New Gauging</button>
@@ -64,13 +64,22 @@
 
             <div class="fn-section">
                 <div class="fn-section-title">Visit details</div>
-                <div class="fn-grid">
-                    <div class="field">
+                <div class="two-col-grid">
+                    <div class="field site-autocomplete-field">
                         <label class="label" for="fn-site-name">Site name</label>
                         <div class="control">
-                            <input class="input" type="text" id="fn-site-name" placeholder="e.g. Taieri at Outram">
+                            <input class="input" type="text" id="fn-site-name" placeholder="Start typing a site name..." autocomplete="off">
+                        </div>
+                        <ul id="fn-site-name-list" class="site-autocomplete-list" style="display: none;"></ul>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-site-number">Site number</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-site-number" placeholder="e.g. EM140">
                         </div>
                     </div>
+                </div>
+                <div class="fn-grid">
                     <div class="field">
                         <label class="label" for="fn-date">Date</label>
                         <div class="control">
@@ -312,14 +321,28 @@
                             <input class="input" type="number" id="fn-mean-q" step="any">
                         </div>
                     </div>
+                </div>
+
+                <div class="two-col-grid sv-spaced-field">
                     <div class="field">
-                        <label class="label" for="fn-rated-q">Rated Q (m&sup3;/s)</label>
+                        <label class="label" for="fn-gauging-start">Gauging start</label>
                         <div class="control">
-                            <input class="input" type="number" id="fn-rated-q" step="any">
+                            <input class="input" type="time" step="60" id="fn-gauging-start">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-gauging-end">Gauging end</label>
+                        <div class="control">
+                            <input class="input" type="time" step="60" id="fn-gauging-end">
                         </div>
                     </div>
                 </div>
-                <div id="gq-flow-diff" class="flow-diff" style="display: none;"></div>
+
+                <p id="fn-hydrograph-status" class="calc-help" style="display: none;"></p>
+                <div id="fn-hydrograph-wrap" style="display: none;">
+                    <div id="fn-hydrograph"></div>
+                </div>
+                <div id="fn-flow-diffs" style="display: none;"></div>
             </div>
 
             <div class="field gq-notes-field">
@@ -330,7 +353,6 @@
             </div>
 
             <div class="field gq-actions">
-                <button type="button" id="fn-reset" class="button gq-reset-button">Reset all</button>
                 <button type="button" id="fn-download" class="button calc-button">Download notes</button>
             </div>
         </div>
@@ -609,7 +631,6 @@
             </p>
 
             <div class="field gq-actions">
-                <button type="button" id="gq-reset" class="button gq-reset-button">Reset all</button>
                 <button type="button" id="gq-download" class="button calc-button">Download results</button>
             </div>
         </div>

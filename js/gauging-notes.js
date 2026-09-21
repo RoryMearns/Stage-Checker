@@ -1,4 +1,9 @@
-import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce, updateFlowDifferenceDisplay, buildFlowDifferenceHtml } from './form-utils.js';
+import { todayIsoDate, formatDateForDisplay, sanitizeForFilename, downloadElementAsPng, saveDraft, loadDraft, clearDraft, debounce, nzUtcOffset, todayIsoNz } from './form-utils.js';
+import { setupSiteAutocomplete } from './site-lookup.js';
+import { fetchDischargeTimeSeries } from './api.js';
+import { parseTimeSeriesResponse, renderHydrograph } from './hydrograph.js';
+import { extrapolateFuturePoints } from './flow-math.js';
+import { buildComparisonRows, renderFlowComparisonSummary } from './flow-comparison.js';
 
 function radioValue(name) {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
@@ -118,15 +123,118 @@ function textValue(id) {
 }
 
 const siteNameInput = document.getElementById('fn-site-name');
+const siteNameListEl = document.getElementById('fn-site-name-list');
+const siteNumberInput = document.getElementById('fn-site-number');
 const dateInput = document.getElementById('fn-date');
 const locationInput = document.getElementById('fn-location');
 const form = siteNameInput.closest('.run-section');
-const resetButton = document.getElementById('fn-reset');
 const downloadButton = document.getElementById('fn-download');
 const notesInput = document.getElementById('fn-notes');
 const meanQInput = document.getElementById('fn-mean-q');
-const ratedQInput = document.getElementById('fn-rated-q');
-const flowDiffEl = document.getElementById('gq-flow-diff');
+const gaugingStartInput = document.getElementById('fn-gauging-start');
+const gaugingEndInput = document.getElementById('fn-gauging-end');
+const hydrographStatusEl = document.getElementById('fn-hydrograph-status');
+const hydrographWrapEl = document.getElementById('fn-hydrograph-wrap');
+const hydrographEl = document.getElementById('fn-hydrograph');
+const flowDiffsEl = document.getElementById('fn-flow-diffs');
+
+function siteLocationKey(siteCode) {
+    return `gauging-notes-location:${siteCode}`;
+}
+
+let selectedSiteCode = null;
+let selectedDatasetId = null;
+let hydrographTimeSeries = [];
+let hydrographNowTime = null;
+
+function showHydrographStatus(message) {
+    hydrographStatusEl.textContent = message;
+    hydrographStatusEl.style.display = message ? '' : 'none';
+}
+
+function getResultsWindow() {
+    if (!gaugingStartInput.value || !gaugingEndInput.value) return null;
+    const date = dateInput.value || todayIsoNz();
+    const offset = nzUtcOffset();
+    const start = new Date(`${date}T${gaugingStartInput.value}:00${offset}`);
+    const end = new Date(`${date}T${gaugingEndInput.value}:00${offset}`);
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || end <= start) return null;
+    return { start, end, isAdjusted: false };
+}
+
+function updateResultsComparison() {
+    if (!hydrographTimeSeries.length) return;
+
+    const windowRange = getResultsWindow();
+    const extrapolatedPoints = extrapolateFuturePoints(hydrographTimeSeries);
+    renderHydrograph(hydrographEl, hydrographTimeSeries, windowRange, hydrographNowTime, extrapolatedPoints, null, parseFloat(meanQInput.value));
+
+    if (!windowRange || !meanQInput.value) {
+        flowDiffsEl.style.display = 'none';
+        return;
+    }
+
+    const rows = buildComparisonRows({
+        timeSeries: hydrographTimeSeries,
+        extrapolatedPoints,
+        windowRange,
+        gaugedFlow: meanQInput.value
+    });
+
+    renderFlowComparisonSummary(flowDiffsEl, rows, 'Mean Q compared to rated flow');
+}
+
+async function fetchResultsHydrograph(siteCode, datasetId) {
+    showHydrographStatus('Loading hydrograph for this site...');
+    hydrographWrapEl.style.display = 'none';
+    flowDiffsEl.style.display = 'none';
+    hydrographTimeSeries = [];
+
+    try {
+        const raw = await fetchDischargeTimeSeries({ datasetId, siteCode, date: todayIsoNz() });
+        const parsed = parseTimeSeriesResponse(raw);
+        if (parsed === null) {
+            showHydrographStatus("Got a response, but it wasn't in the expected format - check the browser console for details.");
+            return;
+        }
+        if (!parsed.points.length) {
+            showHydrographStatus('No recent data available for this site.');
+            return;
+        }
+        hydrographTimeSeries = parsed.points;
+        hydrographNowTime = parsed.nowTime;
+        showHydrographStatus('');
+        hydrographWrapEl.style.display = '';
+        updateResultsComparison();
+    } catch (error) {
+        console.error('Failed to load time series:', error);
+        showHydrographStatus("Couldn't load hydrograph for this site. Check your connection and try again.");
+    }
+}
+
+setupSiteAutocomplete({
+    inputEl: siteNameInput,
+    listEl: siteNameListEl,
+    onSelect: site => {
+        selectedSiteCode = site.code;
+        selectedDatasetId = site.datasetId;
+        siteNumberInput.value = site.code;
+        const rememberedLocation = loadDraft(siteLocationKey(site.code));
+        locationInput.value = rememberedLocation || '';
+        debouncedSaveNotesDraft();
+        fetchResultsHydrograph(site.code, site.datasetId);
+    }
+});
+
+gaugingStartInput.addEventListener('input', updateResultsComparison);
+gaugingEndInput.addEventListener('input', updateResultsComparison);
+meanQInput.addEventListener('input', updateResultsComparison);
+
+locationInput.addEventListener('input', () => {
+    if (selectedSiteCode) {
+        saveDraft(siteLocationKey(selectedSiteCode), locationInput.value.trim());
+    }
+});
 
 dateInput.value = todayIsoDate();
 
@@ -137,13 +245,6 @@ const otherSyncs = [
     setupOtherToggle('fn-adcp-serial', 'fn-m9-other', 'Other-M9'),
     setupOtherToggle('fn-platform', 'fn-platform-other')
 ];
-
-function updateFlowDiff() {
-    updateFlowDifferenceDisplay(flowDiffEl, ratedQInput.value, meanQInput.value);
-}
-
-ratedQInput.addEventListener('input', updateFlowDiff);
-meanQInput.addEventListener('input', updateFlowDiff);
 
 const NOTES_DRAFT_KEY = 'notes';
 
@@ -166,7 +267,7 @@ export function clearNotesDraft() {
     clearDraft(NOTES_DRAFT_KEY);
 }
 
-resetButton.addEventListener('click', () => {
+export function resetFieldNotes() {
     form.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => {
         input.value = '';
     });
@@ -175,17 +276,29 @@ resetButton.addEventListener('click', () => {
     });
     notesInput.value = '';
     dateInput.value = todayIsoDate();
+    gaugingStartInput.value = '';
+    gaugingEndInput.value = '';
+    selectedSiteCode = null;
+    selectedDatasetId = null;
+    hydrographTimeSeries = [];
+    hydrographNowTime = null;
+    hydrographWrapEl.style.display = 'none';
+    flowDiffsEl.style.display = 'none';
+    showHydrographStatus('');
     otherSyncs.forEach(sync => sync());
     syncAdcpDevice();
-    updateFlowDiff();
     clearNotesDraft();
-});
+}
 
 export function collectNotesState() {
     const state = {};
     const set = (key, value) => { if (value) state[key] = value; };
 
     set('s', textValue('fn-site-name'));
+    set('sn', textValue('fn-site-number'));
+    set('dsid', selectedDatasetId);
+    set('gs', gaugingStartInput.value);
+    set('ge', gaugingEndInput.value);
     set('d', dateInput.value);
     set('p', textValue('fn-party'));
     set('l', textValue('fn-location'));
@@ -215,7 +328,6 @@ export function collectNotesState() {
     set('dr', textValue('fn-distance-recorder'));
     set('tx', textValue('fn-transects'));
     set('mq', textValue('fn-mean-q'));
-    set('rq', textValue('fn-rated-q'));
     set('cv', textValue('fn-cov'));
     set('n', notesInput.value.trim());
 
@@ -226,6 +338,14 @@ export function applyNotesState(state) {
     if (!state) return;
 
     setInputValue('fn-site-name', state.s);
+    setInputValue('fn-site-number', state.sn);
+    selectedSiteCode = state.sn || null;
+    selectedDatasetId = state.dsid || null;
+    setInputValue('fn-gauging-start', state.gs);
+    setInputValue('fn-gauging-end', state.ge);
+    if (state.sn && state.dsid) {
+        fetchResultsHydrograph(state.sn, state.dsid);
+    }
     if (state.d) dateInput.value = state.d;
     setInputValue('fn-party', state.p);
     setInputValue('fn-location', state.l);
@@ -256,13 +376,11 @@ export function applyNotesState(state) {
     setInputValue('fn-distance-recorder', state.dr);
     setInputValue('fn-transects', state.tx);
     setInputValue('fn-mean-q', state.mq);
-    setInputValue('fn-rated-q', state.rq);
     setInputValue('fn-cov', state.cv);
     if (state.n) notesInput.value = state.n;
 
     otherSyncs.forEach(sync => sync());
     syncAdcpDevice();
-    updateFlowDiff();
 }
 
 export function buildNotesReport() {
@@ -271,6 +389,7 @@ export function buildNotesReport() {
     report.innerHTML = '<h2 class="gq-report-title">ADCP Field Measurement Notes</h2>';
 
     const siteName = textValue('fn-site-name');
+    const siteNumber = textValue('fn-site-number');
     const party = textValue('fn-party');
     const dateValue = formatDateForDisplay(dateInput.value);
 
@@ -283,6 +402,7 @@ export function buildNotesReport() {
 
     const rows = [
         fieldRow('Site', siteName),
+        fieldRow('Site number', siteNumber),
         fieldRow('Date', dateValue),
         fieldRow('Party', party),
         fieldRow('Measurement location', textValue('fn-location')),
@@ -351,20 +471,27 @@ export function buildNotesReport() {
         report.appendChild(highlight);
     }
 
-    const ratedQValue = textValue('fn-rated-q');
-    if (ratedQValue) {
-        const ratedRow = document.createElement('p');
-        ratedRow.className = 'gq-report-rated-q';
-        ratedRow.innerHTML = `Rated Q: <strong>${parseFloat(ratedQValue).toFixed(3)} m&sup3;/s</strong>`;
-        report.appendChild(ratedRow);
-    }
+    if (hydrographTimeSeries.length) {
+        const windowRange = getResultsWindow();
+        const extrapolatedPoints = extrapolateFuturePoints(hydrographTimeSeries);
 
-    const flowDiffHtml = buildFlowDifferenceHtml(ratedQInput.value, meanQInput.value);
-    if (flowDiffHtml) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'gq-report-flow-diff-wrap';
-        wrapper.innerHTML = flowDiffHtml;
-        report.appendChild(wrapper);
+        const hydrographWrap = document.createElement('div');
+        hydrographWrap.className = 'gq-report-hydrograph-wrap';
+        renderHydrograph(hydrographWrap, hydrographTimeSeries, windowRange, hydrographNowTime, extrapolatedPoints, null, parseFloat(meanQValue));
+        report.appendChild(hydrographWrap);
+
+        if (windowRange && meanQValue) {
+            const rows = buildComparisonRows({
+                timeSeries: hydrographTimeSeries,
+                extrapolatedPoints,
+                windowRange,
+                gaugedFlow: meanQValue
+            });
+            const comparisonWrap = document.createElement('div');
+            comparisonWrap.className = 'gq-report-comparison-wrap';
+            renderFlowComparisonSummary(comparisonWrap, rows, 'Mean Q compared to rated flow');
+            report.appendChild(comparisonWrap);
+        }
     }
 
     return report;

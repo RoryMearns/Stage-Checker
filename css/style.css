@@ -1839,18 +1839,6 @@ html, body {
     pointer-events: none;
 }
 
-.sparkline-gauged-dot {
-    position: absolute;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background-color: #ffffff;
-    border: 2px solid var(--river-deep);
-    box-sizing: border-box;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
 .sparkline-gauged-label {
     position: absolute;
     font-size: 0.68rem;

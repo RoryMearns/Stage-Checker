@@ -1,6 +1,6 @@
 import { encodeStateToCode, decodeCodeToState, copyToClipboard, downloadElementsSideBySide, sanitizeForFilename } from './form-utils.js';
-import { collectQualityState, applyQualityState, buildQualityReport, restoreQualityDraft, clearQualityDraft } from './gauging-quality.js';
-import { collectNotesState, applyNotesState, buildNotesReport, restoreNotesDraft, clearNotesDraft } from './gauging-notes.js';
+import { collectQualityState, applyQualityState, buildQualityReport, restoreQualityDraft, clearQualityDraft, resetQuality } from './gauging-quality.js';
+import { collectNotesState, applyNotesState, buildNotesReport, restoreNotesDraft, clearNotesDraft, resetFieldNotes } from './gauging-notes.js';
 
 const shareButton = document.getElementById('share-link-button');
 const downloadAllButton = document.getElementById('download-everything-button');
@@ -22,7 +22,6 @@ function showCopyFeedback(url, copied) {
         shareLinkEl.style.display = 'none';
         flashButtonLabel('Copied!', 5000);
     } else {
-        // Clipboard write failed - fall back to showing the link so it can be copied manually
         shareLinkEl.dataset.url = url;
         shareLinkEl.textContent = url;
         shareLinkEl.style.display = '';
@@ -71,7 +70,6 @@ async function loadFromUrlIfPresent() {
     } catch (error) {
         console.error('Failed to load shared link:', error);
     } finally {
-        // Remove the code from the URL bar so refreshing the page doesn't re-apply it
         const cleanUrl = window.location.origin + window.location.pathname;
         window.history.replaceState({}, document.title, cleanUrl);
     }
@@ -88,8 +86,8 @@ dismissDraftNoticeButton.addEventListener('click', () => {
 
 clearAllButton.addEventListener('click', () => {
     if (!confirm('Clear all data from both forms on this device? This cannot be undone.')) return;
-    document.getElementById('fn-reset').click();
-    document.getElementById('gq-reset').click();
+    resetFieldNotes();
+    resetQuality();
     draftNotice.style.display = 'none';
 });
 

@@ -113,7 +113,7 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
 
     const clampX = px => Math.min(Math.max(px, padLeft), width - padRight);
     const windowBand = windowRange
-        ? `<rect x="${clampX(x(windowRange.start.getTime())).toFixed(1)}" y="0" width="${(clampX(x(windowRange.end.getTime())) - clampX(x(windowRange.start.getTime()))).toFixed(1)}" height="${height}" fill="var(--river-mid)" opacity="0.12" />`
+        ? `<rect x="${clampX(x(windowRange.start.getTime())).toFixed(1)}" y="0" width="${(clampX(x(windowRange.end.getTime())) - clampX(x(windowRange.start.getTime()))).toFixed(1)}" height="${height}" fill="#3C8C7C" opacity="0.12" />`
         : '';
 
     let methodLineMarkers = [];
@@ -162,7 +162,7 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
         const startX = clampX(x(windowRange.start.getTime()));
         const endX = clampX(x(windowRange.end.getTime()));
 
-        gaugedFlowLineHtml = `<line x1="${startX.toFixed(1)}" y1="${gaugedY.toFixed(1)}" x2="${endX.toFixed(1)}" y2="${gaugedY.toFixed(1)}" stroke="var(--river-deep)" stroke-width="1.75" vector-effect="non-scaling-stroke" />`;
+        gaugedFlowLineHtml = `<line x1="${startX.toFixed(1)}" y1="${gaugedY.toFixed(1)}" x2="${endX.toFixed(1)}" y2="${gaugedY.toFixed(1)}" stroke="#1F3B3C" stroke-width="1.75" vector-effect="non-scaling-stroke" />`;
 
         const curveValueAtAnchor = nearestPoint(scalePoints, windowRange.start).value;
 
@@ -177,7 +177,6 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
         const hTransform = hSide === 'left' ? 'translateX(calc(-100% - 6px))' : 'translateX(6px)';
 
         gaugedFlowMarkerHtml = `
-            <div class="sparkline-gauged-dot" style="left: ${leftPct}%; top: ${topPct}%;"></div>
             <div class="sparkline-gauged-label" style="left: ${leftPct}%; top: ${topPct}%; transform: ${hTransform} ${vTransform};">Gauged ${formatFlowValue(gaugedFlow)}</div>
         `;
     }
@@ -230,14 +229,14 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
             <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" class="sparkline-svg">
                 <defs>
                     <linearGradient id="sparkline-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="var(--river-mid)" stop-opacity="0.25" />
-                        <stop offset="100%" stop-color="var(--river-mid)" stop-opacity="0" />
+                        <stop offset="0%" stop-color="#3C8C7C" stop-opacity="0.25" />
+                        <stop offset="100%" stop-color="#3C8C7C" stop-opacity="0" />
                     </linearGradient>
                 </defs>
                 ${windowBand}
                 <path d="${areaPath}" fill="url(#sparkline-fill)" stroke="none" />
-                <path d="${linePath}" fill="none" stroke="var(--river-mid)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
-                ${extrapolatedPath ? `<path d="${extrapolatedPath}" fill="none" stroke="var(--river-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,4" opacity="0.6" vector-effect="non-scaling-stroke" />` : ''}
+                <path d="${linePath}" fill="none" stroke="#3C8C7C" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+                ${extrapolatedPath ? `<path d="${extrapolatedPath}" fill="none" stroke="#1F3B3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,4" opacity="0.6" vector-effect="non-scaling-stroke" />` : ''}
                 ${gaugedFlowLineHtml}
             </svg>
             <div class="sparkline-end-marker" style="left: ${endMarkerLeftPct}%; top: ${endMarkerTopPct}%;"></div>
