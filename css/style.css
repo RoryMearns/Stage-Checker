@@ -1719,7 +1719,7 @@ html, body {
     color: #92600B;
 }
 
-#gauging-tool-sparkline-wrap {
+.sparkline-card-wrap {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
     padding: 0.85rem 1rem 0.6rem;
