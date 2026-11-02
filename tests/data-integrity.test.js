@@ -7,6 +7,7 @@ import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const sites = JSON.parse(readFileSync(path.join(__dirname, '../data/sites.json'), 'utf-8'));
 const runInfo = JSON.parse(readFileSync(path.join(__dirname, '../data/run-info.json'), 'utf-8'));
+const runInfoCentral = JSON.parse(readFileSync(path.join(__dirname, '../data/run-info-central.json'), 'utf-8'));
 
 describe('sites.json', () => {
     test('every entry has a name, code, and datasetId', () => {
@@ -56,6 +57,42 @@ describe('run-info.json structure', () => {
     test('no site code is listed twice within the same run', () => {
         for (const run of runInfo.runs) {
             assert.equal(new Set(run.sites).size, run.sites.length, `duplicate site within run "${run.name}"`);
+        }
+    });
+});
+
+describe('run-info-central.json structure', () => {
+    test('every run has a non-empty name and at least one site', () => {
+        for (const run of runInfoCentral.runs) {
+            assert.ok(run.name && run.name.trim().length > 0, `run missing a name: ${JSON.stringify(run)}`);
+            assert.ok(Array.isArray(run.sites) && run.sites.length > 0, `run "${run.name}" has no sites`);
+        }
+    });
+
+    test('no site code appears in more than one run', () => {
+        const seen = new Map();
+        for (const run of runInfoCentral.runs) {
+            for (const code of run.sites) {
+                if (seen.has(code)) {
+                    assert.fail(`site ${code} appears in both "${seen.get(code)}" and "${run.name}"`);
+                }
+                seen.set(code, run.name);
+            }
+        }
+    });
+
+    test('no site code is listed twice within the same run', () => {
+        for (const run of runInfoCentral.runs) {
+            assert.equal(new Set(run.sites).size, run.sites.length, `duplicate site within run "${run.name}"`);
+        }
+    });
+
+    test('no site code is shared between run-info.json and run-info-central.json', () => {
+        const coastalCodes = new Set(runInfo.runs.flatMap(run => run.sites));
+        for (const run of runInfoCentral.runs) {
+            for (const code of run.sites) {
+                assert.ok(!coastalCodes.has(code), `site ${code} appears in both the coastal and central run lists`);
+            }
         }
     });
 });

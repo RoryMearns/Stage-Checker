@@ -34,7 +34,7 @@
       },
       {
           "name": "Clutha",
-          "sites": ["GT145"]
+          "sites": ["GT145", "GT699"]
       },
       {
           "name": "Maniototo",
@@ -63,6 +63,7 @@
       "EN063": { "shortName": "Wairuna at Millar Rd", "ftUpperLimit": 1.3, "sxsUpperLimit": 2.5 },
       "EM525": { "shortName": "Waipahi", "ftUpperLimit": 1, "sxsUpperLimit": 5 },
       "GT145": { "shortName": "Clutha at Tuapeka", "ftUpperLimit": 1.5, "sxsUpperLimit": 8 },
+      "GT699": { "shortName": "Clutha at Whitelea", "ftUpperLimit": 1.5, "sxsUpperLimit": 8 },
       "EM481": { "shortName": "Houipapa", "ftUpperLimit": 1.5, "sxsUpperLimit": 5, "wadeLimitFlow": 7 },
       "EN348": { "shortName": "Katea Rd", "ftUpperLimit": 0.8, "sxsUpperLimit": 3.2, "wadeLimitFlow": 3.5 },
       "EM145": { "shortName": "Waipiata", "ftUpperLimit": 1.2, "sxsUpperLimit": 5 },

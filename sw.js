@@ -1,9 +1,10 @@
-const CACHE_NAME = 'shag-shell-v10';
+const CACHE_NAME = 'shag-shell-v11';
 
 const NEVER_CACHE = [
     'yop7qymjl5.execute-api.ap-southeast-2.amazonaws.com',
     'ct96qivjdd.execute-api.ap-southeast-2.amazonaws.com',
-    '/data/run-info.json'
+    '/data/run-info.json',
+    '/data/run-info-central.json'
 ];
 
 const PRECACHE_URLS = [
@@ -11,6 +12,7 @@ const PRECACHE_URLS = [
     '/index.html',
     '/css/style.css',
     '/js/main.js',
+    '/js/app.js',
     '/js/api.js',
     '/js/state.js',
     '/js/runInfo.js',
@@ -26,6 +28,10 @@ const PRECACHE_URLS = [
     '/images/microboard.svg',
     '/images/moving-boat.svg',
     '/images/no-data.svg',
+
+    '/central/',
+    '/central/index.html',
+    '/js/main-central.js',
 
     '/tools/',
     '/tools/index.html',

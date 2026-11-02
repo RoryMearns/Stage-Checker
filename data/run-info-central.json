@@ -1,0 +1,92 @@
+{
+  "runs": [
+    {
+      "name": "Upper Lindis",
+      "sites": ["EY113", "EM631", "EM195"]
+    },
+    {
+      "name": "Dunstan Basin",
+      "sites": ["EY217", "FA888", "GT155"]
+    },
+    {
+      "name": "Glenorchy",
+      "sites": ["FR969", "FS250"]
+    },
+    {
+      "name": "Upper Cardrona",
+      "sites": ["EN148", "EN146", "FA780", "GT700"]
+    },
+    {
+      "name": "Lower Cardrona",
+      "sites": ["EM872", "FG697", "EM869"]
+    },
+    {
+      "name": "Manuherikia Upper Tributaries",
+      "sites": ["EN015", "FL470", "GT686"]
+    },
+    {
+      "name": "Manuherikia Lower Tributaries",
+      "sites": ["EM306", "EN203", "EN047"]
+    },
+    {
+      "name": "Manuherikia Upper Main Stem",
+      "sites": ["EM200"]
+    },
+    {
+      "name": "Manuherikia Lower Main Stem",
+      "sites": ["FK317", "EM837", "EM201"]
+    },
+    {
+      "name": "Falls Dam",
+      "sites": ["FJ930", "GT232"]
+    },
+    {
+      "name": "Chatto Creek",
+      "sites": ["EX375", "EN204", "EM674"]
+    },
+    {
+      "name": "Wakatipu Headwaters",
+      "sites": ["EM759", "GT149"]
+    },
+    {
+      "name": "Shotover",
+      "sites": ["EM564"]
+    },
+    {
+      "name": "Fraser",
+      "sites": ["EM206"]
+    },
+    {
+      "name": "Ettrick",
+      "sites": ["EX154"]
+    },
+    {
+      "name": "Roxburgh",
+      "sites": ["EY474", "FK291"]
+    },
+    {
+      "name": "Hopes Creek",
+      "sites": ["GT777"]
+    },
+    {
+      "name": "Upper Thomsons",
+      "sites": ["EN017"]
+    },
+    {
+      "name": "Aspiring Alpine",
+      "sites": ["EM806"]
+    },
+    {
+      "name": "Wilkin",
+      "sites": ["FA805"]
+    },
+    {
+      "name": "Wakatipu",
+      "sites": ["EM694", "EM640", "EW734"]
+    },
+    {
+      "name": "Lake Hayes",
+      "sites": ["EM212", "FK032", "FJ924"]
+    }
+  ]
+}

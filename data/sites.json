@@ -60,6 +60,11 @@
     "datasetId": 4554
   },
   {
+    "name": "Chatto Creek at SH85",
+    "code": "EM674",
+    "datasetId": 273933
+  },
+  {
     "name": "Cluden Stream at Stock Yards",
     "code": "EY113",
     "datasetId": 9001
@@ -83,6 +88,11 @@
     "name": "Clutha at Clyde (ESNZ)",
     "code": "EM193",
     "datasetId": 134420
+  },
+  {
+    "name": "Clutha at Whitelea",
+    "code": "GT699",
+    "datasetId": 273982
   },
   {
     "name": "Clutha below Roxburgh Dam (ESNZ)",

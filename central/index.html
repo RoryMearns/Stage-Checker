@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage Checker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav class="navbar site-banner" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item banner-brand">
+                <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+                <span class="banner-title">The Friendly Shag</span>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="site-nav-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="site-nav-menu" class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Coastal</a>
+                <a href="/central/" class="navbar-item is-current-page">Central</a>
+                <a href="/tools/" class="navbar-item">Tools</a>
+                <a href="/site-visit/" class="navbar-item">Site Visit</a>
+                <a href="/gauging/" class="navbar-item">Gauging</a>
+                <a href="/nems/" class="navbar-item">NEMS</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="section">
+    <div class="container">
+        <div id="loading" class="notification is-info">
+            <p>Loading data...</p>
+        </div>
+
+        <div id="error" class="notification is-danger" style="display: none;">
+            <button class="delete"></button>
+            <p id="error-message"></p>
+            <button type="button" id="reload-data" class="button is-danger is-light error-reload-button">Reload</button>
+        </div>
+
+        <div id="runs-controls" class="run-section collapse-all-card" style="display: none;">
+            <div id="collapse-all-header" class="run-header" role="button" tabindex="0" aria-expanded="true">
+                <h2 class="run-heading collapse-all-label">Collapse All</h2>
+                <svg class="chevron chevron-double" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 5 12 11 18 5"></polyline><polyline points="6 13 12 19 18 13"></polyline></svg>
+            </div>
+        </div>
+
+        <div id="runs-container" style="display: none;"></div>
+
+        <div id="legend" class="run-section legend-section" style="display: none;">
+            <div class="run-header">
+                <h2 class="run-heading">Legend</h2>
+            </div>
+            <div class="run-body" id="legend-body">
+                <ul class="legend-list">
+                    <li><span class="legend-sample is-overdue">12.345</span><span>Data not up to date</span></li>
+                    <li><span class="legend-sample">—</span><span>No data available</span></li>
+                    <li><img src="../images/flowtracker.svg" alt="Flowtracker gauging" class="legend-icon"><span>Flowtracker gauging</span></li>
+                    <li><img src="../images/microboard.svg" alt="Station by station gauging" class="legend-icon"><span>Station by station gauging</span></li>
+                    <li><img src="../images/moving-boat.svg" alt="Moving boat or flood gauging" class="legend-icon"><span>Moving boat or flood gauging</span></li>
+                    <li><img src="../images/no-data.svg" alt="Unknown" class="legend-icon"><span>Unknown</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<script type="module" src="../js/main-central.js"></script>
+<script src="../js/navbar.js"></script>
+<script type="module" src="../js/register-sw.js"></script>
+</body>
+</html>
