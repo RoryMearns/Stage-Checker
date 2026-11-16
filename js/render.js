@@ -4,6 +4,7 @@ import {fetchDischargeTimeSeries} from "./api.js";
 import {todayIsoNz} from "./form-utils.js";
 import {parseTimeSeriesResponse, renderHydrograph} from "./hydrograph.js";
 import {makeCollapsible} from "./collapsible.js";
+import {minFlowNoteHtml} from "./min-flow.js";
 
 function extractTimeFromEndOfRecord(endOfRecord) {
     if (!endOfRecord) return null;
@@ -12,19 +13,24 @@ function extractTimeFromEndOfRecord(endOfRecord) {
     return `${match[1]}:${match[2]}`;
 }
 
-function formatValueCell(dataItem, extraTag = '') {
-    const isOverdue = dataItem?.State === 'OVERDUE';
-    const hasValue = dataItem && typeof dataItem.ValueNumber === 'number';
+function hasNumericValue(dataItem) {
+    return Boolean(dataItem) && typeof dataItem.ValueNumber === 'number';
+}
 
-    const text = hasValue ? dataItem.ValueNumber.toFixed(3) : '—';
+function timestampHtml(dataItem) {
+    const time = hasNumericValue(dataItem) ? extractTimeFromEndOfRecord(dataItem.EndOfRecord) : null;
+    return time ? `<span class="value-timestamp">at ${time}</span>` : '';
+}
+
+function formatValueCell(dataItem, subHtml = '') {
+    const isOverdue = dataItem?.State === 'OVERDUE';
+
+    const text = hasNumericValue(dataItem) ? dataItem.ValueNumber.toFixed(3) : '—';
     const overdueAttrs = isOverdue
         ? ' class="is-overdue" title="Equipment overdue — this site has stopped reporting, value may be stale"'
         : '';
 
-    const time = hasValue ? extractTimeFromEndOfRecord(dataItem.EndOfRecord) : null;
-    const timestampHtml = time ? `<span class="value-timestamp">at ${time}</span>` : '';
-
-    return `<span class="value-cell-wrap"><span class="value-cell">${extraTag}<span${overdueAttrs}>${text}</span></span>${timestampHtml}</span>`;
+    return `<span class="value-cell-wrap"><span class="value-cell"><span${overdueAttrs}>${text}</span></span>${subHtml}</span>`;
 }
 
 function buildTableSkeleton() {
@@ -111,8 +117,8 @@ function buildSiteRow(siteId, stageBySite, flowBySite, siteMeta) {
 
     row.innerHTML = `
         <td>${locationCell}</td>
-        <td class="has-text-right stage-cell">${formatValueCell(item)}</td>
-        <td class="has-text-right flow-cell">${formatValueCell(flowItem)}</td>
+        <td class="has-text-right stage-cell">${formatValueCell(item, timestampHtml(item))}</td>
+        <td class="has-text-right flow-cell">${formatValueCell(flowItem, minFlowNoteHtml(flowItem, meta))}</td>
         <td class="has-text-centered icon-cell"><img src="${iconUrl}" alt="${iconLabel}" title="${iconLabel}" class="row-icon"></td>
     `;
 
