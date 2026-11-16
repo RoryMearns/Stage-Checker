@@ -88,5 +88,14 @@
       "name": "Lake Hayes",
       "sites": ["EM212", "FK032", "FJ924"]
     }
-  ]
+  ],
+  "siteMeta": {
+    "EM212": { "minFlow": 0.18 },
+    "EM837": { "minFlow": 1.2 },
+    "FK317": { "minFlow": 0.25 },
+    "FA780": { "minFlow": 0.75 },
+    "EM631": { "minFlow": 0.55 },
+    "EW734": { "minFlow": 0.9 },
+    "EM869": { "minFlow": 0.18 }
+  }
 }

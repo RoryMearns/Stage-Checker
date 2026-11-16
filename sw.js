@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shag-shell-v11';
+const CACHE_NAME = 'shag-shell-v12';
 
 const NEVER_CACHE = [
     'yop7qymjl5.execute-api.ap-southeast-2.amazonaws.com',
@@ -49,6 +49,18 @@ const PRECACHE_URLS = [
     '/js/gauging-quality.js',
     '/js/gauging-share.js',
     '/js/form-utils.js',
+
+    '/stationary/',
+    '/stationary/index.html',
+    '/css/stationary.css',
+    '/js/stationary-matrix.js',
+    '/js/stationary-notes.js',
+    '/js/stationary-quality.js',
+    '/js/stationary-share.js',
+    '/js/share-page.js',
+    '/js/results-hydrograph.js',
+    '/js/flow-math.js',
+    '/js/flow-comparison.js',
 
     '/site-visit/',
     '/site-visit/index.html',

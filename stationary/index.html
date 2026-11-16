@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stationary Field Measurement Notes - The Friendly Shag</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/stationary.css">
+</head>
+<body class="page-wide-cards page-no-pull-refresh">
+<nav class="navbar site-banner" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item banner-brand">
+                <img src="../images/shag.svg" alt="The Friendly Shag" class="banner-logo is-hidden-mobile">
+                <span class="banner-title">The Friendly Shag</span>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="site-nav-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="site-nav-menu" class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Coastal</a>
+                <a href="/central/" class="navbar-item">Central</a>
+                <a href="/tools/" class="navbar-item">Tools</a>
+                <a href="/site-visit/" class="navbar-item">Site Visit</a>
+                <a href="/gauging/" class="navbar-item">Moving Boat</a>
+                <a href="/stationary/" class="navbar-item is-current-page">Stationary</a>
+                <a href="/nems/" class="navbar-item">NEMS</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Clear All Forms</h2>
+
+            <div id="draft-restored-notice" class="notification is-info" style="display: none;">
+                <button class="delete" id="dismiss-draft-notice"></button>
+                <p>Your previous entries were restored from this device.</p>
+            </div>
+
+            <p class="calc-help">
+                Your progress saves automatically.
+            </p>
+
+            <button type="button" id="clear-all-button" class="button clear-all-button">Clear Forms &amp; Start New Gauging</button>
+        </div>
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Stationary Field Measurement Notes</h2>
+            <p class="calc-help">
+                Record field details for this gauging.
+            </p>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Visit details</div>
+                <div class="two-col-grid">
+                    <div class="field site-autocomplete-field">
+                        <label class="label" for="fn-site-name">Site name</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-site-name" placeholder="Start typing a site name..." autocomplete="off">
+                        </div>
+                        <ul id="fn-site-name-list" class="site-autocomplete-list" style="display: none;"></ul>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-site-number">Site number</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-site-number" placeholder="e.g. EM140">
+                        </div>
+                    </div>
+                </div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="fn-date">Date</label>
+                        <div class="control">
+                            <input class="input" type="date" id="fn-date">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-party">Party</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-party" placeholder="Names">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-location">Measurement location</label>
+                        <div class="control">
+                            <input class="input" type="text" id="fn-location" placeholder="e.g. 50m upstream of bridge">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Conditions</div>
+                <div class="fn-grid">
+                    <div class="fn-field">
+                        <div class="fn-field-label">Water clarity</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-clarity" value="Turbid"><span>Turbid</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-clarity" value="Discoloured"><span>Discoloured</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-clarity" value="Clear"><span>Clear</span></label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-water-temp">External water temp (&deg;C)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-water-temp" step="any">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Equipment and method</div>
+                <div class="fn-grid">
+                    <div class="fn-field fn-field-wide">
+                        <div class="fn-field-label">Instrument</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-instrument" value="FlowTracker2"><span>FlowTracker2</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-instrument" value="RS5"><span>RS5</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-instrument" value="M9"><span>M9</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-instrument" value="Other"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-instrument-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="fn-field is-hidden" id="fn-rs5-block">
+                        <div class="fn-field-label">RS5 serial No</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52126005"><span>RS52126005</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52126006"><span>RS52126006</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52537002"><span>RS52537002</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="RS52035002"><span>RS52035002</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="Other-RS5"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-rs5-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="fn-field is-hidden" id="fn-m9-block">
+                        <div class="fn-field-label">M9 serial No</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="401"><span>401</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="5755"><span>5755</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="2250"><span>2250</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-adcp-serial" value="Other-M9"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-m9-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="fn-field fn-field-wide">
+                        <div class="fn-field-label">Access</div>
+                        <div class="fn-options">
+                            <label class="fn-option"><input type="radio" name="fn-access" value="Wading"><span>Wading</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-access" value="Bridge"><span>Bridge</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-access" value="Cableway"><span>Cableway</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-access" value="Flying Fox"><span>Flying Fox</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-access" value="Boat"><span>Boat</span></label>
+                            <label class="fn-option"><input type="radio" name="fn-access" value="Other"><span>Other</span></label>
+                        </div>
+                        <input class="input fn-other-input is-hidden" type="text" id="fn-access-other" placeholder="If Other, specify">
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-verticals">Number of verticals</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-verticals" step="1" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Measurements</div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="fn-distance-recorder">Distance to recorder (m)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-distance-recorder" step="any" min="0">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-mean-velocity">Mean velocity (m/s)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-mean-velocity" step="any" min="0">
+                        </div>
+                        <p class="fn-help">Used to calculate lag time when distance to recorder is over 200m</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fn-section">
+                <div class="fn-section-title">Results</div>
+                <div class="fn-grid">
+                    <div class="field">
+                        <label class="label" for="fn-mean-q">Mean Q (m&sup3;/s)</label>
+                        <div class="control">
+                            <input class="input" type="number" id="fn-mean-q" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two-col-grid sv-spaced-field">
+                    <div class="field">
+                        <label class="label" for="fn-gauging-start">Gauging start</label>
+                        <div class="control">
+                            <input class="input" type="time" step="60" id="fn-gauging-start">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="fn-gauging-end">Gauging end</label>
+                        <div class="control">
+                            <input class="input" type="time" step="60" id="fn-gauging-end">
+                        </div>
+                    </div>
+                </div>
+
+                <p id="fn-hydrograph-status" class="calc-help" style="display: none;"></p>
+                <div id="fn-hydrograph-wrap" class="sparkline-card-wrap" style="display: none;">
+                    <div id="fn-hydrograph"></div>
+                </div>
+                <div id="fn-flow-diffs" style="display: none;"></div>
+            </div>
+
+            <div class="field gq-notes-field">
+                <label class="label" for="fn-notes">Additional notes</label>
+                <div class="control">
+                    <textarea id="fn-notes" class="textarea" rows="4" placeholder="Add any additional notes about this gauging..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Stationary Gauging Quality</h2>
+            <p class="calc-help">
+                Tick one option per criterion. Annex B (Site Quality Matrix) is assessed first and feeds into
+                Annex C (Velocity-Area Stationary Meter Method Matrix).
+            </p>
+
+            <div class="fn-section-title">Annex B - Site Quality Matrix</div>
+            <p class="calc-help">Does not apply to dilution gaugings. Where &quot;or ADCP&quot; is shown, the row is not applicable when an ADCP is used.</p>
+            <div id="sq-site-criteria"></div>
+
+            <div class="fn-section-title sq-subheading">Annex C - Velocity-Area Stationary Meter Method Matrix</div>
+            <div id="sq-method-criteria"></div>
+
+            <div class="field gq-notes-field">
+                <label class="label" for="sq-notes">Notes</label>
+                <div class="control">
+                    <textarea id="sq-notes" class="textarea" rows="4" placeholder="Add any additional notes about this gauging..."></textarea>
+                </div>
+            </div>
+
+            <p id="sq-progress" class="calc-help"></p>
+
+            <div class="sq-result-boxes">
+                <div id="sq-site-code" class="gq-quality-code"></div>
+                <div id="sq-method-code" class="gq-quality-code"></div>
+            </div>
+
+            <p class="calc-help gq-note">
+                <strong>Note:</strong> the lowest ticked column in each matrix applies, and no code above 500 can be
+                given if any 600 threshold is not met. Options marked &dagger; are not printed in the standard; they are
+                derived from the Annex A coding rules. Later processing may lower the final QC.
+            </p>
+        </div>
+
+        <div class="run-section">
+            <h2 class="run-heading calc-title">Save or Share Results</h2>
+            <p class="calc-help">
+                Generate a link that captures everything entered on this page for someone else to open and
+                fill in automatically, or download both cards above as a single image.
+            </p>
+
+            <div class="field gq-actions">
+                <button type="button" id="share-link-button" class="button calc-button">Copy share link</button>
+                <button type="button" id="download-everything-button" class="button calc-button">Download results</button>
+            </div>
+
+            <p id="share-link-display" class="fn-share-link" style="display: none;"></p>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <img src="../images/shag.svg" alt="The Friendly Shag" class="footer-logo">
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module" src="../js/stationary-notes.js"></script>
+<script type="module" src="../js/stationary-quality.js"></script>
+<script type="module" src="../js/stationary-share.js"></script>
+<script src="../js/navbar.js"></script>
+<script type="module" src="../js/register-sw.js"></script>
+</body>
+</html>
