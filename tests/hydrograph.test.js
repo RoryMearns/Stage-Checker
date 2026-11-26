@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatFlowValue, parseTimeSeriesResponse, canPlaceBelow, canPlaceAbove, gaugedLabelSide, gaugedLabelHorizontalSide } from '../js/hydrograph.js';
+import { formatFlowValue, limitStatHtml, parseTimeSeriesResponse, canPlaceBelow, canPlaceAbove, gaugedLabelSide, gaugedLabelHorizontalSide } from '../js/hydrograph.js';
 
 describe('canPlaceBelow / canPlaceAbove (regression: method-icon placement swap)', () => {
     // Regression test: an earlier version had these two conditions swapped, causing a
@@ -140,5 +140,23 @@ describe('parseTimeSeriesResponse', () => {
         assert.equal(parseTimeSeriesResponse({}), null);
         assert.equal(parseTimeSeriesResponse({ Series: [] }), null);
         assert.equal(parseTimeSeriesResponse(null), null);
+    });
+});
+
+describe('limitStatHtml', () => {
+    test('shows the label and a formatted value with units', () => {
+        const html = limitStatHtml('FT Upper Limit', 1.5);
+        assert.match(html, />FT Upper Limit</);
+        assert.match(html, /1\.500<small> m&sup3;\/s<\/small>/);
+    });
+
+    test('shows n/a when there is no value', () => {
+        assert.match(limitStatHtml('SxS Upper Limit', undefined), />n\/a</);
+        assert.match(limitStatHtml('SxS Upper Limit', null), />n\/a</);
+        assert.match(limitStatHtml('SxS Upper Limit', NaN), />n\/a</);
+    });
+
+    test('zero is a real value, not n/a', () => {
+        assert.match(limitStatHtml('FT Upper Limit', 0), /0\.000/);
     });
 });

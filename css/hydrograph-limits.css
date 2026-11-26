@@ -1,0 +1,46 @@
+.sparkline-stats.has-limits {
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+}
+
+.sparkline-stat-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.25rem;
+}
+
+.sparkline-limits {
+    margin-left: auto;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--river-line);
+}
+
+.sparkline-stat-na {
+    color: var(--river-muted);
+    font-weight: 600;
+}
+
+@media screen and (max-width: 600px) {
+    .sparkline-stats.has-limits {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .sparkline-stat-group {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .sparkline-limits {
+        margin-left: 0;
+        padding-left: 0;
+        padding-top: 0.6rem;
+        border-left: 0;
+        border-top: 1px solid var(--river-line);
+    }
+
+    .sparkline-limits .sparkline-stat {
+        justify-content: space-between;
+    }
+}
