@@ -47,6 +47,54 @@ export function gaugedLabelHorizontalSide(leftPct, edgeThresholdPct = 75) {
     return leftPct > edgeThresholdPct ? 'left' : 'right';
 }
 
+function flowStatHtml(label, point) {
+    return `
+        <div class="sparkline-stat">
+            <span class="sparkline-stat-label">${label}</span>
+            <span class="sparkline-stat-line">
+                <span class="sparkline-stat-value">${formatFlowValue(point.value)}<small> m&sup3;/s</small></span>
+                <span class="sparkline-stat-time">${formatNzTime(point.time)}</span>
+            </span>
+        </div>
+    `;
+}
+
+export function limitStatHtml(label, limit) {
+    const valueHtml = typeof limit === 'number' && !isNaN(limit)
+        ? `${formatFlowValue(limit)}<small> m&sup3;/s</small>`
+        : '<span class="sparkline-stat-na">n/a</span>';
+    return `
+        <div class="sparkline-stat">
+            <span class="sparkline-stat-label">${label}</span>
+            <span class="sparkline-stat-line">
+                <span class="sparkline-stat-value">${valueHtml}</span>
+            </span>
+        </div>
+    `;
+}
+
+function statsHtml(peak, low, latest, methodThresholds) {
+    const flowStats = [
+        flowStatHtml('Peak flow', peak),
+        flowStatHtml('Low flow', low),
+        flowStatHtml('Latest flow', latest)
+    ].join('');
+
+    if (!methodThresholds) {
+        return `<div class="sparkline-stats">${flowStats}</div>`;
+    }
+
+    return `
+        <div class="sparkline-stats has-limits">
+            <div class="sparkline-stat-group">${flowStats}</div>
+            <div class="sparkline-stat-group sparkline-limits">
+                ${limitStatHtml('FT Upper Limit', methodThresholds.ftUpperLimit)}
+                ${limitStatHtml('SxS Upper Limit', methodThresholds.sxsUpperLimit)}
+            </div>
+        </div>
+    `;
+}
+
 export function renderHydrograph(el, points, windowRange = null, nowTime = null, extrapolatedPoints = [], methodThresholds = null, gaugedFlow = null) {
     if (!points.length) {
         el.innerHTML = '<p class="calc-help">No data points to show.</p>';
@@ -202,29 +250,7 @@ export function renderHydrograph(el, points, windowRange = null, nowTime = null,
 
     el.innerHTML = `
         <p class="sparkline-caption">${captionText}</p>
-        <div class="sparkline-stats">
-            <div class="sparkline-stat">
-                <span class="sparkline-stat-label">Peak flow</span>
-                <span class="sparkline-stat-line">
-                    <span class="sparkline-stat-value">${formatFlowValue(peak.value)}<small> m&sup3;/s</small></span>
-                    <span class="sparkline-stat-time">${formatNzTime(peak.time)}</span>
-                </span>
-            </div>
-            <div class="sparkline-stat">
-                <span class="sparkline-stat-label">Low flow</span>
-                <span class="sparkline-stat-line">
-                    <span class="sparkline-stat-value">${formatFlowValue(low.value)}<small> m&sup3;/s</small></span>
-                    <span class="sparkline-stat-time">${formatNzTime(low.time)}</span>
-                </span>
-            </div>
-            <div class="sparkline-stat">
-                <span class="sparkline-stat-label">Latest flow</span>
-                <span class="sparkline-stat-line">
-                    <span class="sparkline-stat-value">${formatFlowValue(lastPoint.value)}<small> m&sup3;/s</small></span>
-                    <span class="sparkline-stat-time">${formatNzTime(lastPoint.time)}</span>
-                </span>
-            </div>
-        </div>
+        ${statsHtml(peak, low, lastPoint, methodThresholds)}
         <div class="sparkline-svg-wrap">
             <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" class="sparkline-svg">
                 <defs>
